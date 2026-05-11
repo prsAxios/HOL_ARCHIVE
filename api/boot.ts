@@ -20,9 +20,12 @@ app.use("/api/trpc/*", async (c) => {
 });
 app.all("/api/*", (c) => c.json({ error: "Not Found" }, 404));
 
-export default app;
+import { handle } from "hono/vercel";
 
-if (env.isProduction) {
+export const runtime = "edge";
+export default handle(app);
+
+if (env.isProduction && !process.env.VERCEL) {
   const { serve } = await import("@hono/node-server");
   const { serveStaticFiles } = await import("./lib/vite");
   serveStaticFiles(app);
