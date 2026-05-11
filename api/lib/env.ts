@@ -10,5 +10,5 @@ function required(name: string): string {
 
 export const env = {
   isProduction: process.env.NODE_ENV === "production",
-  databaseUrl: required("DATABASE_URL"),
+  databaseUrl: process.env["DATABASE_URL"] ?? "",
 };
