@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 
 export default function Preloader() {
   const [phase, setPhase] = useState<'loading' | 'reveal' | 'done'>('loading')
@@ -20,7 +20,7 @@ export default function Preloader() {
         position: 'fixed',
         inset: 0,
         zIndex: 9999,
-        backgroundColor: '#ffffff',
+        backgroundColor: 'var(--hol-bg-alt)',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -31,18 +31,19 @@ export default function Preloader() {
     >
       <span
         style={{
-          fontSize: 'clamp(32px, 8vw, 100px)',
+          fontSize: 'clamp(52px, 10vw, 140px)',
           fontWeight: 400,
           letterSpacing: '-0.02em',
-          color: '#0a0a0a',
-          fontFamily: 'Playfair Display, serif',
+          color: 'var(--hol-gold)',
+          fontFamily: 'Jost, sans-serif',
           transform: phase === 'loading' ? 'translateY(20px)' : 'translateY(0)',
           opacity: phase === 'loading' ? 0 : 1,
           transition: 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease',
         }}
       >
-        PARK
+        HOL ARCHIVE
       </span>
     </div>
   )
 }
+

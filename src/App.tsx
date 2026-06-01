@@ -1,69 +1,74 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { Routes, Route } from 'react-router'
 import Header from './sections/Header'
-import Spatial from './sections/Spatial'
 import Philosophy from './sections/Philosophy'
-import Works from './sections/Works'
+import Services from './sections/Services'
 import Team from './sections/Team'
 import Capabilities from './sections/Capabilities'
 import Hero from './sections/Hero'
+import AboutSection from './sections/AboutSection'
+import Clients from './sections/Clients'
+import Testimonials from './sections/Testimonials'
+import Contact from './sections/Contact'
 import Footer from './sections/Footer'
 import Preloader from './sections/Preloader'
-import RoomDetail from './pages/RoomDetail'
+import { ThemeProvider } from './context/ThemeContext'
+import { ScrollSmoother, ScrollTrigger } from './lib/gsap-config'
 
 function App() {
   const scrollRef = useRef({ y: 0, speed: 0 })
-  const [currentRoomId, setCurrentRoomId] = useState<string | null>(null)
 
   useEffect(() => {
-    let rafId: number
-    let prevY = window.scrollY
-
-    const tick = () => {
-      const y = window.scrollY
-      const delta = y - prevY
-      scrollRef.current.y = y
-      scrollRef.current.speed = delta
-      prevY = y
-      rafId = requestAnimationFrame(tick)
-    }
-    rafId = requestAnimationFrame(tick)
-
-    return () => cancelAnimationFrame(rafId)
+    if (window.innerWidth < 768) return
+    const smoother = ScrollSmoother.create({
+      wrapper: '#smooth-wrapper',
+      content: '#smooth-content',
+      smooth: 1.4,
+      effects: true,
+      ignoreMobileResize: true,
+    })
+    return () => smoother.kill()
   }, [])
 
-  const handleSelectRoom = (id: string) => setCurrentRoomId(id)
-  const handleBack = () => {
-    setCurrentRoomId(null)
-    setTimeout(() => {
-      document.querySelector('#works')?.scrollIntoView({ behavior: 'auto' })
-    }, 0)
-  }
+  useEffect(() => {
+    let prevY = window.scrollY
+    const tick = () => {
+      const y = window.scrollY
+      scrollRef.current.y = y
+      scrollRef.current.speed = y - prevY
+      prevY = y
+    }
+    window.addEventListener('scroll', tick, { passive: true })
+    return () => window.removeEventListener('scroll', tick)
+  }, [])
 
   return (
-    <Routes>
-      <Route path="*" element={
-        <>
-          <Preloader />
-          <Header scrollRef={scrollRef} />
-          {currentRoomId ? (
-            <div style={{ backgroundColor: '#ffffff' }}>
-              <RoomDetail roomId={currentRoomId} onBack={handleBack} />
+    <ThemeProvider>
+      <Routes>
+        <Route path="*" element={
+          <>
+            <Preloader />
+            <Header scrollRef={scrollRef} />
+            <div id="smooth-wrapper">
+              <div id="smooth-content">
+                <main>
+                  <Hero />
+                  <AboutSection />
+                  <Philosophy />
+                  <Services />
+                  <Team />
+                  <Capabilities />
+                  <Clients />
+                  <Testimonials />
+                  <Contact />
+                </main>
+                <Footer />
+              </div>
             </div>
-          ) : (
-            <main>
-              <Spatial />
-              <Philosophy />
-              <Works scrollRef={scrollRef} onSelectRoom={handleSelectRoom} />
-              <Team />
-              <Capabilities />
-              <Hero />
-            </main>
-          )}
-          <Footer />
-        </>
-      } />
-    </Routes>
+          </>
+        } />
+      </Routes>
+    </ThemeProvider>
   )
 }
 

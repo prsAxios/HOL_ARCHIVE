@@ -1,14 +1,55 @@
-import { motion } from 'framer-motion'
+import { useEffect, useRef } from 'react'
+import { gsap, SplitText } from '../lib/gsap-config'
 
-const tags = ['Residential', 'Commercial', 'Hospitality']
+const tags = ['Hospitality', 'Operations', 'Logistics']
 
 export default function Philosophy() {
+  const sectionRef = useRef<HTMLElement>(null)
+  const quoteRef = useRef<HTMLParagraphElement>(null)
+  const tagsRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      const split = new SplitText(quoteRef.current!, { type: 'lines' })
+
+      gsap.set(quoteRef.current, { autoAlpha: 1 })
+      gsap.fromTo(
+        split.lines,
+        { y: 80, autoAlpha: 0 },
+        {
+          y: 0,
+          autoAlpha: 1,
+          duration: 0.85,
+          stagger: 0.07,
+          ease: 'expo.out',
+          scrollTrigger: { trigger: quoteRef.current, start: 'top 88%' },
+        }
+      )
+
+      gsap.fromTo(
+        Array.from(tagsRef.current!.children),
+        { y: 36, autoAlpha: 0 },
+        {
+          y: 0,
+          autoAlpha: 1,
+          duration: 0.6,
+          stagger: 0.1,
+          ease: 'expo.out',
+          scrollTrigger: { trigger: tagsRef.current, start: 'top 90%' },
+        }
+      )
+    }, sectionRef)
+
+    return () => ctx.revert()
+  }, [])
+
   return (
     <section
+      ref={sectionRef}
       style={{
-        backgroundColor: '#ffffff',
-        padding: '160px clamp(24px, 5vw, 80px)',
-        borderTop: '1px solid rgba(0,0,0,0.05)',
+        backgroundColor: 'var(--hol-bg-alt)',
+        padding: 'clamp(80px, 12vw, 160px) clamp(24px, 5vw, 80px)',
+        borderTop: '1px solid rgba(194, 174, 109, 0.1)',
       }}
     >
       <div
@@ -22,54 +63,45 @@ export default function Philosophy() {
           gap: '64px',
         }}
       >
-        <motion.p
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+        <p
+          ref={quoteRef}
           style={{
-            fontSize: 'clamp(28px, 4vw, 56px)',
+            fontSize: 'clamp(22px, 5.5vw, 76px)',
             fontWeight: 300,
             lineHeight: 1.2,
             letterSpacing: '-0.02em',
-            color: '#0a0a0a',
-            fontFamily: 'Playfair Display, serif',
+            color: 'var(--hol-text)',
+            fontFamily: 'Jost, sans-serif',
+            opacity: 0,
           }}
         >
-          We believe great design is not about filling a space, but about
-          revealing its potential — creating environments that inspire,
-          comfort, and endure.
-        </motion.p>
+          At Archive, we redefine luxury through the lens of operational
+          precision. Every detail is curated, every moment preserved,
+          and your celebration becomes a timeless legacy.
+        </p>
 
         <div
-          style={{
-            display: 'flex',
-            gap: '16px',
-            flexWrap: 'wrap',
-            justifyContent: 'center',
-          }}
+          ref={tagsRef}
+          style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}
         >
-          {tags.map((tag, i) => (
-            <motion.span
+          {tags.map(tag => (
+            <span
               key={tag}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, delay: i * 0.1, ease: [0.16, 1, 0.3, 1] }}
               style={{
-                fontSize: '11px',
+                fontSize: '13px',
                 fontWeight: 500,
                 letterSpacing: '0.2em',
-                color: '#666666',
-                padding: '12px 32px',
-                border: '1px solid rgba(0,0,0,0.1)',
+                color: 'var(--hol-muted)',
+                padding: '12px 28px',
+                border: '1px solid rgba(194, 174, 109, 0.2)',
                 whiteSpace: 'nowrap',
                 textTransform: 'uppercase',
-                fontFamily: 'Outfit, sans-serif',
+                fontFamily: 'Jost, sans-serif',
+                opacity: 0,
               }}
             >
               {tag}
-            </motion.span>
+            </span>
           ))}
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { rooms } from '../data/rooms'
 import { trpc } from '@/providers/trpc'
 import { motion } from 'framer-motion'
@@ -46,23 +46,23 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: '#ffffff',
-          color: '#0a0a0a',
+          backgroundColor: 'var(--hol-bg)',
+          color: 'var(--hol-text)',
           flexDirection: 'column',
           gap: '20px',
-          fontFamily: 'Outfit, sans-serif',
+          fontFamily: 'Jost, sans-serif',
         }}
       >
-        <p style={{ fontSize: '20px' }}>Project not found.</p>
+        <p style={{ fontSize: '26px' }}>Project not found.</p>
         <button
           onClick={onBack}
           style={{
-            fontSize: '13px',
+            fontSize: '17px',
             letterSpacing: '0.14em',
             padding: '14px 32px',
             border: '1px solid #0a0a0a',
             backgroundColor: 'transparent',
-            color: '#0a0a0a',
+            color: 'var(--hol-text)',
             cursor: 'pointer',
             textTransform: 'uppercase',
           }}
@@ -74,7 +74,7 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
   }
 
   return (
-    <div style={{ backgroundColor: '#ffffff', minHeight: '100vh', paddingBottom: '100px' }}>
+    <div style={{ backgroundColor: 'var(--hol-bg)', minHeight: '100vh', paddingBottom: '100px' }}>
       {/* Hero image */}
       <div
         style={{
@@ -114,15 +114,15 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
             position: 'absolute',
             top: isMobile ? '40px' : 'clamp(80px, 12vh, 120px)',
             left: isMobile ? '20px' : 'clamp(24px, 5vw, 80px)',
-            fontSize: '12px',
+            fontSize: '16px',
             letterSpacing: '0.2em',
             padding: '12px 24px',
             border: '1px solid #0a0a0a',
             backgroundColor: 'rgba(255,255,255,0.9)',
-            color: '#0a0a0a',
+            color: 'var(--hol-text)',
             cursor: 'pointer',
             textTransform: 'uppercase',
-            fontFamily: 'Outfit, sans-serif',
+            fontFamily: 'Jost, sans-serif',
             backdropFilter: 'blur(10px)',
             zIndex: 10,
           }}
@@ -132,10 +132,10 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
         <div
           style={{
             position: 'absolute',
-            bottom: isMobile ? '32px' : 'clamp(40px, 6vw, 80px)',
+            bottom: isMobile ? '32px' : 'clamp(56px, 7.5vw, 108px)',
             left: isMobile ? '20px' : 'clamp(24px, 5vw, 80px)',
             right: isMobile ? '20px' : 'clamp(24px, 5vw, 80px)',
-            color: '#0a0a0a',
+            color: 'var(--hol-text)',
           }}
         >
           <motion.p
@@ -143,12 +143,12 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.8 }}
             style={{
-              fontSize: '11px',
+              fontSize: '14px',
               letterSpacing: '0.3em',
               textTransform: 'uppercase',
-              color: '#666666',
+              color: 'var(--hol-muted)',
               marginBottom: '16px',
-              fontFamily: 'Outfit, sans-serif',
+              fontFamily: 'Jost, sans-serif',
             }}
           >
             Project {room.id} &middot; {room.client}
@@ -158,13 +158,13 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.7, duration: 1 }}
             style={{
-              fontSize: 'clamp(40px, 8vw, 120px)',
+              fontSize: 'clamp(56px, 9vw, 150px)',
               fontWeight: 300,
               letterSpacing: '-0.02em',
               lineHeight: 1,
               margin: 0,
               maxWidth: '1000px',
-              fontFamily: 'Playfair Display, serif',
+              fontFamily: 'Jost, sans-serif',
             }}
           >
             {room.title}
@@ -191,25 +191,25 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             style={{
-              fontSize: 'clamp(22px, 2.5vw, 36px)',
+              fontSize: 'clamp(30px, 3.2vw, 50px)',
               fontWeight: 300,
               lineHeight: 1.3,
               letterSpacing: '-0.01em',
-              color: '#0a0a0a',
+              color: 'var(--hol-text)',
               marginBottom: isMobile ? '40px' : '64px',
               maxWidth: '800px',
-              fontFamily: 'Playfair Display, serif',
+              fontFamily: 'Jost, sans-serif',
             }}
           >
             {room.tagline}
           </motion.p>
 
-          <div style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 300 }}>
+          <div style={{ fontFamily: 'Jost, sans-serif', fontWeight: 300 }}>
             {room.description.map((p, i) => (
               <p
                 key={i}
                 style={{
-                  fontSize: '18px',
+                  fontSize: '22px',
                   lineHeight: 1.8,
                   color: '#444444',
                   marginBottom: '24px',
@@ -225,17 +225,17 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
             style={{
               marginTop: isMobile ? '60px' : '100px',
               paddingTop: '48px',
-              borderTop: '1px solid rgba(0,0,0,0.05)',
+              borderTop: '1px solid var(--hol-border)',
             }}
           >
             <p
               style={{
-                fontSize: '11px',
+                fontSize: '14px',
                 letterSpacing: '0.3em',
-                color: '#999999',
+                color: 'var(--hol-faint)',
                 textTransform: 'uppercase',
                 marginBottom: '40px',
-                fontFamily: 'Outfit, sans-serif',
+                fontFamily: 'Jost, sans-serif',
               }}
             >
               Key Details
@@ -254,12 +254,12 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
                 <li
                   key={f}
                   style={{
-                    fontSize: '16px',
+                    fontSize: '20px',
                     lineHeight: 1.6,
-                    color: '#0a0a0a',
+                    color: 'var(--hol-text)',
                     paddingLeft: '32px',
                     position: 'relative',
-                    fontFamily: 'Outfit, sans-serif',
+                    fontFamily: 'Jost, sans-serif',
                     fontWeight: 300,
                   }}
                 >
@@ -270,7 +270,7 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
                       top: '12px',
                       width: '12px',
                       height: '1px',
-                      backgroundColor: '#0a0a0a',
+                      backgroundColor: 'var(--hol-text)',
                     }}
                   />
                   {f}
@@ -287,43 +287,43 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
             minWidth: 0,
             position: isMobile ? 'relative' : 'sticky',
             top: isMobile ? '0' : '140px',
-            border: '1px solid rgba(0,0,0,0.05)',
+            border: '1px solid var(--hol-border)',
             padding: isMobile ? '32px' : '48px',
-            backgroundColor: '#fafafa',
+            backgroundColor: 'var(--hol-card)',
           }}
         >
           <p
             style={{
-              fontSize: '11px',
+              fontSize: '14px',
               letterSpacing: '0.25em',
               textTransform: 'uppercase',
-              color: '#999999',
+              color: 'var(--hol-faint)',
               marginBottom: '16px',
-              fontFamily: 'Outfit, sans-serif',
+              fontFamily: 'Jost, sans-serif',
             }}
           >
             Project Value
           </p>
           <p
             style={{
-              fontSize: 'clamp(40px, 4vw, 56px)',
+              fontSize: 'clamp(56px, 5.5vw, 80px)',
               fontWeight: 300,
               letterSpacing: '-0.02em',
               lineHeight: 1,
-              color: '#0a0a0a',
+              color: 'var(--hol-text)',
               marginBottom: '8px',
-              fontFamily: 'Playfair Display, serif',
+              fontFamily: 'Jost, sans-serif',
             }}
           >
             {room.price}
           </p>
           <p
             style={{
-              fontSize: '14px',
-              color: '#666666',
+              fontSize: '18px',
+              color: 'var(--hol-muted)',
               lineHeight: 1.6,
               marginBottom: '40px',
-              fontFamily: 'Outfit, sans-serif',
+              fontFamily: 'Jost, sans-serif',
               fontWeight: 300,
             }}
           >
@@ -332,8 +332,8 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
 
           <div
             style={{
-              borderTop: '1px solid rgba(0,0,0,0.08)',
-              borderBottom: '1px solid rgba(0,0,0,0.08)',
+              borderTop: '1px solid var(--hol-border)',
+              borderBottom: '1px solid var(--hol-border)',
               padding: '24px 0',
               margin: '0 0 40px',
               display: 'grid',
@@ -352,13 +352,13 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
               style={{
                 width: '100%',
                 padding: '20px',
-                fontSize: '14px',
+                fontSize: '18px',
                 lineHeight: 1.6,
-                color: '#0a0a0a',
-                backgroundColor: '#ffffff',
+                color: 'var(--hol-text)',
+                backgroundColor: 'var(--hol-bg)',
                 border: '1px solid #0a0a0a',
                 textAlign: 'center',
-                fontFamily: 'Outfit, sans-serif',
+                fontFamily: 'Jost, sans-serif',
               }}
             >
               Inquiry submitted successfully.
@@ -371,17 +371,17 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
               onMouseLeave={() => setHovered(false)}
               style={{
                 width: '100%',
-                fontSize: '12px',
+                fontSize: '16px',
                 fontWeight: 500,
                 letterSpacing: '0.2em',
-                color: hovered ? '#ffffff' : '#0a0a0a',
-                backgroundColor: hovered ? '#0a0a0a' : 'transparent',
+                color: hovered ? 'var(--hol-bg)' : 'var(--hol-text)',
+                backgroundColor: hovered ? 'var(--hol-text)' : 'transparent',
                 border: '1px solid #0a0a0a',
                 padding: '20px 32px',
                 cursor: createReservation.isPending ? 'wait' : 'pointer',
                 textTransform: 'uppercase',
                 transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-                fontFamily: 'Outfit, sans-serif',
+                fontFamily: 'Jost, sans-serif',
                 opacity: createReservation.isPending ? 0.6 : 1,
               }}
             >
@@ -394,15 +394,15 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
             style={{
               width: '100%',
               marginTop: '20px',
-              fontSize: '11px',
+              fontSize: '14px',
               letterSpacing: '0.2em',
-              color: '#999999',
+              color: 'var(--hol-faint)',
               backgroundColor: 'transparent',
               border: 'none',
               padding: '10px',
               cursor: 'pointer',
               textTransform: 'uppercase',
-              fontFamily: 'Outfit, sans-serif',
+              fontFamily: 'Jost, sans-serif',
             }}
           >
             &larr; Back to collection
@@ -419,13 +419,14 @@ function StatRow({ k, v }: { k: string; v: string }) {
       style={{
         display: 'flex',
         justifyContent: 'space-between',
-        fontSize: '14px',
-        color: '#0a0a0a',
-        fontFamily: 'Outfit, sans-serif',
+        fontSize: '18px',
+        color: 'var(--hol-text)',
+        fontFamily: 'Jost, sans-serif',
       }}
     >
-      <dt style={{ color: '#999999', fontWeight: 300 }}>{k}</dt>
+      <dt style={{ color: 'var(--hol-faint)', fontWeight: 300 }}>{k}</dt>
       <dd style={{ margin: 0, fontWeight: 400 }}>{v}</dd>
     </div>
   )
 }
+

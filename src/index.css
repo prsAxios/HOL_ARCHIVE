@@ -1,4 +1,51 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@200;300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@1,200;1,300&display=swap');
+
+/* ── HOL Archive Brand Tokens ──────────────────────────────────────── */
+:root {
+  /* Brand palette */
+  --hol-white:  #F4F1EC;
+  --hol-black:  #111111;
+  --hol-grey:   #8E8A84;
+  --hol-gold:   #C2AE6D;
+  --hol-sky:    #A8B8C8;
+  --hol-red:    #E50914;
+
+  /* Light mode */
+  --hol-bg:           #FFFFFF;
+  --hol-bg-alt:       #F7F7F7;
+  --hol-text:         #111111;
+  --hol-muted:        #8E8A84;
+  --hol-faint:        #B0ADA8;
+  --hol-faintest:     #C8C5C0;
+  --hol-border:       rgba(17, 17, 17, 0.1);
+  --hol-card:         #FFFFFF;
+  --hol-pill-bg:      #111111;
+  --hol-pill-text:    #F4F1EC;
+  --hol-pill-divider: rgba(244, 241, 236, 0.15);
+}
+
+[data-theme="dark"] {
+  --hol-bg:           #111111;
+  --hol-bg-alt:       #1A1A1A;
+  --hol-text:         #F4F1EC;
+  --hol-muted:        #8E8A84;
+  --hol-faint:        #555250;
+  --hol-faintest:     #3A3835;
+  --hol-border:       rgba(244, 241, 236, 0.08);
+  --hol-card:         #1C1C1A;
+  --hol-pill-bg:      #F4F1EC;
+  --hol-pill-text:    #111111;
+  --hol-pill-divider: rgba(17, 17, 17, 0.15);
+}
+
+*, *::before, *::after {
+  transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
+  box-sizing: border-box;
+}
+
+body, h1, h2, h3, h4, h5, h6, p, span, button, input, select, textarea {
+  font-family: 'Jost', sans-serif;
+}
 
 @tailwind base;
 @tailwind components;
@@ -6,25 +53,25 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 3.9%;
+    --background: 40 30% 95%;
+    --foreground: 0 0% 7%;
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
+    --card-foreground: 0 0% 7%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-    --destructive: 0 84.2% 60.2%;
+    --popover-foreground: 0 0% 7%;
+    --primary: 0 0% 7%;
+    --primary-foreground: 43 44% 60%;
+    --secondary: 43 44% 95%;
+    --secondary-foreground: 0 0% 7%;
+    --muted: 30 5% 87%;
+    --muted-foreground: 30 5% 55%;
+    --accent: 43 44% 60%;
+    --accent-foreground: 40 30% 95%;
+    --destructive: 354 96% 48%;
     --destructive-foreground: 0 0% 98%;
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-    --ring: 0 0% 3.9%;
+    --border: 30 5% 87%;
+    --input: 30 5% 87%;
+    --ring: 43 44% 60%;
     --radius: 0px;
   }
 
@@ -36,19 +83,36 @@
   }
 
   body {
-    font-family: 'Outfit', sans-serif;
-    background-color: #ffffff;
-    color: #0a0a0a;
+    font-family: 'Jost', sans-serif;
+    background-color: var(--hol-bg);
+    color: var(--hol-text);
     overflow-x: hidden;
     line-height: 1.6;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', serif;
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--hol-text);
   }
 
   ::selection {
-    background-color: #0a0a0a;
-    color: #ffffff;
+    background-color: var(--hol-gold);
+    color: #111111;
   }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 12px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background-color: #E50914; border-radius: 0; }
+  ::-webkit-scrollbar-thumb:hover { background-color: #ff1a24; }
+  * { scrollbar-width: thin; scrollbar-color: #E50914 transparent; }
+}
+
+/* Testimonials horizontal scroll — hide scrollbar */
+.testi-track::-webkit-scrollbar { display: none; }
+.testi-track { scrollbar-width: none; }
+
+/* Pill nav: shrink gracefully on very small screens */
+@media (max-width: 380px) {
+  header .hol-pill-scroll-pct { display: none; }
 }

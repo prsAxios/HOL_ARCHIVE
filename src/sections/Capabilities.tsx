@@ -1,64 +1,91 @@
-import { useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
+﻿import { useEffect, useRef, useState } from 'react'
+import { gsap, SplitText } from '../lib/gsap-config'
 import { useIsMobile } from '../hooks/use-mobile'
 
 const services: { label: string; detail: string }[] = [
-  { label: 'Space Planning', detail: 'Strategic layout optimization for flow, function, and spatial harmony' },
-  { label: 'Interior Styling', detail: 'Curated furniture, art, and accessories that tell your story' },
-  { label: 'Material Selection', detail: 'Bespoke surfaces, textiles, and finishes sourced globally' },
-  { label: 'Custom Furniture', detail: 'One-of-a-kind pieces designed and crafted for your space' },
-  { label: 'Lighting Design', detail: 'Layered illumination plans that transform mood and atmosphere' },
-  { label: 'Project Management', detail: 'End-to-end oversight from concept through final installation' },
-  { label: '3D Visualization', detail: 'Photorealistic renders to experience your space before construction' },
-  { label: 'Art Curation', detail: 'Handpicked artworks and installations for distinctive character' },
+  { label: 'Hospitality Management',  detail: 'Ensuring every guest experiences unparalleled care and attention' },
+  { label: 'Operational Excellence',  detail: 'Precision planning and execution of complex event timelines' },
+  { label: 'Global Logistics',        detail: 'Expert transport, venue setup, and supply chain management' },
+  { label: 'Aesthetic Curation',      detail: 'Designing cohesive visual narratives that reflect your legacy' },
+  { label: 'Destination Planning',    detail: 'Navigating international venues and local vendor networks' },
+  { label: 'Financial Strategy',      detail: 'Meticulous budget management and value optimization' },
+  { label: 'Vendor Orchestration',    detail: 'Curating and managing world-class creative partners' },
+  { label: 'Legacy Documentation',    detail: 'Ensuring your celebration is immortalized through fine art' },
 ]
 
 export default function Capabilities() {
-  const videoRef = useRef<HTMLVideoElement>(null)
+  const sectionRef = useRef<HTMLElement>(null)
+  const headingRef = useRef<HTMLHeadingElement>(null)
+  const gridRef = useRef<HTMLUListElement>(null)
 
   useEffect(() => {
-    const video = videoRef.current
-    if (!video) return
-    video.play().catch(() => {})
+    const ctx = gsap.context(() => {
+      // Eyebrow
+      gsap.fromTo('.cap-eyebrow',
+        { y: 24, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.6, ease: 'expo.out',
+          scrollTrigger: { trigger: '.cap-eyebrow', start: 'top 88%' } }
+      )
+
+      // Heading words
+      const split = new SplitText(headingRef.current!, { type: 'words' })
+      gsap.set(headingRef.current, { autoAlpha: 1 })
+      gsap.fromTo(
+        split.words,
+        { y: 80, autoAlpha: 0 },
+        {
+          y: 0, autoAlpha: 1,
+          duration: 0.85, stagger: 0.07, ease: 'expo.out',
+          scrollTrigger: { trigger: headingRef.current, start: 'top 84%' },
+        }
+      )
+
+      // Sub-text
+      gsap.fromTo('.cap-sub',
+        { y: 30, autoAlpha: 0 },
+        { y: 0, autoAlpha: 1, duration: 0.7, ease: 'expo.out',
+          scrollTrigger: { trigger: '.cap-sub', start: 'top 88%' } }
+      )
+
+      // Service grid: each item clips in from bottom
+      gsap.fromTo(
+        Array.from(gridRef.current!.children),
+        { clipPath: 'inset(0 0 100% 0)', autoAlpha: 0 },
+        {
+          clipPath: 'inset(0 0 0% 0)',
+          autoAlpha: 1,
+          duration: 0.75,
+          stagger: { amount: 0.7, from: 'start' },
+          ease: 'expo.out',
+          scrollTrigger: { trigger: gridRef.current, start: 'top 80%' },
+        }
+      )
+    }, sectionRef)
+
+    return () => ctx.revert()
   }, [])
 
   return (
     <section
+      ref={sectionRef}
       id="capabilities"
       style={{
         position: 'relative',
         overflow: 'hidden',
-        backgroundColor: '#ffffff',
+        backgroundColor: 'var(--hol-bg)',
         padding: 'clamp(100px, 12vw, 160px) clamp(24px, 5vw, 80px)',
-        borderTop: '1px solid rgba(0,0,0,0.05)',
+        borderTop: '1px solid var(--hol-border)',
       }}
     >
-      <video
-        ref={videoRef}
-        src="/videos/spatial-interior.mp4"
-        muted
-        loop
-        playsInline
+      <img
+        src="/wedding_project_royal_banquet.png"
         style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          zIndex: 0,
-          opacity: 0.15,
+          position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+          objectFit: 'cover', zIndex: 0, opacity: 0.1,
         }}
       />
 
-      <div
-        style={{
-          position: 'relative',
-          zIndex: 2,
-          maxWidth: '1400px',
-          margin: '0 auto',
-        }}
-      >
+      <div style={{ position: 'relative', zIndex: 2, maxWidth: '1400px', margin: '0 auto' }}>
         <div
           style={{
             display: 'flex',
@@ -68,64 +95,60 @@ export default function Capabilities() {
             flexWrap: 'wrap',
             marginBottom: '80px',
             paddingBottom: '32px',
-            borderBottom: '1px solid rgba(0,0,0,0.1)',
+            borderBottom: '1px solid rgba(212, 175, 55, 0.2)',
           }}
         >
           <div style={{ flex: '1 1 600px' }}>
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+            <p
+              className="cap-eyebrow"
               style={{
-                fontSize: '11px',
+                fontSize: '14px',
                 letterSpacing: '0.3em',
-                color: '#666666',
+                color: 'var(--hol-muted)',
                 textTransform: 'uppercase',
                 marginBottom: '20px',
-                fontFamily: 'Outfit, sans-serif',
+                fontFamily: 'Jost, sans-serif',
+                opacity: 0,
               }}
             >
-              Excellence in Craft
-            </motion.p>
-            <motion.h2
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
+              Mastery in Motion
+            </p>
+            <h2
+              ref={headingRef}
               style={{
-                fontSize: 'clamp(40px, 6vw, 80px)',
+                fontSize: 'clamp(36px, 7.5vw, 108px)',
                 fontWeight: 300,
                 letterSpacing: '-0.02em',
                 lineHeight: 1.1,
-                color: '#0a0a0a',
+                color: 'var(--hol-text)',
                 marginBottom: '28px',
-                fontFamily: 'Playfair Display, serif',
+                fontFamily: 'Jost, sans-serif',
+                opacity: 0,
               }}
             >
               Our Services
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
+            </h2>
+            <p
+              className="cap-sub"
               style={{
-                fontSize: 'clamp(16px, 1.4vw, 20px)',
+                fontSize: 'clamp(22px, 1.8vw, 28px)',
                 fontWeight: 300,
                 lineHeight: 1.7,
                 color: '#444444',
                 maxWidth: '700px',
-                fontFamily: 'Outfit, sans-serif',
+                fontFamily: 'Jost, sans-serif',
+                opacity: 0,
               }}
             >
-              From conceptual sketches to the final installation, we provide 
-              a comprehensive design service that ensures your vision is 
-              brought to life with uncompromising quality.
-            </motion.p>
+              From initial logistical mapping to the final hospitality touch, we
+              provide a seamless orchestration that ensures your celebration
+              is executed with uncompromising precision.
+            </p>
           </div>
         </div>
 
         <ul
+          ref={gridRef}
           style={{
             listStyle: 'none',
             padding: 0,
@@ -133,12 +156,12 @@ export default function Capabilities() {
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))',
             gap: '1px',
-            backgroundColor: 'rgba(0,0,0,0.05)',
-            border: '1px solid rgba(0,0,0,0.05)',
+            backgroundColor: 'rgba(212, 175, 55, 0.1)',
+            border: '1px solid rgba(212, 175, 55, 0.1)',
           }}
         >
           {services.map((service, i) => (
-            <BulletItem key={service.label} index={i} {...service} />
+            <ServiceItem key={service.label} index={i} {...service} />
           ))}
         </ul>
       </div>
@@ -146,41 +169,34 @@ export default function Capabilities() {
   )
 }
 
-function BulletItem({
-  label,
-  detail,
-  index,
-}: {
-  label: string
-  detail: string
-  index: number
-}) {
+function ServiceItem({ label, detail, index }: { label: string; detail: string; index: number }) {
   const isMobile = useIsMobile()
+  const [hovered, setHovered] = useState(false)
 
   return (
-    <motion.li
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ delay: index * 0.05 }}
+    <li
       style={{
-        backgroundColor: '#ffffff',
+        backgroundColor: hovered ? 'var(--hol-card)' : 'var(--hol-bg-alt)',
         padding: isMobile ? '32px 24px' : '40px 48px',
         display: 'flex',
         gap: isMobile ? '16px' : '24px',
         alignItems: 'flex-start',
         minHeight: '160px',
+        transition: 'background-color 0.35s ease',
+        clipPath: 'inset(0 0 100% 0)',
       }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
     >
       <span
         style={{
           flex: '0 0 auto',
-          fontSize: '11px',
+          fontSize: '14px',
           letterSpacing: '0.1em',
-          color: '#bbbbbb',
+          color: 'var(--hol-faintest)',
           fontVariantNumeric: 'tabular-nums',
           paddingTop: '6px',
-          fontFamily: 'Outfit, sans-serif',
+          fontFamily: 'Jost, sans-serif',
         }}
       >
         {String(index + 1).padStart(2, '0')}
@@ -188,30 +204,32 @@ function BulletItem({
       <div style={{ flex: '1 1 0%' }}>
         <h3
           style={{
-            fontSize: 'clamp(20px, 1.8vw, 26px)',
+            fontSize: 'clamp(20px, 2.4vw, 38px)',
             fontWeight: 400,
             letterSpacing: '-0.01em',
             lineHeight: 1.2,
-            color: '#0a0a0a',
+            color: 'var(--hol-text)',
             marginBottom: '12px',
-            fontFamily: 'Playfair Display, serif',
+            fontFamily: 'Jost, sans-serif',
           }}
         >
           {label}
         </h3>
         <p
           style={{
-            fontSize: '15px',
+            fontSize: '19px',
             lineHeight: 1.6,
-            color: '#666666',
+            color: 'var(--hol-muted)',
             margin: 0,
-            fontFamily: 'Outfit, sans-serif',
+            fontFamily: 'Jost, sans-serif',
             fontWeight: 300,
           }}
         >
           {detail}
         </p>
       </div>
-    </motion.li>
+    </li>
   )
 }
+
+
