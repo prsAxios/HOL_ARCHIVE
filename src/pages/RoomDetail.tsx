@@ -50,7 +50,7 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
           color: 'var(--hol-text)',
           flexDirection: 'column',
           gap: '20px',
-          fontFamily: 'Jost, sans-serif',
+          fontFamily: 'Poppins, sans-serif',
         }}
       >
         <p style={{ fontSize: '26px' }}>Project not found.</p>
@@ -122,7 +122,7 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
             color: 'var(--hol-text)',
             cursor: 'pointer',
             textTransform: 'uppercase',
-            fontFamily: 'Jost, sans-serif',
+            fontFamily: 'Poppins, sans-serif',
             backdropFilter: 'blur(10px)',
             zIndex: 10,
           }}
@@ -148,7 +148,7 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
               textTransform: 'uppercase',
               color: 'var(--hol-muted)',
               marginBottom: '16px',
-              fontFamily: 'Jost, sans-serif',
+              fontFamily: 'Poppins, sans-serif',
             }}
           >
             Project {room.id} &middot; {room.client}
@@ -164,7 +164,7 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
               lineHeight: 1,
               margin: 0,
               maxWidth: '1000px',
-              fontFamily: 'Jost, sans-serif',
+              fontFamily: 'Poppins, sans-serif',
             }}
           >
             {room.title}
@@ -198,13 +198,13 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
               color: 'var(--hol-text)',
               marginBottom: isMobile ? '40px' : '64px',
               maxWidth: '800px',
-              fontFamily: 'Jost, sans-serif',
+              fontFamily: 'Poppins, sans-serif',
             }}
           >
             {room.tagline}
           </motion.p>
 
-          <div style={{ fontFamily: 'Jost, sans-serif', fontWeight: 300 }}>
+          <div style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 300 }}>
             {room.description.map((p, i) => (
               <p
                 key={i}
@@ -235,7 +235,7 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
                 color: 'var(--hol-faint)',
                 textTransform: 'uppercase',
                 marginBottom: '40px',
-                fontFamily: 'Jost, sans-serif',
+                fontFamily: 'Poppins, sans-serif',
               }}
             >
               Key Details
@@ -259,7 +259,7 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
                     color: 'var(--hol-text)',
                     paddingLeft: '32px',
                     position: 'relative',
-                    fontFamily: 'Jost, sans-serif',
+                    fontFamily: 'Poppins, sans-serif',
                     fontWeight: 300,
                   }}
                 >
@@ -299,7 +299,7 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
               textTransform: 'uppercase',
               color: 'var(--hol-faint)',
               marginBottom: '16px',
-              fontFamily: 'Jost, sans-serif',
+              fontFamily: 'Poppins, sans-serif',
             }}
           >
             Project Value
@@ -312,7 +312,7 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
               lineHeight: 1,
               color: 'var(--hol-text)',
               marginBottom: '8px',
-              fontFamily: 'Jost, sans-serif',
+              fontFamily: 'Poppins, sans-serif',
             }}
           >
             {room.price}
@@ -323,7 +323,7 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
               color: 'var(--hol-muted)',
               lineHeight: 1.6,
               marginBottom: '40px',
-              fontFamily: 'Jost, sans-serif',
+              fontFamily: 'Poppins, sans-serif',
               fontWeight: 300,
             }}
           >
@@ -358,7 +358,7 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
                 backgroundColor: 'var(--hol-bg)',
                 border: '1px solid #0a0a0a',
                 textAlign: 'center',
-                fontFamily: 'Jost, sans-serif',
+                fontFamily: 'Poppins, sans-serif',
               }}
             >
               Inquiry submitted successfully.
@@ -381,7 +381,7 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
                 cursor: createReservation.isPending ? 'wait' : 'pointer',
                 textTransform: 'uppercase',
                 transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-                fontFamily: 'Jost, sans-serif',
+                fontFamily: 'Poppins, sans-serif',
                 opacity: createReservation.isPending ? 0.6 : 1,
               }}
             >
@@ -402,7 +402,7 @@ export default function RoomDetail({ roomId, onBack }: RoomDetailProps) {
               padding: '10px',
               cursor: 'pointer',
               textTransform: 'uppercase',
-              fontFamily: 'Jost, sans-serif',
+              fontFamily: 'Poppins, sans-serif',
             }}
           >
             &larr; Back to collection
@@ -421,7 +421,7 @@ function StatRow({ k, v }: { k: string; v: string }) {
         justifyContent: 'space-between',
         fontSize: '18px',
         color: 'var(--hol-text)',
-        fontFamily: 'Jost, sans-serif',
+        fontFamily: 'Poppins, sans-serif',
       }}
     >
       <dt style={{ color: 'var(--hol-faint)', fontWeight: 300 }}>{k}</dt>
@@ -429,4 +429,5 @@ function StatRow({ k, v }: { k: string; v: string }) {
     </div>
   )
 }
+
 

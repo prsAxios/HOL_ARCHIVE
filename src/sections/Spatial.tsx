@@ -129,7 +129,7 @@ export default function Spatial() {
               lineHeight: 0.85,
               letterSpacing: '-0.04em',
               color: 'var(--hol-text)',
-              fontFamily: 'Jost, sans-serif',
+              fontFamily: 'Poppins, sans-serif',
               userSelect: 'none',
             }}
           >
@@ -151,7 +151,7 @@ export default function Spatial() {
               lineHeight: 0.85,
               letterSpacing: '-0.04em',
               color: 'var(--hol-text)',
-              fontFamily: 'Jost, sans-serif',
+              fontFamily: 'Poppins, sans-serif',
               userSelect: 'none',
             }}
           >
@@ -173,7 +173,7 @@ export default function Spatial() {
               lineHeight: 0.85,
               letterSpacing: '-0.04em',
               color: 'var(--hol-text)',
-              fontFamily: 'Jost, sans-serif',
+              fontFamily: 'Poppins, sans-serif',
               userSelect: 'none',
             }}
           >
@@ -197,7 +197,7 @@ export default function Spatial() {
           textAlign: 'center',
           maxWidth: '480px',
           lineHeight: 1.85,
-          fontFamily: 'Jost, sans-serif',
+          fontFamily: 'Poppins, sans-serif',
           padding: '0 24px',
         }}
       >
@@ -222,7 +222,7 @@ export default function Spatial() {
           cursor: 'pointer',
           transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
           textTransform: 'uppercase',
-          fontFamily: 'Jost, sans-serif',
+          fontFamily: 'Poppins, sans-serif',
         }}
       >
         Explore The Portfolio
@@ -238,6 +238,7 @@ const wordStyle: React.CSSProperties = {
   letterSpacing: '0.3em',
   color: 'var(--hol-gold)',
   textTransform: 'uppercase',
-  fontFamily: 'Jost, sans-serif',
+  fontFamily: 'Poppins, sans-serif',
   whiteSpace: 'nowrap',
 }
+

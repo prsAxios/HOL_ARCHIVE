@@ -1,14 +1,54 @@
 ﻿import { useState } from 'react'
 import { trpc } from '@/providers/trpc'
-import { useIsMobile } from '../hooks/use-mobile'
+
+const inputStyle: React.CSSProperties = {
+  width: '100%',
+  padding: '10px 12px',
+  fontSize: '14px',
+  fontFamily: 'Poppins, sans-serif',
+  fontWeight: 300,
+  color: 'var(--hol-text)',
+  backgroundColor: 'var(--hol-bg)',
+  border: '1px solid var(--hol-border)',
+  borderRadius: '4px',
+  outline: 'none',
+  appearance: 'none',
+}
+
+const labelStyle: React.CSSProperties = {
+  fontSize: '13px',
+  fontWeight: 600,
+  fontFamily: 'Poppins, sans-serif',
+  color: 'var(--hol-text)',
+  display: 'block',
+  marginBottom: '20px',
+}
+
+const sectionLabel: React.CSSProperties = {
+  fontSize: '15px',
+  fontWeight: 700,
+  fontFamily: 'Poppins, sans-serif',
+  color: 'var(--hol-text)',
+  marginBottom: '12px',
+  marginTop: '4px',
+}
+
+const REQUIREMENTS = [
+  'Hospitality Management',
+  'Operations Management',
+  'Logistics Management',
+  'Manpower Support',
+  'Full Execution Support',
+  'Destination Wedding Support',
+]
 
 export default function Contact() {
-  const isMobile = useIsMobile()
-  const [submitHovered, setSubmitHovered] = useState(false)
   const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [checked, setChecked] = useState<string[]>([])
   const [formData, setFormData] = useState({
-    name: '', email: '', projectType: 'Grand Wedding', budget: 'Under 100 Guests', message: '',
+    fullName: '', company: '', phone: '', email: '',
+    eventType: '', location: '', dates: '', guestCount: '', servicetier: '', message: '',
   })
 
   const createConsultation = trpc.consultation.create.useMutation({
@@ -16,206 +56,216 @@ export default function Contact() {
     onError: (err) => { setSubmitError(err.message || 'Something went wrong.') },
   })
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
+  }
+
+  const toggleCheck = (label: string) => {
+    setChecked(prev => prev.includes(label) ? prev.filter(l => l !== label) : [...prev, label])
   }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     setSubmitError(null)
-    if (!formData.name || !formData.email) { setSubmitError('Please fill in all required fields.'); return }
+    if (!formData.fullName || !formData.email) {
+      setSubmitError('Please fill in Full Name and Email.')
+      return
+    }
     createConsultation.mutate({
-      fullName: formData.name, email: formData.email,
-      projectType: formData.projectType, budgetRange: formData.budget,
-      message: formData.message || undefined,
+      fullName: formData.fullName,
+      email: formData.email,
+      projectType: formData.eventType || 'General',
+      budgetRange: formData.guestCount || 'Not specified',
+      message: [formData.message, checked.length ? `Requirements: ${checked.join(', ')}` : ''].filter(Boolean).join('\n') || undefined,
     })
   }
 
   return (
-    <section
-      id="contact"
-      style={{
-        position: 'relative', width: '100%', minHeight: '800px',
-        backgroundColor: 'var(--hol-bg-alt)',
-        display: 'grid',
-        gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
-        borderTop: '1px solid rgba(212, 175, 55, 0.1)',
-      }}
-    >
-      {/* Left brand panel */}
-      <div style={{
-        width: '100%', minHeight: isMobile ? '240px' : '420px',
-        backgroundColor: 'var(--hol-bg-alt)',
-        display: 'flex', flexDirection: 'column',
-        alignItems: 'center', justifyContent: 'center', gap: '24px',
-        padding: '80px 40px',
-      }}>
-        <svg width="80" height="87" viewBox="0 0 56 60" fill="none"
-          stroke="var(--hol-text)" strokeWidth="1.5"
-          strokeLinecap="square" strokeLinejoin="miter">
-          <polyline points="3,58 3,22 28,3 53,22 53,58" />
-          <polyline points="13,58 13,28 28,14 43,28 43,58" />
-        </svg>
-        <span style={{
-          fontSize: 'clamp(24px, 3.5vw, 44px)', fontWeight: 400,
-          letterSpacing: '0.3em', color: 'var(--hol-text)',
-          fontFamily: 'Jost, sans-serif', textTransform: 'uppercase',
+    <section id="contact" style={{ backgroundColor: 'var(--hol-bg)', padding: 'clamp(60px, 8vw, 100px) clamp(24px, 6vw, 80px)' }}>
+
+      {/* Heading */}
+      <div style={{ textAlign: 'center', marginBottom: '40px' }}>
+        <h2 style={{
+          fontFamily: 'Poppins, sans-serif', fontWeight: 700,
+          fontSize: 'clamp(24px, 3.5vw, 42px)',
+          color: 'var(--hol-text)', margin: '0 0 12px',
+          letterSpacing: '-0.02em',
         }}>
-          ARCHIVE
-        </span>
+          Every successful event begins with operational clarity.
+        </h2>
+        <p style={{
+          fontFamily: 'Poppins, sans-serif', fontWeight: 300,
+          fontSize: 'clamp(13px, 1vw, 15px)', color: 'var(--hol-muted)',
+          maxWidth: '620px', margin: '0 auto', lineHeight: 1.7,
+        }}>
+          Whether you're planning a luxury wedding, large-scale production, or destination event, H.O.L Archive is built to
+          deliver structured execution, operational control, and seamless coordination from start to finish.
+        </p>
       </div>
 
-      {/* Right: form */}
-      <div style={{
-        backgroundColor: 'var(--hol-bg-alt)', color: 'var(--hol-text)',
-        padding: 'clamp(60px, 8vw, 120px) clamp(24px, 5vw, 80px)',
-        display: 'flex', flexDirection: 'column', justifyContent: 'center',
-      }}>
-        <div style={{ maxWidth: '560px', width: '100%', marginLeft: 'auto', marginRight: 'auto' }}>
-          <p style={{
-            fontSize: '14px', letterSpacing: '0.25em', color: 'var(--hol-faint)',
-            textTransform: 'uppercase', marginBottom: '20px', fontFamily: 'Jost, sans-serif',
-          }}>
-            Inquiries
-          </p>
-          <h3 style={{
-            fontSize: 'clamp(28px, 5.5vw, 70px)', fontWeight: 300,
-            letterSpacing: '-0.01em', lineHeight: 1.2,
-            marginBottom: '48px', fontFamily: 'Jost, sans-serif',
-          }}>
-            Tell us about your vision.
-          </h3>
-
-          {submitted ? (
-            <div style={{
-              border: '1px solid var(--hol-border)', padding: '40px',
-              fontSize: '20px', lineHeight: 1.6, color: 'var(--hol-text)',
-              fontFamily: 'Jost, sans-serif', fontWeight: 300,
-            }}>
-              Thank you. Our principal architect of events will review your inquiry
-              and reach out within 24 hours.
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-              {submitError && (
-                <div style={{
-                  backgroundColor: '#fff0f0', padding: '16px', fontSize: '18px',
-                  color: '#d00', marginBottom: '8px', fontFamily: 'Jost, sans-serif',
-                }}>
-                  {submitError}
-                </div>
-              )}
-              <Field label="Full name" type="text" name="name" placeholder="Name" value={formData.name} onChange={handleChange} />
-              <Field label="Email address" type="email" name="email" placeholder="Email" value={formData.email} onChange={handleChange} />
-              <Row>
-                <SelectField label="Event type" name="projectType" value={formData.projectType} onChange={handleChange}
-                  options={['Grand Wedding', 'Destination Celebration', 'Corporate Gala', 'Private Milestone']} />
-                <SelectField label="Guest count" name="budget" value={formData.budget} onChange={handleChange}
-                  options={['Under 100 Guests', '100 - 250 Guests', '250 - 500 Guests', '500 Guests +', 'Confidential']} />
-              </Row>
-              <TextareaField label="Message (optional)" name="message"
-                placeholder="Tell us about your celebration..." value={formData.message} onChange={handleChange} />
-              <button
-                type="submit"
-                disabled={createConsultation.isPending}
-                onMouseEnter={() => setSubmitHovered(true)}
-                onMouseLeave={() => setSubmitHovered(false)}
-                style={{
-                  marginTop: '20px', padding: '20px 40px',
-                  fontSize: '16px', fontWeight: 500, letterSpacing: '0.2em',
-                  color: submitHovered ? 'var(--hol-bg)' : 'var(--hol-text)',
-                  backgroundColor: submitHovered ? 'var(--hol-text)' : 'transparent',
-                  border: '1px solid var(--hol-border)',
-                  cursor: createConsultation.isPending ? 'wait' : 'pointer',
-                  textTransform: 'uppercase',
-                  transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
-                  fontFamily: 'Jost, sans-serif',
-                  opacity: createConsultation.isPending ? 0.6 : 1,
-                }}
-              >
-                {createConsultation.isPending ? 'Sending...' : 'Send Inquiry'}
-              </button>
-            </form>
-          )}
+      {submitted ? (
+        <div style={{
+          maxWidth: '700px', margin: '0 auto', padding: '40px',
+          border: '1px solid var(--hol-border)', borderRadius: '8px',
+          fontFamily: 'Poppins, sans-serif', fontWeight: 300,
+          fontSize: '18px', color: 'var(--hol-text)', lineHeight: 1.7, textAlign: 'center',
+        }}>
+          Thank you. Our team will review your inquiry and respond within 24â€“48 hours.
         </div>
-      </div>
+      ) : (
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'minmax(0,1fr) 260px',
+          gap: '32px',
+          maxWidth: '960px',
+          margin: '0 auto',
+          alignItems: 'start',
+        }}>
+          {/* Form */}
+          <form onSubmit={handleSubmit}>
+            {submitError && (
+              <div style={{ color: '#d00', fontFamily: 'Poppins, sans-serif', fontSize: '13px', marginBottom: '12px' }}>
+                {submitError}
+              </div>
+            )}
+
+            {/* Basic Information */}
+            <p style={sectionLabel}>Basic Information</p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '10px' }}>
+              <input name="fullName" placeholder="Full Name" value={formData.fullName} onChange={handleChange} style={inputStyle} />
+              <input name="company" placeholder="Company / Planner Name" value={formData.company} onChange={handleChange} style={inputStyle} />
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '24px' }}>
+              <input name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange} style={inputStyle} />
+              <input name="email" type="email" placeholder="Email Address" value={formData.email} onChange={handleChange} style={inputStyle} />
+            </div>
+
+            {/* Project Information */}
+            <p style={sectionLabel}>Project Information</p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '10px', marginBottom: '24px' }}>
+              <input name="eventType" placeholder="Type of Event" value={formData.eventType} onChange={handleChange} style={inputStyle} />
+              <input name="location" placeholder="Event Location" value={formData.location} onChange={handleChange} style={inputStyle} />
+              <input name="dates" placeholder="Event Dates" value={formData.dates} onChange={handleChange} style={inputStyle} />
+              <input name="guestCount" placeholder="Estimated Guest Count" value={formData.guestCount} onChange={handleChange} style={inputStyle} />
+            </div>
+
+            {/* Service Tier */}
+            <p style={sectionLabel}>Services / Experiences Looking For</p>
+            <div style={{ marginBottom: '24px' }}>
+              <select
+                name="servicetier"
+                value={formData.servicetier}
+                onChange={e => setFormData(prev => ({ ...prev, servicetier: e.target.value }))}
+                style={{ ...inputStyle, color: formData.servicetier ? 'var(--hol-text)' : 'var(--hol-muted)' }}
+              >
+                <option value="">Select an experience</option>
+                <option value="Luxury Tier Experiences">Luxury Tier Experiences</option>
+                <option value="Scalable Event & Backend Support">Scalable Event &amp; Backend Support</option>
+                <option value="Destination & Multi-Day Operations">Destination &amp; Multi-Day Operations</option>
+              </select>
+            </div>
+
+            {/* Requirement Section */}
+            <p style={sectionLabel}>Requirement Section</p>
+            <div style={{
+              display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '8px 16px', marginBottom: '24px',
+            }}>
+              {REQUIREMENTS.map(req => (
+                <label key={req} style={{
+                  display: 'flex', alignItems: 'center', gap: '8px',
+                  fontFamily: 'Poppins, sans-serif', fontWeight: 300,
+                  fontSize: '13px', color: 'var(--hol-text)', cursor: 'pointer',
+                }}>
+                  <input
+                    type="checkbox"
+                    checked={checked.includes(req)}
+                    onChange={() => toggleCheck(req)}
+                    style={{ accentColor: '#C2AE6D', width: '14px', height: '14px', cursor: 'pointer' }}
+                  />
+                  {req}
+                </label>
+              ))}
+            </div>
+
+            {/* Message */}
+            <p style={sectionLabel}>Message Box</p>
+            <textarea
+              name="message"
+              placeholder="Tell us about your event requirements, challenges, or operational expectations."
+              value={formData.message}
+              onChange={handleChange}
+              rows={5}
+              style={{ ...inputStyle, resize: 'vertical', marginBottom: '16px' }}
+            />
+
+            <button
+              type="submit"
+              disabled={createConsultation.isPending}
+              style={{
+                width: '100%', padding: '14px',
+                backgroundColor: 'var(--hol-text)', color: 'var(--hol-bg)',
+                border: 'none', borderRadius: '4px',
+                fontFamily: 'Poppins, sans-serif', fontWeight: 500,
+                fontSize: '14px', letterSpacing: '0.08em',
+                cursor: createConsultation.isPending ? 'wait' : 'pointer',
+                opacity: createConsultation.isPending ? 0.6 : 1,
+                transition: 'opacity 0.2s',
+              }}
+            >
+              {createConsultation.isPending ? 'Sending...' : 'Submit Inquiry'}
+            </button>
+          </form>
+
+          {/* Direct Contact sidebar */}
+          <div style={{
+            border: '1px solid var(--hol-border)',
+            borderRadius: '8px',
+            padding: '20px',
+            fontFamily: 'Poppins, sans-serif',
+          }}>
+            <p style={{ fontWeight: 700, fontSize: '14px', color: 'var(--hol-text)', marginBottom: '16px' }}>
+              Direct Contact
+            </p>
+
+            {[
+              { icon: 'ðŸ“ž', label: 'Phone', value: '+91 XXXXX XXXXX' },
+              { icon: 'âœ‰ï¸', label: 'Email', value: 'holarchives@gmail.com' },
+              { icon: 'ðŸ“', label: 'Location', value: 'Mumbai, India\n(Operating across India)' },
+            ].map(({ icon, label, value }) => (
+              <div key={label} style={{ marginBottom: '14px' }}>
+                <p style={{ fontSize: '12px', fontWeight: 700, color: 'var(--hol-text)', margin: '0 0 2px' }}>
+                  {icon} {label}
+                </p>
+                <p style={{ fontSize: '12px', fontWeight: 300, color: 'var(--hol-muted)', margin: 0, whiteSpace: 'pre-line' }}>
+                  {value}
+                </p>
+              </div>
+            ))}
+
+            <p style={{
+              fontSize: '11px', fontWeight: 300, color: 'var(--hol-muted)',
+              lineHeight: 1.6, margin: '16px 0 0',
+              borderTop: '1px solid var(--hol-border)', paddingTop: '14px',
+            }}>
+              Our team reviews every inquiry carefully to understand the operational requirements of your event.
+              We typically respond within 24â€“48 hours.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Footer tagline */}
+      <p style={{
+        textAlign: 'center',
+        fontFamily: 'Poppins, sans-serif', fontWeight: 400,
+        fontSize: 'clamp(20px, 3vw, 36px)',
+        color: 'var(--hol-text)', marginTop: '60px',
+        letterSpacing: '-0.01em',
+      }}>
+        Precision begins long before the event day.
+      </p>
     </section>
-  )
-}
-
-function Row({ children }: { children: React.ReactNode }) {
-  return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))', gap: '32px' }}>
-      {children}
-    </div>
-  )
-}
-
-const fieldBase: React.CSSProperties = {
-  width: '100%', padding: '16px 0', fontSize: '20px',
-  backgroundColor: 'transparent', color: 'var(--hol-text)',
-  border: 'none', borderBottom: '1px solid var(--hol-border)',
-  outline: 'none', fontFamily: 'Jost, sans-serif',
-  letterSpacing: '0.01em', appearance: 'none', fontWeight: 300,
-}
-
-const labelBase: React.CSSProperties = {
-  fontSize: '13px', letterSpacing: '0.2em', color: 'var(--hol-faint)',
-  textTransform: 'uppercase', marginBottom: '8px', display: 'block',
-  fontFamily: 'Jost, sans-serif',
-}
-
-function Field({ label, type, name, placeholder, value, onChange }: {
-  label: string; type: string; name: string; placeholder?: string
-  value?: string; onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void
-}) {
-  return (
-    <label style={{ display: 'block' }}>
-      <span style={labelBase}>{label}</span>
-      <input type={type} name={name} placeholder={placeholder} value={value} onChange={onChange}
-        style={fieldBase}
-        onFocus={e => (e.currentTarget.style.borderBottomColor = 'var(--hol-text)')}
-        onBlur={e => (e.currentTarget.style.borderBottomColor = 'var(--hol-border)')}
-      />
-    </label>
-  )
-}
-
-function SelectField({ label, name, options, value, onChange }: {
-  label: string; name: string; options: string[]
-  value?: string; onChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void
-}) {
-  return (
-    <label style={{ display: 'block' }}>
-      <span style={labelBase}>{label}</span>
-      <select name={name} value={value} onChange={onChange}
-        style={{ ...fieldBase, paddingRight: '20px' }}
-        onFocus={e => (e.currentTarget.style.borderBottomColor = 'var(--hol-text)')}
-        onBlur={e => (e.currentTarget.style.borderBottomColor = 'var(--hol-border)')}
-      >
-        {options.map(opt => (
-          <option key={opt} value={opt} style={{ color: 'var(--hol-text)', backgroundColor: 'var(--hol-bg)' }}>
-            {opt}
-          </option>
-        ))}
-      </select>
-    </label>
-  )
-}
-
-function TextareaField({ label, name, placeholder, value, onChange }: {
-  label: string; name: string; placeholder?: string
-  value?: string; onChange?: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
-}) {
-  return (
-    <label style={{ display: 'block' }}>
-      <span style={labelBase}>{label}</span>
-      <textarea name={name} placeholder={placeholder} rows={3} value={value} onChange={onChange}
-        style={{ ...fieldBase, resize: 'vertical', paddingTop: '16px' }}
-        onFocus={e => (e.currentTarget.style.borderBottomColor = 'var(--hol-text)')}
-        onBlur={e => (e.currentTarget.style.borderBottomColor = 'var(--hol-border)')}
-      />
-    </label>
   )
 }
 

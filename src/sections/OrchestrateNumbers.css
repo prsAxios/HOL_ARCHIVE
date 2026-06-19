@@ -1,0 +1,227 @@
+/* Orchestrate Section Layout */
+.orch-section {
+  position: relative;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0b0b0b;
+}
+
+/* Perspective wrapper to give 3D depth to the stack */
+.orch-stack-wrapper {
+  position: relative;
+  width: 92%;
+  max-width: 1200px;
+  height: 75vh;
+  max-height: 620px;
+  perspective: 1500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Folder Card Base */
+.folder-card {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: calc(100% - 120px); /* Leaves space for the stacked cards to peek out on the right */
+  height: 100%;
+  border-radius: 24px;
+  padding: clamp(32px, 5vw, 72px);
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  box-shadow: 0 35px 80px -25px rgba(0, 0, 0, 0.65), 
+              inset 0 1px 1px rgba(255, 255, 255, 0.08);
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+}
+
+/* Light theme overrides for Folder 04 */
+.folder-card.is-light {
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 35px 80px -25px rgba(0, 0, 0, 0.25), 
+              inset 0 1px 1px rgba(255, 255, 255, 0.6);
+}
+
+/* Folder Tab - The physical folder label top tab */
+.folder-tab {
+  position: absolute;
+  top: -39px;
+  height: 40px;
+  padding: 0 clamp(16px, 2.5vw, 36px);
+  border-radius: 14px 14px 0 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(10px, 0.8vw, 12px);
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+  border-right: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 -8px 20px -8px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.folder-card.is-light .folder-tab {
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-left: 1px solid rgba(0, 0, 0, 0.06);
+  border-right: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: 0 -8px 20px -8px rgba(0, 0, 0, 0.1);
+}
+
+/* Big Ghost Number behind content */
+.folder-ghost-number {
+  position: absolute;
+  left: -0.04em;
+  bottom: -0.18em;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: clamp(280px, 38vw, 550px);
+  line-height: 0.8;
+  user-select: none;
+  pointer-events: none;
+  letter-spacing: -0.06em;
+  z-index: 0;
+  opacity: 0.85;
+}
+
+/* Folder Content Area */
+.folder-content {
+  position: relative;
+  z-index: 2;
+  max-width: clamp(320px, 45vw, 640px);
+}
+
+.folder-tag {
+  display: inline-block;
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(10px, 0.8vw, 12px);
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  padding: 6px 18px;
+  border-radius: 100px;
+  margin-bottom: clamp(20px, 3vh, 36px);
+  text-transform: uppercase;
+}
+
+.folder-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(32px, 5vw, 76px);
+  font-weight: 300;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin: 0 0 clamp(16px, 2.5vh, 28px);
+  white-space: pre-line;
+}
+
+.folder-body {
+  font-family: 'Poppins', sans-serif;
+  font-size: clamp(14px, 1.1vw, 18px);
+  font-weight: 300;
+  line-height: 1.7;
+  max-width: 480px;
+  margin: 0;
+}
+
+/* Counter on bottom right */
+.folder-counter {
+  position: absolute;
+  bottom: clamp(24px, 4vh, 48px);
+  right: clamp(32px, 5vw, 64px);
+  font-family: 'Poppins', sans-serif;
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  font-weight: 500;
+  opacity: 0.4;
+}
+
+/* ──────────────── RESPONSIVENESS ──────────────── */
+
+/* Tablet Viewports */
+@media (max-width: 1024px) {
+  .orch-stack-wrapper {
+    height: 70vh;
+    max-height: 550px;
+  }
+  .folder-card {
+    width: calc(100% - 72px); /* Matches reduced offset */
+    padding: clamp(24px, 4vw, 48px);
+  }
+}
+
+/* Mobile Viewports */
+@media (max-width: 768px) {
+  .orch-stack-wrapper {
+    width: 90%;
+    height: 75vh;
+    max-height: 520px;
+  }
+  
+  .folder-card {
+    width: 100%; /* Full width stack on mobile */
+    height: calc(100% - 72px); /* Leave room for vertical offsets */
+    padding: 28px 24px;
+    border-radius: 20px;
+  }
+  
+  .folder-tab {
+    top: -33px;
+    height: 34px;
+    padding: 0 16px;
+    border-radius: 10px 10px 0 0;
+    font-size: 9px;
+  }
+  
+  .folder-ghost-number {
+    font-size: clamp(200px, 35vw, 320px);
+  }
+
+  .folder-title {
+    font-size: clamp(26px, 8vw, 42px);
+    margin-bottom: 12px;
+  }
+
+  .folder-body {
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .folder-tag {
+    padding: 4px 12px;
+    font-size: 9px;
+    margin-bottom: 16px;
+  }
+}
+
+/* Tab Positioning */
+.tab-0 { left: 40px; }
+.tab-1 { left: 200px; }
+.tab-2 { left: 360px; }
+.tab-3 { left: 520px; }
+
+@media (max-width: 1024px) {
+  .tab-0 { left: 24px; }
+  .tab-1 { left: 154px; }
+  .tab-2 { left: 284px; }
+  .tab-3 { left: 414px; }
+}
+
+@media (max-width: 768px) {
+  .tab-0 { left: 12px; }
+  .tab-1 { left: 82px; }
+  .tab-2 { left: 152px; }
+  .tab-3 { left: 222px; }
+}
+

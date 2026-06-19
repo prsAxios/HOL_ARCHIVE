@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useIsMobile } from '../hooks/use-mobile'
 import { useTheme } from '../context/ThemeContext'
@@ -8,8 +9,8 @@ interface HeaderProps {
   scrollRef: React.RefObject<{ y: number; speed: number }>
 }
 
-const navItems = ['Philosophy', 'Services', 'Team', 'Inquire']
-const sectionIds = ['#about', '#services', '#team', '#footer']
+const navItems = ['The Story', 'Services', 'Why HOL', 'Vision', 'Work', 'Process', 'Archive', 'Contact']
+const sectionIds = ['#about', '#services', '#why-hol', '#vision', '#work', '#process', '#archive', '#contact']
 
 export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -18,8 +19,11 @@ export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
   const audioRef = useRef<HTMLAudioElement>(null)
   const isMobile = useIsMobile()
   const { theme, toggle: toggleTheme } = useTheme()
+  const navigate = useNavigate()
 
   const pillHover = theme === 'dark' ? 'rgba(0,0,0,0.12)' : 'rgba(255,255,255,0.08)'
+  const sidenavBg = theme === 'dark' ? 'rgba(11, 11, 11, 0.7)' : 'rgba(255, 255, 255, 0.7)'
+  const sidenavBorder = theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)'
 
   useEffect(() => {
     const onScroll = () => {
@@ -48,8 +52,17 @@ export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
 
   const handleNavClick = (index: number) => {
     setIsMenuOpen(false)
-    const target = document.querySelector(sectionIds[index])
-    if (target) setTimeout(() => scrollTo(target), isMenuOpen ? 400 : 0)
+    const item = navItems[index]
+    if (item === 'The Story') {
+      navigate('/story')
+    } else if (item === 'Why HOL') {
+      navigate('/why-hol-archive')
+    } else if (item === 'Archive') {
+      navigate('/archive')
+    } else {
+      const target = document.querySelector(sectionIds[index])
+      if (target) setTimeout(() => scrollTo(target), isMenuOpen ? 400 : 0)
+    }
   }
 
   return (
@@ -59,6 +72,32 @@ export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
         @keyframes hBar2 { 0%,100%{height:12px} 50%{height:4px}  }
         @keyframes hBar3 { 0%,100%{height:6px}  50%{height:16px} }
         @keyframes hBar4 { 0%,100%{height:14px} 50%{height:5px}  }
+        @keyframes coinFlip {
+          0%   { transform: rotateY(0deg); }
+          30%  { transform: rotateY(180deg); }
+          60%  { transform: rotateY(360deg); }
+          80%  { transform: rotateY(400deg); }
+          100% { transform: rotateY(360deg); }
+        }
+        .logo-coin:hover { animation: coinFlip 0.7s cubic-bezier(0.45,0,0.55,1) forwards; }
+        @keyframes slotUp {
+          0%   { transform: translateY(0); }
+          40%  { transform: translateY(-110%); }
+          41%  { transform: translateY(110%); }
+          100% { transform: translateY(0); }
+        }
+        .logo-slot-wrap {
+          display: inline-block;
+          overflow: hidden;
+          vertical-align: bottom;
+          line-height: 1.3;
+        }
+        .logo-text-group:hover .logo-slot-inner {
+          animation: slotUp 0.42s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        .logo-text-group:hover .logo-slot-archive {
+          animation-delay: 0.07s;
+        }
       `}</style>
 
       <audio ref={audioRef} src="/music/ambient.mp3" loop preload="auto" />
@@ -79,21 +118,38 @@ export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
             display: 'flex', alignItems: 'center', gap: '10px', padding: 0,
           }}
         >
-          <svg width={isMobile ? 22 : 26} height={isMobile ? 24 : 28}
-            viewBox="0 0 56 60" fill="none" stroke="var(--hol-text)"
-            strokeWidth="2" strokeLinecap="square" strokeLinejoin="miter">
-            <polyline points="3,58 3,22 28,3 53,22 53,58" />
-            <polyline points="13,58 13,28 28,14 43,28 43,58" />
-          </svg>
-          {!isMobile && (
-            <span style={{
-              fontSize: '15px', fontWeight: 400, letterSpacing: '0.22em',
-              color: 'var(--hol-text)', fontFamily: 'Jost, sans-serif',
-            }}>HOL ARCHIVE</span>
-          )}
+          <img
+            src="/images/Logo/HOL_MAIN_LOGO.png"
+            alt="HOL Archive"
+            className="logo-coin"
+            style={{
+              height: isMobile ? '36px' : '46px',
+              width: 'auto',
+              objectFit: 'contain',
+              filter: theme === 'light' ? 'brightness(0)' : 'brightness(0) invert(1)',
+              transformStyle: 'preserve-3d',
+              perspective: '600px',
+            }}
+          />
+          <span className="logo-text-group" style={{
+            fontFamily: 'Poppins, sans-serif',
+            fontSize: isMobile ? '12px' : '14px',
+            letterSpacing: '0.1em',
+            color: 'var(--hol-text)',
+            textTransform: 'uppercase',
+            whiteSpace: 'nowrap',
+            cursor: 'pointer',
+          }}>
+            <span className="logo-slot-wrap">
+              <span className="logo-slot-inner" style={{ fontWeight: 700, display: 'inline-block' }}>HOL</span>
+            </span>
+            <span className="logo-slot-wrap" style={{ marginLeft: '6px' }}>
+              <span className="logo-slot-inner logo-slot-archive" style={{ fontWeight: 300, color: 'var(--hol-faint)', display: 'inline-block' }}>Archive</span>
+            </span>
+          </span>
         </button>
 
-        {/* Center pill — desktop only */}
+        {/* Center pill â€” desktop only */}
         {!isMobile && (
           <div style={{
             pointerEvents: 'auto', display: 'flex', alignItems: 'center',
@@ -108,7 +164,7 @@ export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
                 display: 'flex', alignItems: 'center', gap: '10px',
                 color: 'var(--hol-pill-text)', background: 'none', border: 'none',
                 cursor: 'pointer', padding: '0 18px 0 14px', height: '100%',
-                fontFamily: 'Jost, sans-serif', fontSize: '15px',
+                fontFamily: 'Poppins, sans-serif', fontSize: '15px',
                 letterSpacing: '0.04em', fontWeight: 300, borderRadius: '100px',
                 transition: 'background 0.2s ease',
               }}
@@ -138,7 +194,7 @@ export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
               {musicPlaying ? (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '2.5px', height: '18px' }}>
                   {[{ a: 'hBar1', d: '0s', h: '3px' }, { a: 'hBar2', d: '0.1s', h: '12px' },
-                    { a: 'hBar3', d: '0.05s', h: '6px' }, { a: 'hBar4', d: '0.18s', h: '14px' }].map(({ a, d, h }) => (
+                  { a: 'hBar3', d: '0.05s', h: '6px' }, { a: 'hBar4', d: '0.18s', h: '14px' }].map(({ a, d, h }) => (
                     <div key={a} style={{
                       width: '3px', height: h, borderRadius: '2px',
                       backgroundColor: 'var(--hol-gold)',
@@ -187,7 +243,7 @@ export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
             <div style={{ width: '1px', height: '20px', backgroundColor: 'var(--hol-pill-divider)', flexShrink: 0 }} />
 
             <span className="hol-pill-scroll-pct" style={{
-              color: 'var(--hol-pill-text)', fontFamily: 'Jost, sans-serif',
+              color: 'var(--hol-pill-text)', fontFamily: 'Poppins, sans-serif',
               fontSize: '14px', letterSpacing: '0.04em', padding: '0 16px',
               fontVariantNumeric: 'tabular-nums', minWidth: '52px',
               textAlign: 'center', fontWeight: 300,
@@ -221,27 +277,13 @@ export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
             </button>
           ) : (
             <>
-              <button style={{
-                width: '46px', height: '46px', borderRadius: '50%',
-                backgroundColor: 'transparent', border: '1px solid var(--hol-border)',
-                cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                transition: 'border-color 0.3s ease, background 0.3s ease',
-              }}
-                onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--hol-text)'; e.currentTarget.style.background = 'rgba(128,128,128,0.08)' }}
-                onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--hol-border)'; e.currentTarget.style.background = 'transparent' }}
-              >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                  stroke="var(--hol-text)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="8" r="4" /><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
-                </svg>
-              </button>
               <button
                 onClick={() => scrollTo('#footer')}
                 style={{
                   backgroundColor: 'var(--hol-pill-bg)', color: 'var(--hol-pill-text)',
                   border: 'none', borderRadius: '100px', padding: '0 26px',
                   height: '46px', fontSize: '14px', letterSpacing: '0.06em',
-                  fontFamily: 'Jost, sans-serif', cursor: 'pointer', fontWeight: 400, whiteSpace: 'nowrap',
+                  fontFamily: 'Poppins, sans-serif', cursor: 'pointer', fontWeight: 400, whiteSpace: 'nowrap',
                 }}
                 onMouseEnter={e => (e.currentTarget.style.opacity = '0.8')}
                 onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
@@ -272,54 +314,146 @@ export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
               style={{
                 position: 'fixed', top: 0, right: 0, bottom: 0,
                 width: 'min(380px, 85vw)',
-                backgroundColor: 'var(--hol-bg)',
+                backgroundColor: sidenavBg,
+                backdropFilter: 'blur(20px) saturate(160%)',
+                WebkitBackdropFilter: 'blur(20px) saturate(160%)',
                 zIndex: 102, display: 'flex', flexDirection: 'column',
-                padding: '44px 40px',
-                borderLeft: '1px solid var(--hol-border)',
+                padding: isMobile ? '36px 28px' : '44px 40px',
+                borderLeft: sidenavBorder,
               }}
             >
-              <button
-                onClick={() => setIsMenuOpen(false)}
-                style={{
-                  alignSelf: 'flex-end', background: 'none', border: 'none',
-                  fontSize: '13px', letterSpacing: '0.2em', textTransform: 'uppercase',
-                  fontFamily: 'Jost, sans-serif', color: 'var(--hol-faint)', cursor: 'pointer',
-                  marginBottom: '56px',
-                }}
-              >
-                Close
-              </button>
+              <div style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                width: '100%',
+                marginBottom: isMobile ? '36px' : '56px',
+              }}>
+                <button
+                  onClick={toggleTheme}
+                  style={{
+                    background: 'none', border: 'none', cursor: 'pointer',
+                    display: 'flex', alignItems: 'center', gap: '8px', padding: 0,
+                    color: 'var(--hol-faint)',
+                    fontFamily: 'Poppins, sans-serif',
+                    fontSize: 'clamp(11px, 1.2vw, 13px)',
+                    letterSpacing: '0.15em',
+                    textTransform: 'uppercase',
+                    transition: 'color 0.2s ease',
+                  }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.color = 'var(--hol-gold)'
+                    const svg = e.currentTarget.querySelector('svg')
+                    if (svg) svg.style.stroke = 'var(--hol-gold)'
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.color = 'var(--hol-faint)'
+                    const svg = e.currentTarget.querySelector('svg')
+                    if (svg) svg.style.stroke = 'var(--hol-faint)'
+                  }}
+                >
+                  {theme === 'dark' ? (
+                    <>
+                      <svg width="15" height="15" viewBox="0 0 24 24" fill="none"
+                        stroke="var(--hol-faint)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+                        style={{ transition: 'stroke 0.2s ease' }}>
+                        <circle cx="12" cy="12" r="5" />
+                        <line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" />
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                        <line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" />
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+                      </svg>
+                      Light
+                    </>
+                  ) : (
+                    <>
+                      <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+                        stroke="var(--hol-faint)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
+                        style={{ transition: 'stroke 0.2s ease' }}>
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+                      </svg>
+                      Dark
+                    </>
+                  )}
+                </button>
 
-              <nav style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+                <button
+                  onClick={() => setIsMenuOpen(false)}
+                  style={{
+                    background: 'none', border: 'none',
+                    fontSize: 'clamp(11px, 1.2vw, 13px)', letterSpacing: '0.2em', textTransform: 'uppercase',
+                    fontFamily: 'Poppins, sans-serif', color: 'var(--hol-faint)', cursor: 'pointer',
+                    transition: 'color 0.2s ease',
+                  }}
+                  onMouseEnter={e => (e.currentTarget.style.color = 'var(--hol-gold)')}
+                  onMouseLeave={e => (e.currentTarget.style.color = 'var(--hol-faint)')}
+                >
+                  Close
+                </button>
+              </div>
+
+              <nav style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(12px, 2vh, 24px)' }}>
                 {navItems.map((item, i) => (
                   <motion.button
                     key={item}
-                    initial={{ opacity: 0, x: 28 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: i * 0.07, duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
+                    initial="entry"
+                    animate="visible"
+                    whileHover="hover"
+                    variants={{
+                      entry: { opacity: 0, x: 28 },
+                      visible: {
+                        opacity: 1,
+                        x: 0,
+                        transition: { delay: i * 0.07, duration: 0.45, ease: [0.16, 1, 0.3, 1] }
+                      }
+                    }}
                     onClick={() => handleNavClick(i)}
                     style={{
-                      fontSize: 'clamp(34px, 5vw, 52px)',
-                      fontFamily: 'Jost, sans-serif', color: 'var(--hol-text)',
+                      fontSize: 'clamp(18px, 2.5vw + 10px, 30px)',
+                      fontFamily: 'Poppins, sans-serif', color: 'var(--hol-text)',
                       background: 'none', border: 'none', textAlign: 'left',
                       cursor: 'pointer', fontWeight: 300,
                       letterSpacing: '-0.01em', lineHeight: 1.1, padding: 0,
+                      display: 'flex',
+                      alignItems: 'center',
                     }}
                   >
-                    {item}
+                    <motion.div
+                      style={{ display: 'flex', alignItems: 'center' }}
+                      variants={{
+                        hover: { x: 8 }
+                      }}
+                      transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+                    >
+                      <motion.span
+                        variants={{
+                          entry: { width: 0, opacity: 0, scaleX: 0, marginRight: 0 },
+                          visible: { width: 0, opacity: 0, scaleX: 0, marginRight: 0 },
+                          hover: { width: 14, opacity: 1, scaleX: 1, marginRight: 8 }
+                        }}
+                        transition={{ type: 'spring', stiffness: 350, damping: 25 }}
+                        style={{
+                          height: '1px',
+                          backgroundColor: 'var(--hol-gold)',
+                          display: 'inline-block',
+                          transformOrigin: 'left center',
+                        }}
+                      />
+                      <motion.span
+                        variants={{
+                          entry: { color: 'var(--hol-text)' },
+                          visible: { color: 'var(--hol-text)' },
+                          hover: { color: 'var(--hol-gold)' }
+                        }}
+                        transition={{ duration: 0.2 }}
+                      >
+                        {item}
+                      </motion.span>
+                    </motion.div>
                   </motion.button>
                 ))}
               </nav>
 
-              <div style={{ marginTop: 'auto', paddingTop: '40px' }}>
-                <p style={{
-                  fontSize: '13px', letterSpacing: '0.22em', color: 'var(--hol-faintest)',
-                  textTransform: 'uppercase', fontFamily: 'Jost, sans-serif', marginBottom: '10px',
-                }}>Get in touch</p>
-                <p style={{ fontSize: '17px', color: 'var(--hol-muted)', fontFamily: 'Jost, sans-serif', fontWeight: 300 }}>
-                  hello@archiveco.com
-                </p>
-              </div>
             </motion.div>
           </>
         )}
@@ -327,3 +461,4 @@ export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
     </>
   )
 }
+

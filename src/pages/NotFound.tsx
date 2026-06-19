@@ -13,7 +13,7 @@ export default function NotFound() {
         color: 'var(--hol-text)',
         padding: '24px',
         textAlign: 'center',
-        fontFamily: 'Jost, sans-serif'
+        fontFamily: 'Poppins, sans-serif'
       }}
     >
       <h1 
@@ -22,7 +22,7 @@ export default function NotFound() {
           fontWeight: 300, 
           margin: 0, 
           lineHeight: 1,
-          fontFamily: 'Jost, sans-serif',
+          fontFamily: 'Poppins, sans-serif',
           opacity: 0.1
         }}
       >
@@ -65,4 +65,5 @@ export default function NotFound() {
     </div>
   );
 }
+
 

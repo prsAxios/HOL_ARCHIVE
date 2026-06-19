@@ -121,7 +121,7 @@ export default function Works({ onSelectRoom }: WorksProps) {
               letterSpacing: '-0.03em',
               lineHeight: 1,
               color: 'var(--hol-text)',
-              fontFamily: 'Jost, sans-serif',
+              fontFamily: 'Poppins, sans-serif',
               opacity: 0,
             }}
           >
@@ -134,7 +134,7 @@ export default function Works({ onSelectRoom }: WorksProps) {
               letterSpacing: '0.2em',
               color: 'var(--hol-faint)',
               textTransform: 'uppercase',
-              fontFamily: 'Jost, sans-serif',
+              fontFamily: 'Poppins, sans-serif',
               marginBottom: '10px',
               opacity: 0,
             }}
@@ -217,7 +217,7 @@ function RoomCard({ room, onClick }: { room: Room; index: number; onClick: () =>
               textTransform: 'uppercase',
               marginBottom: '12px',
               display: 'block',
-              fontFamily: 'Jost, sans-serif',
+              fontFamily: 'Poppins, sans-serif',
             }}
           >
             {room.id} &middot; {room.client}
@@ -229,7 +229,7 @@ function RoomCard({ room, onClick }: { room: Room; index: number; onClick: () =>
               color: 'var(--hol-text)',
               letterSpacing: '-0.01em',
               lineHeight: 1.2,
-              fontFamily: 'Jost, sans-serif',
+              fontFamily: 'Poppins, sans-serif',
             }}
           >
             {room.title}
@@ -251,5 +251,6 @@ function RoomCard({ room, onClick }: { room: Room; index: number; onClick: () =>
     </div>
   )
 }
+
 
 
