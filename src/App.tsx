@@ -50,87 +50,108 @@ function App() {
     return () => window.removeEventListener('scroll', tick)
   }, [])
 
+  // Scroll Restoration on Route Change
+  useEffect(() => {
+    window.scrollTo(0, 0)
+    const smoother = ScrollSmoother.get()
+    if (smoother) {
+      smoother.scrollTop(0)
+    }
+  }, [location.pathname])
+
   return (
     <ThemeProvider>
-      <AnimatePresence mode="wait">
-        <Routes location={location} key={location.pathname}>
-          <Route path="/founder" element={<FounderPage />} />
-          <Route
-            path="/story"
-            element={
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.6, ease: 'easeInOut' }}
-              >
-                <StoryPage />
-              </motion.div>
-            }
-          />
-          <Route
-            path="/why-hol-archive"
-            element={
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.6, ease: 'easeInOut' }}
-              >
-                <WhyHolArchivePage />
-              </motion.div>
-            }
-          />
-          <Route
-            path="/archive"
-            element={
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.6, ease: 'easeInOut' }}
-              >
-                <ArchivePage />
-              </motion.div>
-            }
-          />
-          <Route
-            path="/work/:id"
-            element={
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.6, ease: 'easeInOut' }}
-              >
-                <ProjectDetail />
-              </motion.div>
-            }
-          />
-          <Route
-            path="/orchestrate"
-            element={
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.6, ease: 'easeInOut' }}
-              >
-                <OrchestratePage />
-              </motion.div>
-            }
-          />
-          <Route path="*" element={
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.6, ease: 'easeInOut' }}
-            >
-              <Preloader />
-              <Header scrollRef={scrollRef} />
-              <div id="smooth-wrapper">
-                <div id="smooth-content">
+      <Preloader />
+      <Header scrollRef={scrollRef} />
+      <div id="smooth-wrapper">
+        <div id="smooth-content">
+          <AnimatePresence mode="wait">
+            <Routes location={location} key={location.pathname}>
+              <Route
+                path="/founder"
+                element={
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.6, ease: 'easeInOut' }}
+                  >
+                    <FounderPage />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/story"
+                element={
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.6, ease: 'easeInOut' }}
+                  >
+                    <StoryPage />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/why-hol-archive"
+                element={
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.6, ease: 'easeInOut' }}
+                  >
+                    <WhyHolArchivePage />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/archive"
+                element={
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.6, ease: 'easeInOut' }}
+                  >
+                    <ArchivePage />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/work/:id"
+                element={
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.6, ease: 'easeInOut' }}
+                  >
+                    <ProjectDetail />
+                  </motion.div>
+                }
+              />
+              <Route
+                path="/orchestrate"
+                element={
+                  <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.6, ease: 'easeInOut' }}
+                  >
+                    <OrchestratePage />
+                  </motion.div>
+                }
+              />
+              <Route path="*" element={
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.6, ease: 'easeInOut' }}
+                >
                   <main>
                     <Hero />
                     <AboutSection />
@@ -143,12 +164,12 @@ function App() {
                     <Contact />
                   </main>
                   <Footer />
-                </div>
-              </div>
-            </motion.div>
-          } />
-        </Routes>
-      </AnimatePresence>
+                </motion.div>
+              } />
+            </Routes>
+          </AnimatePresence>
+        </div>
+      </div>
     </ThemeProvider>
   )
 }

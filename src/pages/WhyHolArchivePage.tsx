@@ -189,30 +189,7 @@ export default function WhyHolArchivePage() {
         }}
       />
 
-      {/* Back Button */}
-      <div style={{ position: 'fixed', top: 'clamp(20px, 4vh, 40px)', left: 'clamp(24px, 5vw, 60px)', zIndex: 100 }}>
-        <MagneticButton
-          onClick={() => navigate('/')}
-          style={{
-            background: 'rgba(11, 11, 11, 0.75)',
-            backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)',
-            border: '1px solid rgba(244, 241, 236, 0.12)',
-            cursor: 'pointer',
-            fontSize: '11px',
-            fontWeight: 300,
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            padding: '12px 28px',
-            borderRadius: '100px',
-            color: '#8E8A84',
-            transition: 'border-color 0.3s ease, color 0.3s ease',
-          }}
-          className="hover:text-[#F4F1EC] hover:border-white/25"
-        >
-          ← Back
-        </MagneticButton>
-      </div>
+
 
       {/* 80vh Hero Area with Grid-Lines Placeholder */}
       <div

@@ -111,7 +111,13 @@ export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
 
         {/* Logo */}
         <button
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+          onClick={() => {
+            if (window.location.pathname !== '/') {
+              navigate('/')
+            } else {
+              window.scrollTo({ top: 0, behavior: 'smooth' })
+            }
+          }}
           style={{
             flex: 1, pointerEvents: 'auto',
             background: 'none', border: 'none', cursor: 'pointer',

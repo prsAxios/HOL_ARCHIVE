@@ -61,40 +61,7 @@ export default function FounderPage() {
         }
       `}</style>
 
-      {/* ── Fixed Back Button ── */}
-      <button
-        onClick={() => navigate('/')}
-        style={{
-          position: 'fixed',
-          top: 'clamp(20px, 4vh, 40px)',
-          left: 'clamp(24px, 5vw, 60px)',
-          zIndex: 100,
-          background: 'rgba(255, 255, 255, 0.75)',
-          backdropFilter: 'blur(8px)',
-          WebkitBackdropFilter: 'blur(8px)',
-          border: '1px solid rgba(17, 17, 17, 0.08)',
-          cursor: 'pointer',
-          fontFamily: 'Poppins, sans-serif',
-          fontSize: '11px',
-          fontWeight: 300,
-          letterSpacing: '0.22em',
-          textTransform: 'uppercase',
-          padding: '10px 22px',
-          borderRadius: '100px',
-          color: '#8E8A84',
-          transition: 'all 0.3s ease',
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.color = '#111111'
-          e.currentTarget.style.borderColor = 'rgba(17, 17, 17, 0.2)'
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.color = '#8E8A84'
-          e.currentTarget.style.borderColor = 'rgba(17, 17, 17, 0.08)'
-        }}
-      >
-        ← Back
-      </button>
+
 
       {/* ── Main Layout Container ── */}
       <motion.div
