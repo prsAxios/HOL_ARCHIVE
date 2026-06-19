@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { PROJECTS, type Project } from '../data/projects'
 
@@ -154,32 +154,6 @@ export default function OurWork() {
         )}
       </div>
 
-      {/* Stats strip */}
-      <div style={{
-        display: 'flex', justifyContent: 'center', gap: 'clamp(24px,4vw,56px)',
-        padding: 'clamp(28px,4vw,48px) clamp(24px,5vw,72px)',
-        borderTop: '1px solid rgba(194,174,109,0.15)',
-        flexWrap: 'wrap',
-      }}>
-        {[
-          { num: `${PROJECTS.length}+`, label: 'Cities' },
-          { num: '200+', label: 'Events Delivered' },
-          { num: '6+', label: 'Countries' },
-        ].map(({ num, label }) => (
-          <div key={label} style={{ textAlign: 'center' }}>
-            <p style={{
-              fontFamily: 'Poppins, sans-serif', fontWeight: 700,
-              fontSize: 'clamp(24px,3vw,40px)',
-              color: ACCENT, margin: '0 0 4px', letterSpacing: '-0.02em',
-            }}>{num}</p>
-            <p style={{
-              fontFamily: 'Poppins, sans-serif', fontWeight: 300,
-              fontSize: '12px', letterSpacing: '0.18em', textTransform: 'uppercase',
-              color: 'rgba(244,241,236,0.4)', margin: 0,
-            }}>{label}</p>
-          </div>
-        ))}
-      </div>
     </section>
   )
 }
