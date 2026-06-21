@@ -3,10 +3,10 @@ import { gsap, ScrollTrigger } from '../lib/gsap-config'
 
 /* ── Isometric math ─────────────────────────────────────────────── */
 const ISO = Math.PI / 6
-const S   = 24
-const W   = 1.1
-const H   = 1.6
-const D   = 1.0
+const S = 24
+const W = 1.1
+const H = 1.6
+const D = 1.0
 
 function iso(x: number, y: number, z: number): [number, number] {
   return [
@@ -34,53 +34,53 @@ function computeViewBox() {
   let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity
   for (let i = 0; i < 10; i++) {
     [
-      iso(i*W, i*H, 0), iso(i*W, i*H, D),
-      iso(i*W, (i+1)*H, 0), iso(i*W, (i+1)*H, D),
-      iso((i+1)*W, i*H, 0), iso((i+1)*W, i*H, D),
-      iso((i+1)*W, (i+1)*H, 0), iso((i+1)*W, (i+1)*H, D),
+      iso(i * W, i * H, 0), iso(i * W, i * H, D),
+      iso(i * W, (i + 1) * H, 0), iso(i * W, (i + 1) * H, D),
+      iso((i + 1) * W, i * H, 0), iso((i + 1) * W, i * H, D),
+      iso((i + 1) * W, (i + 1) * H, 0), iso((i + 1) * W, (i + 1) * H, D),
     ].forEach(([x, y]) => {
       x0 = Math.min(x0, x); x1 = Math.max(x1, x)
       y0 = Math.min(y0, y); y1 = Math.max(y1, y)
     })
   }
   const p = 12
-  return `${x0-p} ${y0-p} ${x1-x0+p*2} ${y1-y0+p*2}`
+  return `${x0 - p} ${y0 - p} ${x1 - x0 + p * 2} ${y1 - y0 + p * 2}`
 }
 const VIEWBOX = computeViewBox()
 
 /* ── Step data ──────────────────────────────────────────────────── */
 const STEPS = [
-  { num:'01', title:'Initial Inquiry',     desc:'Submit your event details through our contact form. We review every brief with care and respond within 24 hours.' },
-  { num:'02', title:'Discovery Call',      desc:'A focused consultation where we understand your vision, guest profile, location preferences, and operational requirements.' },
-  { num:'03', title:'Concept Design',      desc:'Our creative team develops a bespoke event concept — theme, spatial layout, aesthetic direction — tailored to your identity.' },
-  { num:'04', title:'Venue Scouting',      desc:'We source and inspect venues that align with your concept — considering capacity, acoustics, access, and luxury quotient.' },
-  { num:'05', title:'Vendor Curation',     desc:'We handpick caterers, florists, AV specialists, photographers, and entertainment from our verified luxury network.' },
-  { num:'06', title:'Budget Planning',     desc:'Transparent cost architecture. Every line item is accounted for — no surprises, no hidden fees, pure operational clarity.' },
-  { num:'07', title:'Operations Brief',    desc:'A master operations document is created: run-of-show, vendor contacts, contingency plans, and floor diagrams.' },
-  { num:'08', title:'Pre-Event Logistics', desc:'Ground team mobilises 48–72 hours prior. Venue setup, equipment checks, guest list coordination, and dry runs.' },
-  { num:'09', title:'Event Execution',     desc:'Our on-ground team manages every moment — guest flow, vendor coordination, timeline adherence, and real-time problem solving.' },
-  { num:'10', title:'Post-Event Archive',  desc:'Every event is documented, photographed, and archived. A detailed debrief ensures each future event exceeds the last.' },
+  { num: '01', title: 'Initial Inquiry', desc: 'Submit your event details through our contact form. We review every brief with care and respond within 24 hours.' },
+  { num: '02', title: 'Discovery Call', desc: 'A focused consultation where we understand your vision, guest profile, location preferences, and operational requirements.' },
+  { num: '03', title: 'Concept Design', desc: 'Our creative team develops a bespoke event concept — theme, spatial layout, aesthetic direction — tailored to your identity.' },
+  { num: '04', title: 'Venue Scouting', desc: 'We source and inspect venues that align with your concept — considering capacity, acoustics, access, and luxury quotient.' },
+  { num: '05', title: 'Vendor Curation', desc: 'We handpick caterers, florists, AV specialists, photographers, and entertainment from our verified luxury network.' },
+  { num: '06', title: 'Budget Planning', desc: 'Transparent cost architecture. Every line item is accounted for — no surprises, no hidden fees, pure operational clarity.' },
+  { num: '07', title: 'Operations Brief', desc: 'A master operations document is created: run-of-show, vendor contacts, contingency plans, and floor diagrams.' },
+  { num: '08', title: 'Pre-Event Logistics', desc: 'Ground team mobilises 48–72 hours prior. Venue setup, equipment checks, guest list coordination, and dry runs.' },
+  { num: '09', title: 'Event Execution', desc: 'Our on-ground team manages every moment — guest flow, vendor coordination, timeline adherence, and real-time problem solving.' },
+  { num: '10', title: 'Post-Event Archive', desc: 'Every event is documented, photographed, and archived. A detailed debrief ensures each future event exceeds the last.' },
 ]
 
 const N = STEPS.length
 
 export default function Process() {
-  const sectionRef  = useRef<HTMLElement>(null)
-  const groupRefs   = useRef<(SVGGElement | null)[]>([])
+  const sectionRef = useRef<HTMLElement>(null)
+  const groupRefs = useRef<(SVGGElement | null)[]>([])
   const contentRefs = useRef<(HTMLDivElement | null)[]>([])
 
   useEffect(() => {
     const section = sectionRef.current
     if (!section) return
 
-    const groups   = groupRefs.current.filter(Boolean) as SVGGElement[]
+    const groups = groupRefs.current.filter(Boolean) as SVGGElement[]
     const contents = contentRefs.current.filter(Boolean) as HTMLDivElement[]
 
     /* ── Set initial state ── */
     gsap.set(groups, { opacity: 0, scale: 0.88, transformOrigin: '50% 50%' })
 
     /* Step 0 visible immediately */
-    if (groups[0])   gsap.set(groups[0],   { opacity: 1, scale: 1 })
+    if (groups[0]) gsap.set(groups[0], { opacity: 1, scale: 1 })
     if (contents[0]) gsap.set(contents[0], { opacity: 1, y: 0 })
 
     /* ── Single scrubbed timeline ── */
@@ -96,11 +96,11 @@ export default function Process() {
           /* Step track — driven directly from scroll progress */
           const raw = self.progress * (N - 1)
           STEPS.forEach((_, i) => {
-            const dot  = document.getElementById(`step-dot-${i}`)
+            const dot = document.getElementById(`step-dot-${i}`)
             const line = document.getElementById(`step-line-${i}`)
             if (dot) {
               const active = Math.round(raw) === i
-              const past   = raw > i + 0.5
+              const past = raw > i + 0.5
               dot.style.backgroundColor = past || active ? 'var(--hol-gold)' : 'var(--hol-border)'
               dot.style.transform = active ? 'scale(1.6)' : 'scale(1)'
             }
@@ -149,14 +149,14 @@ export default function Process() {
       id="process"
       style={{
         position: 'relative', width: '100%', height: '100vh',
-        overflow: 'hidden', backgroundColor: '#0D0D0D',
+        overflow: 'hidden',
         display: 'flex', flexDirection: 'column', justifyContent: 'center',
-      backgroundColor: 'var(--hol-bg)',
+        backgroundColor: 'var(--hol-bg)',
       }}
     >
       {/* Heading */}
       <div style={{
-        position: 'absolute', top: 'clamp(32px, 5vh, 56px)',
+        position: 'absolute', top: 'clamp(60px, 10vh, 100px)',
         left: 'clamp(40px, 6vw, 80px)', zIndex: 10,
       }}>
         <h2 style={{
@@ -195,7 +195,7 @@ export default function Process() {
               const [top, front, right] = stepPaths(i)
               return (
                 <g key={i} ref={el => { groupRefs.current[i] = el }}>
-                  <path d={top}   className="stair-top"   strokeWidth="0.8" />
+                  <path d={top} className="stair-top" strokeWidth="0.8" />
                   <path d={front} className="stair-front" strokeWidth="0.8" />
                   <path d={right} className="stair-right" strokeWidth="0.8" />
                 </g>

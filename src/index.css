@@ -3,47 +3,61 @@
 /* â”€â”€ HOL Archive Brand Tokens â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 :root {
   /* Brand palette */
-  --hol-white:  #F4F1EC;
-  --hol-black:  #111111;
-  --hol-grey:   #8E8A84;
-  --hol-gold:   #C2AE6D;
-  --hol-sky:    #A8B8C8;
-  --hol-red:    #E50914;
+  --hol-white: #F4F1EC;
+  --hol-black: #111111;
+  --hol-grey: #8E8A84;
+  --hol-gold: #C2AE6D;
+  --hol-sky: #A8B8C8;
+  --hol-red: #E50914;
 
   /* Light mode */
-  --hol-bg:           #FFFFFF;
-  --hol-bg-alt:       #F7F7F7;
-  --hol-text:         #111111;
-  --hol-muted:        #8E8A84;
-  --hol-faint:        #B0ADA8;
-  --hol-faintest:     #C8C5C0;
-  --hol-border:       rgba(17, 17, 17, 0.1);
-  --hol-card:         #FFFFFF;
-  --hol-pill-bg:      #111111;
-  --hol-pill-text:    #F4F1EC;
+  --hol-bg: #FFFFFF;
+  --hol-bg-alt: #F7F7F7;
+  --hol-text: #111111;
+  --hol-muted: #8E8A84;
+  --hol-faint: #B0ADA8;
+  --hol-faintest: #C8C5C0;
+  --hol-border: rgba(17, 17, 17, 0.1);
+  --hol-card: #FFFFFF;
+  --hol-pill-bg: #111111;
+  --hol-pill-text: #F4F1EC;
   --hol-pill-divider: rgba(244, 241, 236, 0.15);
 }
 
 [data-theme="dark"] {
-  --hol-bg:           #111111;
-  --hol-bg-alt:       #1A1A1A;
-  --hol-text:         #F4F1EC;
-  --hol-muted:        #8E8A84;
-  --hol-faint:        #555250;
-  --hol-faintest:     #3A3835;
-  --hol-border:       rgba(244, 241, 236, 0.08);
-  --hol-card:         #1C1C1A;
-  --hol-pill-bg:      #F4F1EC;
-  --hol-pill-text:    #111111;
+  --hol-bg: #111111;
+  --hol-bg-alt: #1A1A1A;
+  --hol-text: #F4F1EC;
+  --hol-muted: #8E8A84;
+  --hol-faint: #555250;
+  --hol-faintest: #3A3835;
+  --hol-border: rgba(244, 241, 236, 0.08);
+  --hol-card: #1C1C1A;
+  --hol-pill-bg: #F4F1EC;
+  --hol-pill-text: #111111;
   --hol-pill-divider: rgba(17, 17, 17, 0.15);
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease;
   box-sizing: border-box;
 }
 
-body, h1, h2, h3, h4, h5, h6, p, span, button, input, select, textarea {
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+button,
+input,
+select,
+textarea {
   font-family: 'Poppins', sans-serif;
 }
 
@@ -84,16 +98,23 @@ body, h1, h2, h3, h4, h5, h6, p, span, button, input, select, textarea {
 
   body {
     font-family: 'Poppins', sans-serif;
-    background-color: #0A0A0A; /* match preloader bg â€” eliminates flash */
+    background-color: #0A0A0A;
+    /* match preloader bg â€” eliminates flash */
     color: var(--hol-text);
     overflow-x: hidden;
     line-height: 1.6;
   }
+
   body.hol-ready {
     background-color: var(--hol-bg);
   }
 
-  h1, h2, h3, h4, h5, h6 {
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
     font-family: 'Cormorant Garamond', serif;
     color: var(--hol-text);
   }
@@ -104,19 +125,41 @@ body, h1, h2, h3, h4, h5, h6, p, span, button, input, select, textarea {
   }
 
   /* Scrollbar */
-  ::-webkit-scrollbar { width: 12px; }
-  ::-webkit-scrollbar-track { background: transparent; }
-  ::-webkit-scrollbar-thumb { background-color: #E50914; border-radius: 0; }
-  ::-webkit-scrollbar-thumb:hover { background-color: #ff1a24; }
-  * { scrollbar-width: thin; scrollbar-color: #E50914 transparent; }
+  ::-webkit-scrollbar {
+    width: px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #E50914;
+    border-radius: 0;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: #ff1a24;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #E50914 transparent;
+  }
 }
 
 /* Testimonials horizontal scroll â€” hide scrollbar */
-.testi-track::-webkit-scrollbar { display: none; }
-.testi-track { scrollbar-width: none; }
+.testi-track::-webkit-scrollbar {
+  display: none;
+}
+
+.testi-track {
+  scrollbar-width: none;
+}
 
 /* Pill nav: shrink gracefully on very small screens */
 @media (max-width: 380px) {
-  header .hol-pill-scroll-pct { display: none; }
+  header .hol-pill-scroll-pct {
+    display: none;
+  }
 }
-

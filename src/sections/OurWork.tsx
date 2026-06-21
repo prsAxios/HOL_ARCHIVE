@@ -1,14 +1,12 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router'
-import { PROJECTS, type Project } from '../data/projects'
+import { PROJECTS } from '../data/projects'
 
 const ACCENT = '#C2AE6D'
 
 export default function OurWork() {
-  const mountRef  = useRef<HTMLDivElement>(null)
-  const globeRef  = useRef<any>(null)
-  const [active, setActive]     = useState<Project | null>(null)
-  const [popupPos, setPopupPos] = useState({ x: 0, y: 0 })
+  const mountRef = useRef<HTMLDivElement>(null)
+  const globeRef = useRef<any>(null)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -16,9 +14,7 @@ export default function OurWork() {
 
     async function init() {
       const GlobeGL = (await import('globe.gl')).default
-
-      const globe = GlobeGL()(mountRef.current!)
-
+      const globe = (GlobeGL as any)()(mountRef.current!)
       globeRef.current = globe
 
       globe
@@ -32,44 +28,157 @@ export default function OurWork() {
         .showAtmosphere(true)
         .atmosphereColor('#C2AE6D')
         .atmosphereAltitude(0.12)
-        /* HTML markers */
+        /* HTML markers (Blinking Red Dots with Anchored Popup Cards) */
         .htmlElementsData(PROJECTS)
         .htmlElement((d: any) => {
           const el = document.createElement('div')
           el.innerHTML = `
-            <div style="
-              width:80px;
-              border-radius:8px;
-              overflow:visible;
-              box-shadow:0 4px 18px rgba(0,0,0,0.6);
-              border:2px solid #fff;
-              cursor:pointer;
-              background:#0d0d0d;
-              font-family:Poppins,sans-serif;
-              position:relative;
-              transition:transform 0.2s ease;
-            ">
-              <img src="${d.photos[0]}" style="width:100%;height:52px;object-fit:cover;display:block;border-radius:6px 6px 0 0;" />
-              <div style="padding:4px 6px 5px;background:#0d0d0d;border-radius:0 0 6px 6px;">
-                <div style="font-size:9px;font-weight:600;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${d.city}</div>
-                <div style="font-size:8px;font-weight:300;color:${ACCENT};overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${d.category}</div>
+            <div style="position: relative; display: flex; align-items: center; justify-content: center; width: 22px; height: 22px;">
+              <!-- Pulsating outer ring -->
+              <div class="pulse-dot-wrapper" style="
+                position: absolute;
+                width: 22px;
+                height: 22px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+                z-index: 10;
+              ">
+                <div style="
+                  position: absolute;
+                  width: 100%;
+                  height: 100%;
+                  border-radius: 50%;
+                  background-color: #E50914;
+                  opacity: 0.8;
+                  animation: blink-pulse 1.8s infinite ease-out;
+                  pointer-events: none;
+                "></div>
+                <!-- Solid inner center dot -->
+                <div style="
+                  position: absolute;
+                  width: 8px;
+                  height: 8px;
+                  border-radius: 50%;
+                  background-color: #E50914;
+                  box-shadow: 0 0 8px #E50914, 0 0 16px #E50914;
+                  transition: transform 0.2s ease;
+                  pointer-events: none;
+                "></div>
               </div>
-              <div style="position:absolute;bottom:-7px;left:50%;transform:translateX(-50%);width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:7px solid #fff;"></div>
+
+              <!-- Anchored Popup Card -->
+              <div class="globe-popup-card" style="
+                position: absolute;
+                bottom: 28px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 260px;
+                background-color: #111;
+                border: 1px solid rgba(194, 174, 109, 0.35);
+                border-radius: 10px;
+                box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+                overflow: hidden;
+                display: none;
+                z-index: 1000;
+              ">
+                <!-- Image Grid -->
+                <div style="display: flex; height: 90px; gap: 2px;">
+                  <div style="flex: 1; overflow: hidden;">
+                    <img src="${d.photos[0]}" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+                  </div>
+                  <div style="flex: 1; overflow: hidden;">
+                    <img src="${d.photos[1]}" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+                  </div>
+                  <div style="flex: 1; overflow: hidden;">
+                    <img src="${d.photos[2]}" style="width: 100%; height: 100%; object-fit: cover; display: block;" />
+                  </div>
+                </div>
+                
+                <!-- Content -->
+                <div style="padding: 12px;">
+                  <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                    <span style="font-size: 9px; letter-spacing: 0.15em; text-transform: uppercase; color: ${ACCENT}; font-family: Poppins, sans-serif; font-weight: 600;">
+                      ${d.city}, ${d.country}
+                    </span>
+                    <span style="font-size: 9px; color: rgba(244,241,236,0.3); font-family: Poppins, sans-serif;">${d.year}</span>
+                  </div>
+                  <p style="font-family: Poppins, sans-serif; font-weight: 600; font-size: 13px; color: #F4F1EC; margin: 0 0 3px; line-height: 1.2;">${d.title}</p>
+                  <p style="font-family: Poppins, sans-serif; font-weight: 300; font-size: 11px; color: rgba(244,241,236,0.5); margin: 0 0 10px;">${d.subtitle}</p>
+                  
+                  <!-- CTA Buttons -->
+                  <div style="display: flex; gap: 6px;">
+                    <button class="view-btn" style="
+                      flex: 1; padding: 7px 0;
+                      background-color: ${ACCENT}; color: #111;
+                      border: none; border-radius: 4px;
+                      font-family: Poppins, sans-serif; font-weight: 600; font-size: 11px; letter-spacing: 0.05em; cursor: pointer;
+                    ">View Details →</button>
+                    <button class="close-btn" style="
+                      padding: 7px 10px;
+                      background-color: transparent; color: rgba(244,241,236,0.4);
+                      border: 1px solid rgba(244,241,236,0.12); border-radius: 4px;
+                      font-family: Poppins, sans-serif; font-size: 11px; cursor: pointer;
+                    ">✕</button>
+                  </div>
+                </div>
+
+                <!-- Arrow indicator -->
+                <div style="
+                  position: absolute;
+                  bottom: -6px;
+                  left: 50%;
+                  transform: translateX(-50%);
+                  width: 0;
+                  height: 0;
+                  border-left: 6px solid transparent;
+                  border-right: 6px solid transparent;
+                  border-top: 6px solid rgba(194, 174, 109, 0.35);
+                "></div>
+              </div>
             </div>
           `
           el.style.pointerEvents = 'auto'
-          el.addEventListener('mouseenter', () => {
-            ;(el.firstElementChild as HTMLElement).style.transform = 'scale(1.1)'
-          })
-          el.addEventListener('mouseleave', () => {
-            ;(el.firstElementChild as HTMLElement).style.transform = 'scale(1)'
-          })
-          el.addEventListener('click', (e) => {
+
+          const dot = el.querySelector('.pulse-dot-wrapper') as HTMLElement
+          const card = el.querySelector('.globe-popup-card') as HTMLElement
+          const closeBtn = el.querySelector('.close-btn') as HTMLElement
+          const viewBtn = el.querySelector('.view-btn') as HTMLElement
+
+          // Toggle card display on dot click
+          dot.addEventListener('click', (e) => {
             e.stopPropagation()
-            const rect = mountRef.current!.getBoundingClientRect()
-            setPopupPos({ x: e.clientX - rect.left, y: e.clientY - rect.top })
-            setActive(d as Project)
+            // Close all other open cards on the globe first
+            const allCards = mountRef.current!.querySelectorAll('.globe-popup-card')
+            allCards.forEach((c: any) => {
+              if (c !== card) c.style.display = 'none'
+            })
+            card.style.display = card.style.display === 'block' ? 'none' : 'block'
           })
+
+          // Close button click handler
+          closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation()
+            card.style.display = 'none'
+          })
+
+          // View Details click handler
+          viewBtn.addEventListener('click', (e) => {
+            e.stopPropagation()
+            navigate(`/work/${d.id}`)
+          })
+
+          // Hover scale effect on inner center dot
+          dot.addEventListener('mouseenter', () => {
+            const inner = dot.querySelector('div:last-child') as HTMLElement
+            if (inner) inner.style.transform = 'scale(1.4)'
+          })
+          dot.addEventListener('mouseleave', () => {
+            const inner = dot.querySelector('div:last-child') as HTMLElement
+            if (inner) inner.style.transform = 'scale(1)'
+          })
+
           return el
         })
         .htmlLat((d: any) => d.lat)
@@ -109,6 +218,18 @@ export default function OurWork() {
 
   return (
     <section id="our-work" style={{ backgroundColor: '#0A0A0A', padding: 'clamp(60px,8vw,100px) 0 0' }}>
+      <style>{`
+        @keyframes blink-pulse {
+          0% {
+            transform: scale(0.3);
+            opacity: 0.95;
+          }
+          100% {
+            transform: scale(2.2);
+            opacity: 0;
+          }
+        }
+      `}</style>
 
       {/* Heading */}
       <div style={{ textAlign: 'center', padding: '0 clamp(24px,5vw,72px)', marginBottom: '40px' }}>
@@ -142,86 +263,8 @@ export default function OurWork() {
       {/* Globe */}
       <div style={{ position: 'relative', width: '100%', height: 'clamp(500px, 75vh, 860px)' }}>
         <div ref={mountRef} style={{ width: '100%', height: '100%' }} />
-
-        {active && (
-          <PopupCard
-            project={active}
-            x={popupPos.x}
-            y={popupPos.y}
-            onClose={() => setActive(null)}
-            onViewDetails={() => navigate(`/work/${active.id}`)}
-          />
-        )}
       </div>
 
     </section>
   )
 }
-
-/* â”€â”€ Popup card â”€â”€ */
-function PopupCard({ project, x, y, onClose, onViewDetails }: {
-  project: Project; x: number; y: number
-  onClose: () => void; onViewDetails: () => void
-}) {
-  const W = 280, OFFSET = 16
-  const mapEl = document.getElementById('our-work')?.querySelector('div[style]') as HTMLElement | null
-  const mapW  = mapEl?.offsetWidth  ?? window.innerWidth
-  const mapH  = mapEl?.offsetHeight ?? 500
-
-  let left = x + OFFSET
-  let top  = y - 80
-  if (left + W > mapW - 8)  left = x - W - OFFSET
-  if (top < 8)               top  = 8
-  if (top + 320 > mapH)      top  = mapH - 328
-
-  return (
-    <div
-      onClick={e => e.stopPropagation()}
-      style={{
-        position: 'absolute', left, top, width: W, zIndex: 800,
-        backgroundColor: '#111',
-        border: '1px solid rgba(194,174,109,0.3)',
-        borderRadius: '12px',
-        boxShadow: '0 16px 48px rgba(0,0,0,0.6)',
-        overflow: 'hidden',
-        animation: 'popIn 0.22s cubic-bezier(0.16,1,0.3,1)',
-      }}
-    >
-      <style>{`@keyframes popIn{from{opacity:0;transform:scale(0.92) translateY(6px)}to{opacity:1;transform:none}}`}</style>
-
-      <div style={{ display: 'flex', height: '110px', gap: '2px' }}>
-        {project.photos.slice(0, 3).map((src, i) => (
-          <div key={i} style={{ flex: 1, overflow: 'hidden' }}>
-            <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-          </div>
-        ))}
-      </div>
-
-      <div style={{ padding: '14px 16px 16px' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
-          <span style={{ fontSize: '10px', letterSpacing: '0.22em', textTransform: 'uppercase', color: ACCENT, fontFamily: 'Poppins, sans-serif', fontWeight: 600 }}>
-            {project.city}, {project.country}
-          </span>
-          <span style={{ fontSize: '10px', color: 'rgba(244,241,236,0.3)', fontFamily: 'Poppins, sans-serif' }}>{project.year}</span>
-        </div>
-        <p style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 600, fontSize: '14px', color: '#F4F1EC', margin: '0 0 4px', lineHeight: 1.3 }}>{project.title}</p>
-        <p style={{ fontFamily: 'Poppins, sans-serif', fontWeight: 300, fontSize: '12px', color: 'rgba(244,241,236,0.5)', margin: '0 0 14px' }}>{project.subtitle}</p>
-        <div style={{ display: 'flex', gap: '8px' }}>
-          <button onClick={onViewDetails} style={{
-            flex: 1, padding: '9px 0',
-            backgroundColor: ACCENT, color: '#111',
-            border: 'none', borderRadius: '6px',
-            fontFamily: 'Poppins, sans-serif', fontWeight: 600, fontSize: '12px', letterSpacing: '0.06em', cursor: 'pointer',
-          }}>View Details â†’</button>
-          <button onClick={onClose} style={{
-            padding: '9px 12px',
-            backgroundColor: 'transparent', color: 'rgba(244,241,236,0.4)',
-            border: '1px solid rgba(244,241,236,0.12)', borderRadius: '6px',
-            fontFamily: 'Poppins, sans-serif', fontSize: '12px', cursor: 'pointer',
-          }}>âœ•</button>
-        </div>
-      </div>
-    </div>
-  )
-}
-

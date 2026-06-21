@@ -96,8 +96,8 @@ export default function Vision() {
     gsap.set(cta, { opacity: 0, y: 24, display: 'none' })
 
     // Exact pupil coordinates from browser canvas pixel analysis
-    const px = 0.49816
-    const py = 0.46868
+    const px = 0.48980
+    const py = 0.518678
 
     // Center targeting translation math
     const tx = (0.5 - px) * dimensions.width
@@ -171,6 +171,31 @@ export default function Vision() {
       }}
     >
 
+      {/* Top Left Section Indicator Tag */}
+      <div
+        style={{
+          position: 'absolute',
+          left: 'clamp(24px, 5vw, 80px)',
+          top: 'clamp(100px, 12vh, 140px)',
+          zIndex: 40,
+          pointerEvents: 'none',
+        }}
+      >
+        <span
+          style={{
+            fontFamily: 'Poppins, sans-serif',
+            fontSize: 'clamp(64px, 6vw, 96px)',
+            fontWeight: 700,
+            letterSpacing: '0.01em',
+            textTransform: 'uppercase',
+            color: 'var(--hol-red)',
+            opacity: 0.95,
+          }}
+        >
+          Vision
+        </span>
+      </div>
+
 
       {/* ── Image Zoom Wrapper ── */}
       <div
@@ -183,7 +208,7 @@ export default function Vision() {
           height: dimensions.height || '100%',
           marginLeft: dimensions.width ? -dimensions.width / 2 : 0,
           marginTop: dimensions.height ? -dimensions.height / 2 : 0,
-          transformOrigin: '49.8160% 46.8678%',
+          transformOrigin: '48.9800% 51.8678%',
           willChange: 'transform',
         }}
       >
@@ -210,11 +235,11 @@ export default function Vision() {
           <div
             style={{
               position: 'absolute',
-              left: '49.8160%',
-              top: '46.8678%',
+              left: '48.9800%',
+              top: '51.8678%',
               width: '5.5379%',
               aspectRatio: '1 / 1',
-              backgroundColor: '#000000',
+              backgroundColor: '#d40303ff',
               borderRadius: '50%',
               transform: 'translate(-50%, -50%)',
               filter: 'blur(10px)',

@@ -5,7 +5,7 @@ import { gsap, ScrollTrigger } from '../lib/gsap-config'
 const PANELS = [
   {
     num: 'CTA',
-
+    label: 'The Story',
     title: 'The \n Story',
     body: 'Large scale celebrations require more than coordination. They demand timing, discretion, structure, and complete environmental control behind the scenes.',
     features: ['Premium event ecosystems', 'Precision at every layer'],
@@ -14,7 +14,7 @@ const PANELS = [
   },
   {
     num: 'CTA',
-
+    label: 'Orchestrate',
     title: 'What we \n Orchestrate ! ',
     body: 'H.O.L. ARCHIVE supports premium event ecosystems through hospitality alignment, movement management, backend communication frameworks, and controlled operational flow designed for high pressure environments.',
     features: ['Celebrity functions', 'Luxury wedding ecosystems'],
@@ -23,14 +23,13 @@ const PANELS = [
   },
   {
     num: 'CTA',
-
+    label: 'Why HOL',
     title: 'Why \n HOL Archive ?',
-    body: 'As event companies expand, H.O.L. ARCHIVE provides structured backend support â€” from communication structures and workforce alignment to scheduling frameworks and on-ground supervision.',
+    body: 'As event companies expand, H.O.L. ARCHIVE provides structured backend support — from communication structures and workforce alignment to scheduling frameworks and on-ground supervision.',
     features: ['Growing event companies', 'Production agencies'],
     bg: '#F4F1EC',
     color: '#111111',
   },
-
 ] as const
 
 export default function AboutSection() {
