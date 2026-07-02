@@ -1,6 +1,7 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700;800&family=Cormorant+Garamond:ital,wght@1,200;1,300&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
 
-/* â”€â”€ HOL Archive Brand Tokens â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+/* ── HOL Archive Brand Tokens ──────────────────────────────────────── */
 :root {
   /* Brand palette */
   --hol-white: #F4F1EC;
@@ -58,7 +59,7 @@ button,
 input,
 select,
 textarea {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Sora', sans-serif;
 }
 
 @tailwind base;
@@ -97,9 +98,9 @@ textarea {
   }
 
   body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Sora', sans-serif;
     background-color: #0A0A0A;
-    /* match preloader bg â€” eliminates flash */
+    /* match preloader bg — eliminates flash */
     color: var(--hol-text);
     overflow-x: hidden;
     line-height: 1.6;
@@ -115,7 +116,7 @@ textarea {
   h4,
   h5,
   h6 {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Sora', sans-serif;
     color: var(--hol-text);
   }
 
@@ -148,7 +149,7 @@ textarea {
   }
 }
 
-/* Testimonials horizontal scroll â€” hide scrollbar */
+/* Testimonials horizontal scroll — hide scrollbar */
 .testi-track::-webkit-scrollbar {
   display: none;
 }
@@ -162,4 +163,25 @@ textarea {
   header .hol-pill-scroll-pct {
     display: none;
   }
+}
+
+/* Lenis smooth scroll styling */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
 }

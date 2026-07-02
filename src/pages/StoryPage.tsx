@@ -4,15 +4,18 @@ import { motion } from 'framer-motion'
 import { gsap, ScrollTrigger, SplitText } from '../lib/gsap-config'
 import Footer from '../sections/Footer'
 import MagneticButton from '../components/MagneticButton'
+import { useTheme } from '../context/ThemeContext'
 
 export default function StoryPage() {
   const navigate = useNavigate()
+  const { theme } = useTheme()
+  const isDark = theme === 'dark'
   const pageRef = useRef<HTMLDivElement>(null)
   const heroRef = useRef<HTMLDivElement>(null)
   const placeholderRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
   const descRef = useRef<HTMLParagraphElement>(null)
-  
+
   const [scrollProgress, setScrollProgress] = useState(0)
 
   // Scroll to top on mount
@@ -168,13 +171,18 @@ export default function StoryPage() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8, ease: 'easeInOut' }}
       style={{
-        backgroundColor: '#0b0b0b',
-        color: '#F4F1EC',
+        backgroundColor: 'var(--hol-bg)',
+        color: 'var(--hol-text)',
         minHeight: '100vh',
         overflowX: 'hidden',
-        fontFamily: "'Poppins', sans-serif",
+        fontFamily: "'Sora', sans-serif",
+        transition: 'background-color 0.4s ease, color 0.4s ease',
       }}
     >
+      {/* ── Google Fonts Sora Loader ── */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap');
+      `}</style>
       {/* Reading Progress Indicator */}
       <div
         style={{
@@ -198,10 +206,11 @@ export default function StoryPage() {
           position: 'relative',
           width: '100%',
           height: '80vh',
-          backgroundColor: '#0b0b0b',
+          backgroundColor: 'var(--hol-bg)',
           overflow: 'hidden',
           display: 'flex',
           alignItems: 'end',
+          transition: 'background-color 0.4s ease',
         }}
       >
         <div
@@ -212,31 +221,23 @@ export default function StoryPage() {
             left: 0,
             width: '100%',
             height: '115%',
-            backgroundColor: '#eae7e1', // Neutral light background
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
             willChange: 'transform',
           }}
         >
-          {/* Faint technical viewport lines for premium look */}
-          <div style={{ position: 'absolute', top: '24px', bottom: '24px', left: '24px', right: '24px', border: '1px solid rgba(17,17,17,0.04)', pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', top: '50%', left: '24px', right: '24px', height: '1px', backgroundColor: 'rgba(17,17,17,0.03)', pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', left: '50%', top: '24px', bottom: '24px', width: '1px', backgroundColor: 'rgba(17,17,17,0.03)', pointerEvents: 'none' }} />
-
-          <span
+          <img
+            src="/images/The_Story.jpeg"
+            alt="The Story"
             style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: 'clamp(28px, 5vw, 64px)',
-              fontWeight: 200,
-              letterSpacing: '0.4em',
-              color: 'rgba(17, 17, 17, 0.15)',
-              userSelect: 'none',
-              transform: 'translateX(0.2em)', // offset letter-spacing on last char
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              display: 'block',
             }}
-          >
-            IMAGE
-          </span>
+          />
+          {/* Faint technical viewport lines for premium look */}
+          <div style={{ position: 'absolute', top: '24px', bottom: '24px', left: '24px', right: '24px', border: '1px solid rgba(255,255,255,0.08)', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', top: '50%', left: '24px', right: '24px', height: '1px', backgroundColor: 'rgba(255,255,255,0.05)', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', left: '50%', top: '24px', bottom: '24px', width: '1px', backgroundColor: 'rgba(255,255,255,0.05)', pointerEvents: 'none' }} />
         </div>
 
         {/* Cinematic bottom gradient */}
@@ -244,8 +245,11 @@ export default function StoryPage() {
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(to top, #0b0b0b 0%, rgba(11,11,11,0.4) 40%, transparent 100%)',
+            background: isDark
+              ? 'linear-gradient(to top, #0b0b0b 0%, rgba(11,11,11,0.4) 40%, transparent 100%)'
+              : 'linear-gradient(to top, #ffffff 0%, rgba(255,255,255,0.4) 40%, transparent 100%)',
             pointerEvents: 'none',
+            transition: 'background 0.4s ease',
           }}
         />
 
@@ -254,32 +258,20 @@ export default function StoryPage() {
           <h1
             ref={titleRef}
             style={{
-              fontFamily: "'Poppins', sans-serif",
+              fontFamily: "'Sora', sans-serif",
               fontSize: 'clamp(46px, 8.5vw, 110px)',
-              fontWeight: 200,
+              fontWeight: 100,
               letterSpacing: '-0.03em',
               lineHeight: 0.95,
-              color: '#F4F1EC',
+              color: 'var(--hol-text)',
               marginBottom: '28px',
               textTransform: 'uppercase',
+              transition: 'color 0.4s ease',
             }}
           >
             The Story
           </h1>
-          <p
-            ref={descRef}
-            style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: 'clamp(15px, 1.3vw, 20px)',
-              fontWeight: 200,
-              color: '#8E8A84',
-              lineHeight: 1.6,
-              maxWidth: '680px',
-              margin: 0,
-            }}
-          >
-            A chronicle of structural discipline, event architecture, and creative execution in the high-pressure realm of luxury guest ecosystems.
-          </p>
+
         </div>
       </div>
 
@@ -294,74 +286,63 @@ export default function StoryPage() {
         }}
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(80px, 10vh, 140px)' }}>
-          
-          {/* Section 1: The Genesis of Order */}
-          <section style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            <span style={{ fontSize: '11px', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#C2AE6D', fontWeight: 500 }}>
-              01 // Foundation
-            </span>
-            <h3
-              className="animate-heading"
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: 'clamp(28px, 4.5vw, 48px)',
-                fontWeight: 300,
-                letterSpacing: '-0.02em',
-                lineHeight: 1.1,
-                color: '#F4F1EC',
-                margin: 0,
-                textTransform: 'uppercase',
-              }}
-            >
-              The Genesis of Order
-            </h3>
-            <div className="animate-paragraph" style={{ fontSize: 'clamp(14px, 1.1vw, 17px)', fontWeight: 200, color: '#8E8A84', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <p>
-                H.O.L. Solutions was founded with a singular conviction: that the grandest creative visions require the most rigorous structural discipline. We looked at the world of luxury experiences and saw an industry where beauty was frequently compromised by backstage friction, misaligned teams, and logistical instability.
-              </p>
-              <p>
-                Our mission became clear: to build the invisible protocols that support absolute creative expression. By viewing event management not as an art of coordination, but as an architectural discipline, we designed frameworks that absorb pressure and ensure flawlessness.
+
+          {/* Section 1: Foundation */}
+          <section style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}>
+
+
+
+            <div style={{ fontSize: 'clamp(14px, 1.1vw, 17px)', fontWeight: 200, color: 'var(--hol-muted)', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '24px', transition: 'color 0.4s ease' }}>
+              <p className="animate-paragraph" style={{ margin: 0 }}>
+                H.O.L. ARCHIVE was built around the understanding that seamless experiences are never created by chance. Every smooth movement, every timely transition, every calm environment, and every uninterrupted flow is the result of observation, structure, preparation, and operational intelligence.
               </p>
             </div>
           </section>
 
-          {/* Section 2: Two-column layout */}
+          {/* Section 2: Systems */}
           <section
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
               gap: '40px',
               paddingTop: '64px',
-              borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+              borderTop: '1px solid var(--hol-border)',
+              transition: 'border-color 0.4s ease',
             }}
           >
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <span style={{ fontSize: '11px', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#E50914', fontWeight: 500 }}>
-                02 // Discipline
-              </span>
+
               <h3
                 className="animate-heading"
                 style={{
-                  fontFamily: "'Poppins', sans-serif",
+                  fontFamily: "'Sora', sans-serif",
                   fontSize: 'clamp(28px, 4vw, 42px)',
                   fontWeight: 300,
                   letterSpacing: '-0.02em',
                   lineHeight: 1.1,
-                  color: '#F4F1EC',
+                  color: 'var(--hol-text)',
                   margin: 0,
                   textTransform: 'uppercase',
+                  transition: 'color 0.4s ease',
                 }}
               >
-                Structural Blueprint
+                Before an event becomes visible, it first exists inside systems.
               </h3>
+
             </div>
-            <div className="animate-paragraph" style={{ fontSize: 'clamp(14px, 1.1vw, 17px)', fontWeight: 200, color: '#8E8A84', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <p>
-                We treat events as temporary architectures. Every entry point, movement pathway, and backend communication channel is mapped, tested, and optimized. When the on-ground workforce runs under structured, automated schedules, the experience unfolds seamlessly.
-              </p>
-              <p>
-                This level of preparation turns risk into variables and variables into controlled states. Whether managing multi-day transport channels or complex venue configurations accessible only by water, our protocols deliver absolute operational stability.
-              </p>
+
+            <div style={{ fontSize: 'clamp(14px, 1.1vw, 17px)', fontWeight: 200, color: 'var(--hol-muted)', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '12px', transition: 'color 0.4s ease' }}>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', paddingLeft: '16px', borderLeft: '1px solid var(--hol-border)', transition: 'border-color 0.4s ease' }}>
+
+                <p className="animate-paragraph" style={{ margin: 0 }}>Inside documents.</p>
+                <p className="animate-paragraph" style={{ margin: 0 }}>Inside movement maps.</p>
+                <p className="animate-paragraph" style={{ margin: 0 }}>Inside hospitality structures.</p>
+                <p className="animate-paragraph" style={{ margin: 0 }}>Inside communication layers.</p>
+                <p className="animate-paragraph" style={{ margin: 0 }}>Inside timelines.</p>
+                <p className="animate-paragraph" style={{ margin: 0 }}>Inside contingency thinking.</p>
+                <p className="animate-paragraph" style={{ margin: 0 }}>Inside coordination frameworks designed to function under pressure.</p>
+              </div>
             </div>
           </section>
 
@@ -369,15 +350,16 @@ export default function StoryPage() {
           <section
             style={{
               padding: '64px 0',
-              borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+              borderTop: '1px solid var(--hol-border)',
+              borderBottom: '1px solid var(--hol-border)',
               textAlign: 'center',
+              transition: 'border-color 0.4s ease',
             }}
           >
             <blockquote
               className="animate-quote"
               style={{
-                fontFamily: "'Poppins', sans-serif",
+                fontFamily: "'Sora', sans-serif",
                 fontSize: 'clamp(20px, 3.5vw, 36px)',
                 fontWeight: 300,
                 fontStyle: 'italic',
@@ -387,69 +369,143 @@ export default function StoryPage() {
                 margin: '0 auto',
               }}
             >
-              "Structure is not the constraint of creative vision; it is the platform upon which the impossible becomes repeatable."
+              "At H.O.L., we do not focus on decoration as the measure of success."
             </blockquote>
-            <cite style={{ display: 'block', fontSize: '10px', letterSpacing: '0.25em', color: '#8E8A84', textTransform: 'uppercase', marginTop: '24px', notItalic: true, fontWeight: 300 }}>
-              — H.O.L. ARCHIVE PHILOSOPHY
-            </cite>
           </section>
 
-          {/* Section 4: A Legacy of Precision with CTA */}
-          <section style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <span style={{ fontSize: '11px', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#C2AE6D', fontWeight: 500 }}>
-                03 // Legacy
-              </span>
+          {/* Section 4: Focus & Rhythm */}
+          <section
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
+              gap: '40px',
+
+
+              transition: 'border-color 0.4s ease',
+            }}
+          >
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+
               <h3
                 className="animate-heading"
                 style={{
-                  fontFamily: "'Poppins', sans-serif",
+                  fontFamily: "'Sora', sans-serif",
+                  fontSize: 'clamp(28px, 4vw, 42px)',
+                  fontWeight: 300,
+                  letterSpacing: '-0.02em',
+                  lineHeight: 1.1,
+                  color: 'var(--hol-text)',
+                  margin: 0,
+                  textTransform: 'uppercase',
+                  transition: 'color 0.4s ease',
+                }}
+              >
+                Rhythm & Focus
+              </h3>
+            </div>
+
+            <div style={{ fontSize: 'clamp(14px, 1.1vw, 17px)', fontWeight: 200, color: 'var(--hol-muted)', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '12px', transition: 'color 0.4s ease' }}>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', paddingLeft: '16px', borderLeft: '1px solid var(--hol-border)', transition: 'border-color 0.4s ease', color: 'var(--hol-muted)', fontWeight: 300 }}>
+                <p className="animate-paragraph" style={{ margin: 0 }}>We focus on rhythm.</p>
+                <p className="animate-paragraph" style={{ margin: 0 }}>Continuity.</p>
+                <p className="animate-paragraph" style={{ margin: 0 }}>Clarity.</p>
+                <p className="animate-paragraph" style={{ margin: 0 }}>Controlled environments.</p>
+                <p className="animate-paragraph" style={{ margin: 0 }}>Invisible precision.</p>
+              </div>
+
+
+
+            </div>
+
+
+            <p
+              className='animate-paragraph'
+              style={{
+                margin: '24px 0 0',
+                width: '100%',
+                gridColumn: '1 / -1',
+                fontSize: 'clamp(14px, 1.1vw, 17px)',
+                fontWeight: 200,
+                color: 'var(--hol-muted)',
+                lineHeight: 1.8,
+                transition: 'color 0.4s ease',
+              }}
+            >
+              Because true backend management is not recognized by how much activity is happening.
+              It is recognized by how little confusion is felt.
+              The smoother the experience feels,
+              the stronger the structure behind it.
+              Every briefing sheet, operational note, logistics layout, manpower structure, and execution
+              framework exists for one reason:
+              to transform complexity into calmness.
+            </p>
+
+          </section>
+
+          {/* Section 5: Ecosystem & Execution with CTA */}
+          <section
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '32px',
+              paddingTop: '64px',
+              borderTop: '1px solid var(--hol-border)',
+              transition: 'border-color 0.4s ease',
+            }}
+          >
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+
+              <h3
+                className="animate-heading"
+                style={{
+                  fontFamily: "'Sora', sans-serif",
                   fontSize: 'clamp(28px, 4.5vw, 48px)',
                   fontWeight: 300,
                   letterSpacing: '-0.02em',
                   lineHeight: 1.1,
-                  color: '#F4F1EC',
+                  color: 'var(--hol-text)',
                   margin: 0,
                   textTransform: 'uppercase',
+                  transition: 'color 0.4s ease',
                 }}
               >
-                A Legacy of Precision
+                H.O.L. ARCHIVE exists in the space between vision and reality.
               </h3>
             </div>
-            <div className="animate-paragraph" style={{ fontSize: 'clamp(14px, 1.1vw, 17px)', fontWeight: 200, color: '#8E8A84', lineHeight: 1.8 }}>
-              <p>
-                Over years of execution, we have solved some of the most logistically demanding venue challenges. From remote private islands to historic monuments, each project in our archive is proof that absolute discipline enables absolute luxury. We compile our blueprints, schedules, and spatial matrices into a single source of truth.
+
+            <div style={{ fontSize: 'clamp(14px, 1.1vw, 17px)', fontWeight: 200, color: 'var(--hol-muted)', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '24px', transition: 'color 0.4s ease' }}>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', paddingLeft: '16px', borderLeft: '1px solid var(--hol-border)', transition: 'border-color 0.4s ease' }}>
+                <p className="animate-paragraph" style={{ margin: 0 }}>Where expectations are translated into movement.</p>
+                <p className="animate-paragraph" style={{ margin: 0 }}>Where planning becomes coordination.</p>
+                <p className="animate-paragraph" style={{ margin: 0 }}>Where pressure becomes discipline.</p>
+                <p className="animate-paragraph" style={{ margin: 0 }}>Where large scale environments become controlled ecosystems.</p>
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginTop: '16px', paddingTop: '20px', borderTop: '1px solid var(--hol-border)', transition: 'border-color 0.4s ease' }}>
+                <div>
+
+                  <span className="animate-paragraph" style={{ display: 'block', fontSize: '15px', color: 'var(--hol-text)', marginTop: '4px' }}>Not through noise.<br />Through structure.</span>
+                </div>
+                <div>
+
+                  <span className="animate-paragraph" style={{ display: 'block', fontSize: '15px', color: 'var(--hol-text)', marginTop: '4px' }}>Not through visibility.<br />Through precision.</span>
+                </div>
+              </div>
+
+              <p className="animate-paragraph" style={{ margin: '16px 0 0', fontStyle: 'italic', color: 'red', fontWeight: 300, fontSize: 'clamp(15px, 1.2vw, 19px)' }}>
+                The best execution is rarely noticed. And that is exactly the point.
               </p>
             </div>
 
-            {/* Custom Premium CTA Control */}
-            <div className="animate-cta" style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-start' }}>
-              <MagneticButton
-                onClick={() => navigate('/archive')}
-                style={{
-                  background: 'rgba(244, 241, 236, 0.03)',
-                  border: '1px solid rgba(244, 241, 236, 0.15)',
-                  color: '#F4F1EC',
-                  fontFamily: "'Poppins', sans-serif",
-                  fontSize: '12px',
-                  fontWeight: 400,
-                  letterSpacing: '0.18em',
-                  textTransform: 'uppercase',
-                  padding: '16px 40px',
-                  borderRadius: '100px',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  outline: 'none',
-                }}
-                className="hover:border-[#C2AE6D] hover:text-[#C2AE6D] hover:bg-[#C2AE6D]/5 hover:scale-[1.03]"
-              >
-                Explore Archive &nbsp; &rarr;
-              </MagneticButton>
-            </div>
           </section>
 
         </div>
       </main>
+
+
+
 
       {/* Reused Website Footer */}
       <Footer />

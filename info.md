@@ -106,3 +106,120 @@ Reservation behavior around auth:
 - Do not remove `api/kimi/` — it handles OAuth
 - **Do not duplicate `src/data/rooms.ts` into the database.** It is the single source of truth for displayed rooms; only `reservation_requests` persist guest submissions
 - The bottom section's form and each room's "Reserve This Room" button are the only frontend controls wired to the backend; header nav items are in-page scroll anchors
+
+
+
+
+
+
+
+
+
+
+R — ROOTS
+
+Every founder has a beginning.
+
+Rony’s just happened to start in a kitchen.
+
+Like many students pursuing Hotel Management, he entered the world of hospitality because he enjoyed cooking. The plan seemed simple enough: learn the craft, understand the industry, and build a career around creating experiences for people.
+
+What he didn’t realise was that his attention was constantly drifting away from the food.
+
+While others focused on what was being served, he found himself fascinated by everything happening behind it.
+
+The conversations.
+
+The movement.
+
+The timing.
+
+The invisible forces holding everything together.
+
+The hundreds of decisions quietly working together to create a single experience.
+
+Looking back, it was probably the first sign that management was always going to win that battle.
+
+Hospitality introduced him to people.
+
+Management gave him a reason to stay.
+
+That curiosity eventually led him towards an MBA in Events, where something he had unknowingly carried since childhood finally started making sense. He was fascinated by celebrations—not simply the joy of them, but the complexity behind them. The idea that hundreds of moving parts, expectations, emotions, and personalities could somehow come together to create happiness for someone else was endlessly interesting.
+
+Somewhere between curiosity and a few viewings of Band Baaja Baaraat, a career path quietly began to reveal itself.
+
+⸻
+
+O — OBSERVATION
+
+Over the years, every chapter contributed something different.
+
+Wedding Genie introduced him to the pursuit of perfection.
+
+Bindra Hospitality Services taught him leadership, ownership, and the reality that responsibility often arrives before confidence.
+
+Genpact showed him the value of systems, diplomacy, and managing people with patience and professionalism.
+
+The Event Casa expanded his understanding of execution at scale. It taught him that details are rarely small, consistency is often underestimated, and the difference between good and exceptional usually exists in the things most people never notice.
+
+More importantly, it revealed what sustained focus and disciplined thinking could achieve.
+
+What distinguishes Rony today is not where he has worked.
+
+Many professionals have worked across hospitality, operations, logistics, and events.
+
+What distinguishes him is the way he observes them.
+
+While others see functions, he sees relationships.
+
+While others see events, he sees ecosystems.
+
+While others celebrate outcomes, he studies the systems that quietly produced them.
+
+⸻
+
+N — KNOWLEDGE
+
+For nearly a decade, he has been observing how people organise, communicate, lead, recover, and execute under pressure. With every project, one realization became impossible to ignore.
+
+The event may last a few days.
+
+The knowledge behind it often disappears the moment it ends.
+
+Every challenge solved.
+
+Every operational breakthrough.
+
+Every lesson learned.
+
+Every system improved.
+
+Too often, they remain with individuals instead of becoming part of the industry’s collective intelligence.
+
+That observation became the foundation of H.O.L Archive.
+
+Not simply as a company, but as a long-term vision.
+
+A place where operational knowledge is preserved instead of forgotten.
+
+Where experience is documented instead of disappearing.
+
+⸻
+
+Y — YESTERDAY TO TOMORROW
+
+Where systems become stronger because lessons are shared.
+
+Where the industry can learn not only from success, but from preparation, process, and continuous refinement.
+
+The vision of H.O.L Archive is simple.
+
+To transform experience into knowledge.
+
+Knowledge into systems.
+
+And systems into better execution for everyone who builds experiences for others.
+
+Because every event eventually comes to an end.
+
+The knowledge behind it shouldn’t.

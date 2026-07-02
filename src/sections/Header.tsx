@@ -100,7 +100,7 @@ export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
         }
       `}</style>
 
-      <audio ref={audioRef} src="/music/ambient.mp3" loop preload="auto" />
+      <audio ref={audioRef} src="/music/A.mp3" loop preload="auto" />
 
       <header style={{
         position: 'fixed', top: 0, left: 0, width: '100%', zIndex: 100,
@@ -138,7 +138,7 @@ export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
             }}
           />
           <span className="logo-text-group" style={{
-            fontFamily: 'Poppins, sans-serif',
+            fontFamily: 'Sora, sans-serif',
             fontSize: isMobile ? '12px' : '14px',
             letterSpacing: '0.1em',
             color: 'var(--hol-text)',
@@ -170,7 +170,7 @@ export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
                 display: 'flex', alignItems: 'center', gap: '10px',
                 color: 'var(--hol-pill-text)', background: 'none', border: 'none',
                 cursor: 'pointer', padding: '0 18px 0 14px', height: '100%',
-                fontFamily: 'Poppins, sans-serif', fontSize: '15px',
+                fontFamily: 'Sora, sans-serif', fontSize: '15px',
                 letterSpacing: '0.04em', fontWeight: 300, borderRadius: '100px',
                 transition: 'background 0.2s ease',
               }}
@@ -249,7 +249,7 @@ export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
             <div style={{ width: '1px', height: '20px', backgroundColor: 'var(--hol-pill-divider)', flexShrink: 0 }} />
 
             <span className="hol-pill-scroll-pct" style={{
-              color: 'var(--hol-pill-text)', fontFamily: 'Poppins, sans-serif',
+              color: 'var(--hol-pill-text)', fontFamily: 'Sora, sans-serif',
               fontSize: '14px', letterSpacing: '0.04em', padding: '0 16px',
               fontVariantNumeric: 'tabular-nums', minWidth: '52px',
               textAlign: 'center', fontWeight: 300,
@@ -289,7 +289,7 @@ export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
                   backgroundColor: 'var(--hol-pill-bg)', color: 'var(--hol-pill-text)',
                   border: 'none', borderRadius: '100px', padding: '0 26px',
                   height: '46px', fontSize: '14px', letterSpacing: '0.06em',
-                  fontFamily: 'Poppins, sans-serif', cursor: 'pointer', fontWeight: 400, whiteSpace: 'nowrap',
+                  fontFamily: 'Sora, sans-serif', cursor: 'pointer', fontWeight: 400, whiteSpace: 'nowrap',
                 }}
                 onMouseEnter={e => (e.currentTarget.style.opacity = '0.8')}
                 onMouseLeave={e => (e.currentTarget.style.opacity = '1')}
@@ -341,7 +341,7 @@ export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
                     background: 'none', border: 'none', cursor: 'pointer',
                     display: 'flex', alignItems: 'center', gap: '8px', padding: 0,
                     color: 'var(--hol-faint)',
-                    fontFamily: 'Poppins, sans-serif',
+                    fontFamily: 'Sora, sans-serif',
                     fontSize: 'clamp(11px, 1.2vw, 13px)',
                     letterSpacing: '0.15em',
                     textTransform: 'uppercase',
@@ -388,7 +388,7 @@ export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
                   style={{
                     background: 'none', border: 'none',
                     fontSize: 'clamp(11px, 1.2vw, 13px)', letterSpacing: '0.2em', textTransform: 'uppercase',
-                    fontFamily: 'Poppins, sans-serif', color: 'var(--hol-faint)', cursor: 'pointer',
+                    fontFamily: 'Sora, sans-serif', color: 'var(--hol-faint)', cursor: 'pointer',
                     transition: 'color 0.2s ease',
                   }}
                   onMouseEnter={e => (e.currentTarget.style.color = 'var(--hol-gold)')}
@@ -416,7 +416,7 @@ export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
                     onClick={() => handleNavClick(i)}
                     style={{
                       fontSize: 'clamp(18px, 2.5vw + 10px, 30px)',
-                      fontFamily: 'Poppins, sans-serif', color: 'var(--hol-text)',
+                      fontFamily: 'Sora, sans-serif', color: 'var(--hol-text)',
                       background: 'none', border: 'none', textAlign: 'left',
                       cursor: 'pointer', fontWeight: 300,
                       letterSpacing: '-0.01em', lineHeight: 1.1, padding: 0,
@@ -467,4 +467,5 @@ export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
     </>
   )
 }
+
 

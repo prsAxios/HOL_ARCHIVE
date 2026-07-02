@@ -20,22 +20,44 @@ import Footer from './sections/Footer'
 import Preloader from './sections/Preloader'
 import ProjectDetail from './pages/ProjectDetail'
 import { ThemeProvider } from './context/ThemeContext'
-import { ScrollSmoother } from './lib/gsap-config'
+import { gsap, setLenis, ScrollTrigger, lenisInstance } from './lib/gsap-config'
+import Lenis from 'lenis'
 
 function App() {
   const scrollRef = useRef({ y: 0, speed: 0 })
   const location = useLocation()
 
   useEffect(() => {
-    if (window.innerWidth < 768) return
-    const smoother = ScrollSmoother.create({
-      wrapper: '#smooth-wrapper',
-      content: '#smooth-content',
-      smooth: 1.4,
-      effects: true,
-      ignoreMobileResize: true,
+    // Initialize Lenis smooth scroll unconditionally on all viewports
+    const lenis = new Lenis({
+      duration: 1.2,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      orientation: 'vertical',
+      gestureOrientation: 'vertical',
+      smoothWheel: true,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.5,
     })
-    return () => smoother.kill()
+
+    setLenis(lenis)
+
+    // Connect Lenis to ScrollTrigger update events
+    lenis.on('scroll', () => {
+      ScrollTrigger.update()
+    })
+
+    // Sync GSAP's global ticker to drive Lenis scrolling requests
+    const updateTicker = (time: number) => {
+      lenis.raf(time * 1000)
+    }
+    gsap.ticker.add(updateTicker)
+    gsap.ticker.lagSmoothing(0)
+
+    return () => {
+      gsap.ticker.remove(updateTicker)
+      lenis.destroy()
+      setLenis(null)
+    }
   }, [])
 
   useEffect(() => {
@@ -53,123 +75,118 @@ function App() {
   // Scroll Restoration on Route Change
   useEffect(() => {
     window.scrollTo(0, 0)
-    const smoother = ScrollSmoother.get()
-    if (smoother) {
-      smoother.scrollTop(0)
+    if (lenisInstance) {
+      lenisInstance.scrollTo(0, { immediate: true })
     }
   }, [location.pathname])
 
   return (
     <ThemeProvider>
       <Preloader />
-      <Header scrollRef={scrollRef} />
-      <div id="smooth-wrapper">
-        <div id="smooth-content">
-          <AnimatePresence mode="wait">
-            <Routes location={location} key={location.pathname}>
-              <Route
-                path="/founder"
-                element={
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.6, ease: 'easeInOut' }}
-                  >
-                    <FounderPage />
-                  </motion.div>
-                }
-              />
-              <Route
-                path="/story"
-                element={
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.6, ease: 'easeInOut' }}
-                  >
-                    <StoryPage />
-                  </motion.div>
-                }
-              />
-              <Route
-                path="/why-hol-archive"
-                element={
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.6, ease: 'easeInOut' }}
-                  >
-                    <WhyHolArchivePage />
-                  </motion.div>
-                }
-              />
-              <Route
-                path="/archive"
-                element={
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.6, ease: 'easeInOut' }}
-                  >
-                    <ArchivePage />
-                  </motion.div>
-                }
-              />
-              <Route
-                path="/work/:id"
-                element={
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.6, ease: 'easeInOut' }}
-                  >
-                    <ProjectDetail />
-                  </motion.div>
-                }
-              />
-              <Route
-                path="/orchestrate"
-                element={
-                  <motion.div
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.6, ease: 'easeInOut' }}
-                  >
-                    <OrchestratePage />
-                  </motion.div>
-                }
-              />
-              <Route path="*" element={
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.6, ease: 'easeInOut' }}
-                >
-                  <main>
-                    <Hero />
-                    <AboutSection />
-                    <BrandReveal />
-                    <OurWork />
-                    <Process />
-                    <Vision />
-                    <ArchiveSection />
-                    <FAQ />
-                    <Contact />
-                  </main>
-                  <Footer />
-                </motion.div>
-              } />
-            </Routes>
-          </AnimatePresence>
-        </div>
-      </div>
+      {location.pathname !== '/archive' && <Header scrollRef={scrollRef} />}
+      <AnimatePresence mode="wait">
+        <Routes location={location} key={location.pathname}>
+          <Route
+            path="/founder"
+            element={
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6, ease: 'easeInOut' }}
+              >
+                <FounderPage />
+              </motion.div>
+            }
+          />
+          <Route
+            path="/story"
+            element={
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6, ease: 'easeInOut' }}
+              >
+                <StoryPage />
+              </motion.div>
+            }
+          />
+          <Route
+            path="/why-hol-archive"
+            element={
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6, ease: 'easeInOut' }}
+              >
+                <WhyHolArchivePage />
+              </motion.div>
+            }
+          />
+          <Route
+            path="/archive"
+            element={
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6, ease: 'easeInOut' }}
+              >
+                <ArchivePage />
+              </motion.div>
+            }
+          />
+          <Route
+            path="/work/:id"
+            element={
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6, ease: 'easeInOut' }}
+              >
+                <ProjectDetail />
+              </motion.div>
+            }
+          />
+          <Route
+            path="/orchestrate"
+            element={
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6, ease: 'easeInOut' }}
+              >
+                <OrchestratePage />
+              </motion.div>
+            }
+          />
+          <Route path="*" element={
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.6, ease: 'easeInOut' }}
+            >
+              <main>
+                <Hero />
+                <AboutSection />
+                <BrandReveal />
+                <OurWork />
+                <Process />
+                <Vision />
+                <ArchiveSection />
+                <FAQ />
+                <Contact />
+              </main>
+              <Footer />
+            </motion.div>
+          } />
+        </Routes>
+      </AnimatePresence>
     </ThemeProvider>
   )
 }

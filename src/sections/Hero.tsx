@@ -110,7 +110,7 @@ export default function Hero() {
           <div ref={headRef}>
             {['Hospitality', 'Operations', 'Logistics'].map((word, i) => (
               <p key={word} className="hero-line" style={{
-                fontFamily: 'Poppins, sans-serif', fontWeight: 700,
+                fontFamily: 'Sora, sans-serif', fontWeight: 700,
                 fontSize: 'clamp(24px, 7vw, 87px)',
                 lineHeight: 1.0, letterSpacing: '-0.03em',
                 color: i === 0 ? 'var(--hol-text)' : 'var(--hol-muted)',
@@ -129,7 +129,7 @@ export default function Hero() {
         }}>
           <span style={{
             fontSize: '10px', letterSpacing: '0.22em',
-            color: 'var(--hol-faint)', fontFamily: 'Poppins, sans-serif',
+            color: 'var(--hol-faint)', fontFamily: 'Sora, sans-serif',
             textTransform: 'uppercase',
           }}>Scroll Down</span>
         </div>
@@ -137,3 +137,4 @@ export default function Hero() {
     </>
   )
 }
+

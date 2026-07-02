@@ -4,15 +4,18 @@ import { motion } from 'framer-motion'
 import { gsap, ScrollTrigger, SplitText } from '../lib/gsap-config'
 import Footer from '../sections/Footer'
 import MagneticButton from '../components/MagneticButton'
+import { useTheme } from '../context/ThemeContext'
 
 export default function WhyHolArchivePage() {
   const navigate = useNavigate()
+  const { theme } = useTheme()
+  const isDark = theme === 'dark'
   const pageRef = useRef<HTMLDivElement>(null)
   const heroRef = useRef<HTMLDivElement>(null)
   const placeholderRef = useRef<HTMLDivElement>(null)
   const titleRef = useRef<HTMLHeadingElement>(null)
   const descRef = useRef<HTMLParagraphElement>(null)
-  
+
   const [scrollProgress, setScrollProgress] = useState(0)
 
   // Scroll to top on mount
@@ -168,13 +171,18 @@ export default function WhyHolArchivePage() {
       exit={{ opacity: 0 }}
       transition={{ duration: 0.8, ease: 'easeInOut' }}
       style={{
-        backgroundColor: '#0b0b0b',
-        color: '#F4F1EC',
+        backgroundColor: 'var(--hol-bg)',
+        color: 'var(--hol-text)',
         minHeight: '100vh',
         overflowX: 'hidden',
-        fontFamily: "'Poppins', sans-serif",
+        fontFamily: "'Sora', sans-serif",
+        transition: 'background-color 0.4s ease, color 0.4s ease',
       }}
     >
+      {/* ── Google Fonts Sora Loader ── */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap');
+      `}</style>
       {/* Reading Progress Indicator */}
       <div
         style={{
@@ -189,8 +197,6 @@ export default function WhyHolArchivePage() {
         }}
       />
 
-
-
       {/* 80vh Hero Area with Grid-Lines Placeholder */}
       <div
         ref={heroRef}
@@ -198,10 +204,11 @@ export default function WhyHolArchivePage() {
           position: 'relative',
           width: '100%',
           height: '80vh',
-          backgroundColor: '#0b0b0b',
+          backgroundColor: 'var(--hol-bg)',
           overflow: 'hidden',
           display: 'flex',
           alignItems: 'end',
+          transition: 'background-color 0.4s ease',
         }}
       >
         <div
@@ -212,31 +219,23 @@ export default function WhyHolArchivePage() {
             left: 0,
             width: '100%',
             height: '115%',
-            backgroundColor: '#eae7e1', // Neutral light background
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
             willChange: 'transform',
           }}
         >
-          {/* Faint technical viewport lines for premium look */}
-          <div style={{ position: 'absolute', top: '24px', bottom: '24px', left: '24px', right: '24px', border: '1px solid rgba(17,17,17,0.04)', pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', top: '50%', left: '24px', right: '24px', height: '1px', backgroundColor: 'rgba(17,17,17,0.03)', pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', left: '50%', top: '24px', bottom: '24px', width: '1px', backgroundColor: 'rgba(17,17,17,0.03)', pointerEvents: 'none' }} />
-
-          <span
+          <img
+            src="/images/why_hol.jpg"
+            alt="Why We Orchestrate"
             style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: 'clamp(28px, 5vw, 64px)',
-              fontWeight: 200,
-              letterSpacing: '0.4em',
-              color: 'rgba(17, 17, 17, 0.15)',
-              userSelect: 'none',
-              transform: 'translateX(0.2em)',
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              display: 'block',
             }}
-          >
-            IMAGE
-          </span>
+          />
+          {/* Faint technical viewport lines for premium look */}
+          <div style={{ position: 'absolute', top: '24px', bottom: '24px', left: '24px', right: '24px', border: '1px solid rgba(255,255,255,0.08)', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', top: '50%', left: '24px', right: '24px', height: '1px', backgroundColor: 'rgba(255,255,255,0.05)', pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', left: '50%', top: '24px', bottom: '24px', width: '1px', backgroundColor: 'rgba(255,255,255,0.05)', pointerEvents: 'none' }} />
         </div>
 
         {/* Cinematic bottom gradient */}
@@ -244,8 +243,11 @@ export default function WhyHolArchivePage() {
           style={{
             position: 'absolute',
             inset: 0,
-            background: 'linear-gradient(to top, #0b0b0b 0%, rgba(11,11,11,0.4) 40%, transparent 100%)',
+            background: isDark
+              ? 'linear-gradient(to top, #0b0b0b 0%, rgba(11,11,11,0.4) 40%, transparent 100%)'
+              : 'linear-gradient(to top, #ffffff 0%, rgba(255,255,255,0.4) 40%, transparent 100%)',
             pointerEvents: 'none',
+            transition: 'background 0.4s ease',
           }}
         />
 
@@ -254,32 +256,20 @@ export default function WhyHolArchivePage() {
           <h1
             ref={titleRef}
             style={{
-              fontFamily: "'Poppins', sans-serif",
+              fontFamily: "'Sora', sans-serif",
               fontSize: 'clamp(46px, 8.5vw, 110px)',
               fontWeight: 200,
               letterSpacing: '-0.03em',
               lineHeight: 0.95,
-              color: '#F4F1EC',
+              color: 'var(--hol-text)',
               marginBottom: '28px',
               textTransform: 'uppercase',
+              transition: 'color 0.4s ease',
             }}
           >
             Why HOL Archive
           </h1>
-          <p
-            ref={descRef}
-            style={{
-              fontFamily: "'Poppins', sans-serif",
-              fontSize: 'clamp(15px, 1.3vw, 20px)',
-              fontWeight: 200,
-              color: '#8E8A84',
-              lineHeight: 1.6,
-              maxWidth: '680px',
-              margin: 0,
-            }}
-          >
-            Unlocking the operational blueprints and repeatable execution frameworks designed for high-pressure luxury production.
-          </p>
+
         </div>
       </div>
 
@@ -294,34 +284,19 @@ export default function WhyHolArchivePage() {
         }}
       >
         <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(80px, 10vh, 140px)' }}>
-          
+
           {/* Section 1: The Library of Solved Problems */}
           <section style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            <span style={{ fontSize: '11px', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#C2AE6D', fontWeight: 500 }}>
-              01 // Knowledge
-            </span>
-            <h3
-              className="animate-heading"
-              style={{
-                fontFamily: "'Poppins', sans-serif",
-                fontSize: 'clamp(28px, 4.5vw, 48px)',
-                fontWeight: 300,
-                letterSpacing: '-0.02em',
-                lineHeight: 1.1,
-                color: '#F4F1EC',
-                margin: 0,
-                textTransform: 'uppercase',
-              }}
-            >
-              The Library of Solved Problems
-            </h3>
-            <div className="animate-paragraph" style={{ fontSize: 'clamp(14px, 1.1vw, 17px)', fontWeight: 200, color: '#8E8A84', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <p>
-                In high-end event production, details are customized, but logistics follow fundamental patterns. Every event is a temporary build, but the logic behind it is permanent. The HOL Archive compiles these patterns into structured, repeatable blueprints.
-              </p>
-              <p>
-                By documenting spatial plans, workforce matrices, and communication channels, we ensure that past experience guides present execution. This repository guarantees that as operations scale, precision is never compromised.
-              </p>
+
+
+            <div className="animate-paragraph" style={{ fontSize: 'clamp(14px, 1.1vw, 17px)', fontWeight: 200, color: 'var(--hol-muted)', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '20px', transition: 'color 0.4s ease' }}>
+              <h1 style={{ margin: 0 }}>
+                Most management companies focus on how an event appears.<br />
+                H.O.L. focuses on how it functions.<br />
+                Where many teams see the final outcome, we study the hundreds of invisible systems working
+                behind it.<br />
+                Because seamless experiences are never accidental.              </h1>
+
             </div>
           </section>
 
@@ -332,58 +307,148 @@ export default function WhyHolArchivePage() {
               gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
               gap: '40px',
               paddingTop: '64px',
-              borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+              borderTop: '1px solid var(--hol-border)',
+              transition: 'border-color 0.4s ease',
             }}
           >
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <span style={{ fontSize: '11px', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#E50914', fontWeight: 500 }}>
-                02 // Core Systems
-              </span>
+
               <h3
                 className="animate-heading"
                 style={{
-                  fontFamily: "'Poppins', sans-serif",
+                  fontFamily: "'Sora', sans-serif",
                   fontSize: 'clamp(28px, 4vw, 42px)',
                   fontWeight: 300,
                   letterSpacing: '-0.02em',
                   lineHeight: 1.1,
-                  color: '#F4F1EC',
+                  color: 'var(--hol-text)',
                   margin: 0,
                   textTransform: 'uppercase',
+                  transition: 'color 0.4s ease',
                 }}
               >
-                Core Pillars of Execution
+                They are built through:
               </h3>
             </div>
-            <div className="animate-paragraph" style={{ fontSize: 'clamp(14px, 1.1vw, 17px)', fontWeight: 200, color: '#8E8A84', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '24px' }}>
+            <div className="animate-paragraph" style={{ fontSize: 'clamp(14px, 1.1vw, 17px)', fontWeight: 200, color: 'var(--hol-muted)', lineHeight: 1.8, display: 'flex', flexDirection: 'column', gap: '24px', transition: 'color 0.4s ease' }}>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                <h4 style={{ color: '#F4F1EC', fontWeight: 500, fontSize: '15px', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>1. Predictability</h4>
-                <p style={{ margin: 0 }}>We remove on-ground assumptions by mapping out minute-by-minute runs-of-show and simulating guest flow pathways before any build begins.</p>
+                <h4 style={{ color: 'var(--hol-text)', fontWeight: 500, fontSize: '15px', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em', transition: 'color 0.4s ease' }}>1. Observation</h4>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '16px' }}>
-                <h4 style={{ color: '#F4F1EC', fontWeight: 500, fontSize: '15px', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>2. Reusability</h4>
-                <p style={{ margin: 0 }}>Every custom logistical challenge is cataloged as a reusable blueprint, translating past spatial, technical, and communication workflows into future configurations.</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', borderTop: '1px solid var(--hol-border)', paddingTop: '16px', transition: 'border-color 0.4s ease' }}>
+                <h4 style={{ color: 'var(--hol-text)', fontWeight: 500, fontSize: '15px', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em', transition: 'color 0.4s ease' }}>2. Structure</h4>
               </div>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', borderTop: '1px solid rgba(255,255,255,0.05)', paddingTop: '16px' }}>
-                <h4 style={{ color: '#F4F1EC', fontWeight: 500, fontSize: '15px', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em' }}>3. Real-time Control</h4>
-                <p style={{ margin: 0 }}>We set up backend structured channels and clear workforce responsibilities to keep teams in sync, permitting instant adjustments under intense pressure.</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', borderTop: '1px solid var(--hol-border)', paddingTop: '16px', transition: 'border-color 0.4s ease' }}>
+                <h4 style={{ color: 'var(--hol-text)', fontWeight: 500, fontSize: '15px', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em', transition: 'color 0.4s ease' }}>3. Timing</h4>
+
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', borderTop: '1px solid var(--hol-border)', paddingTop: '16px', transition: 'border-color 0.4s ease' }}>
+                <h4 style={{ color: 'var(--hol-text)', fontWeight: 500, fontSize: '15px', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em', transition: 'color 0.4s ease' }}>4. Communication
+                </h4>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', borderTop: '1px solid var(--hol-border)', paddingTop: '16px', transition: 'border-color 0.4s ease' }}>
+                <h4 style={{ color: 'var(--hol-text)', fontWeight: 500, fontSize: '15px', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em', transition: 'color 0.4s ease' }}>5. Movement Control
+                </h4>
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', borderTop: '1px solid var(--hol-border)', paddingTop: '16px', transition: 'border-color 0.4s ease' }}>
+                <h4 style={{ color: 'var(--hol-text)', fontWeight: 500, fontSize: '15px', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em', transition: 'color 0.4s ease' }}>6. Operational Awareness
+                </h4>
+              </div>
+
+            </div>
+          </section>
+
+
+
+          {/* Section 4: Operational Security */}
+          <section style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+
+            </div>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))',
+                gap: '48px',
+                fontSize: 'clamp(14px, 1.1vw, 17px)',
+                fontWeight: 200,
+                color: 'var(--hol-muted)',
+                lineHeight: 1.8,
+                transition: 'color 0.4s ease',
+              }}
+            >
+              {/* Left Column: Narrative paragraphs */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                <p className="animate-paragraph" style={{ margin: 0 }}>
+                  Long before the day arrives, it is the process of understanding how an environment responds under pressure.
+                  How guests navigate a journey. How hospitality is delivered. How operational ecosystems interact.
+                  How disruptions influence continuity. How information moves across teams. How critical moments emerge
+                  and evolve throughout delivery.
+                </p>
+                <p className="animate-paragraph" style={{ margin: 0 }}>
+                  Every framework is designed to reduce complexity before event day arrives. Through contingency planning,
+                  movement mapping, coordination frameworks, backend communication systems, and operational synchronization,
+                  we build environments that remain stable, coordinated, and controlled—even when pressure escalates.
+                </p>
+                <p className="animate-paragraph" style={{ margin: 0, marginTop: '16px' }}>
+                  H.O.L. understands both: the expectations of luxury, and the realities of on-ground operations.
+                  That balance defines our approach. We do not operate like coordinators waiting for challenges to appear;
+                  we operate through anticipation.
+                </p>
+                <p className="animate-paragraph" style={{ margin: 0 }}>
+                  The strongest execution teams often go unnoticed during the experience itself because everything flows
+                  exactly as it should.
+                  <br />
+                  And that is what H.O.L. was built to do.
+                </p>
+              </div>
+
+              {/* Right Column: Principles & Warnings */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
+                {/* Section A: Luxury is: */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  <h4 className="animate-paragraph" style={{ color: 'var(--hol-text)', fontWeight: 500, fontSize: '15px', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em', transition: 'color 0.4s ease' }}>
+                    Because luxury is not only visual. Luxury is:
+                  </h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', paddingLeft: '16px', borderLeft: '1px solid var(--hol-border)', transition: 'border-color 0.4s ease' }}>
+                    <p className="animate-paragraph" style={{ margin: 0 }}>• Timing without disruption</p>
+                    <p className="animate-paragraph" style={{ margin: 0 }}>• Movement without friction</p>
+                    <p className="animate-paragraph" style={{ margin: 0 }}>• Hospitality without uncertainty</p>
+                    <p className="animate-paragraph" style={{ margin: 0 }}>• Continuity without visible pressure</p>
+                  </div>
+                </div>
+
+                {/* Section B: A refined setting means little if: */}
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  <h4 className="animate-paragraph" style={{ color: 'var(--hol-text)', fontWeight: 500, fontSize: '15px', margin: 0, textTransform: 'uppercase', letterSpacing: '0.05em', transition: 'color 0.4s ease' }}>
+                    A refined setting means little if:
+                  </h4>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', paddingLeft: '16px', borderLeft: '1px solid var(--hol-border)', transition: 'border-color 0.4s ease' }}>
+                    <p className="animate-paragraph" style={{ margin: 0 }}>• Timelines slip</p>
+                    <p className="animate-paragraph" style={{ margin: 0 }}>• Vendor coordination weakens</p>
+                    <p className="animate-paragraph" style={{ margin: 0 }}>• Guest transitions become disrupted</p>
+                    <p className="animate-paragraph" style={{ margin: 0 }}>and communication breaks down.</p>
+                  </div>
+                </div>
               </div>
             </div>
           </section>
+
 
           {/* Section 3: Pull Quote */}
           <section
             style={{
               padding: '64px 0',
-              borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-              borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+              borderTop: '1px solid var(--hol-border)',
+              borderBottom: '1px solid var(--hol-border)',
               textAlign: 'center',
+              transition: 'border-color 0.4s ease',
             }}
           >
             <blockquote
               className="animate-quote"
               style={{
-                fontFamily: "'Poppins', sans-serif",
+                fontFamily: "'Sora', sans-serif",
                 fontSize: 'clamp(20px, 3.5vw, 36px)',
                 fontWeight: 300,
                 fontStyle: 'italic',
@@ -393,69 +458,24 @@ export default function WhyHolArchivePage() {
                 margin: '0 auto',
               }}
             >
-              "The ultimate luxury is peace of mind, built on a foundation of absolute logic."
+              We do not measure success by the number of projects we complete.
+              <br />
+              We measure it by the number of people who return.
+              <br />
+              Because in an industry driven by timelines, pressure, countless moving parts, and constant
+              <br />
+              change, repeat trust is the strongest form of appreciation.
+              <br />
+              Anyone can promise smooth execution.
+              <br />
+              The real measure of success is whether people choose to work with you again.
+              That is the standard we hold ourselves to.
             </blockquote>
-            <cite style={{ display: 'block', fontSize: '10px', letterSpacing: '0.25em', color: '#8E8A84', textTransform: 'uppercase', marginTop: '24px', notItalic: true, fontWeight: 300 }}>
-              — HOL ARCHIVE BLUEPRINT
-            </cite>
+
           </section>
-
-          {/* Section 4: Operational Security */}
-          <section style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-              <span style={{ fontSize: '11px', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#C2AE6D', fontWeight: 500 }}>
-                03 // Security
-              </span>
-              <h3
-                className="animate-heading"
-                style={{
-                  fontFamily: "'Poppins', sans-serif",
-                  fontSize: 'clamp(28px, 4.5vw, 48px)',
-                  fontWeight: 300,
-                  letterSpacing: '-0.02em',
-                  lineHeight: 1.1,
-                  color: '#F4F1EC',
-                  margin: 0,
-                  textTransform: 'uppercase',
-                }}
-              >
-                Operational Security
-              </h3>
-            </div>
-            <div className="animate-paragraph" style={{ fontSize: 'clamp(14px, 1.1vw, 17px)', fontWeight: 200, color: '#8E8A84', lineHeight: 1.8 }}>
-              <p>
-                For production agencies, event coordinators, and high-profile clients, the HOL Archive acts as an insurance policy. It shifts the burden of coordination from human memory to an organized repository of technical specifications. When operations are guided by detailed plans rather than improvisation, creative agencies can focus completely on the design and storytelling of the experience.
-              </p>
-            </div>
-
-            {/* Reused Custom Premium CTA */}
-            <div className="animate-cta" style={{ marginTop: '20px', display: 'flex', justifyContent: 'flex-start' }}>
-              <MagneticButton
-                onClick={() => navigate('/orchestrate')}
-                style={{
-                  background: 'rgba(244, 241, 236, 0.03)',
-                  border: '1px solid rgba(244, 241, 236, 0.15)',
-                  color: '#F4F1EC',
-                  fontFamily: "'Poppins', sans-serif",
-                  fontSize: '12px',
-                  fontWeight: 400,
-                  letterSpacing: '0.18em',
-                  textTransform: 'uppercase',
-                  padding: '16px 40px',
-                  borderRadius: '100px',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  outline: 'none',
-                }}
-                className="hover:border-[#C2AE6D] hover:text-[#C2AE6D] hover:bg-[#C2AE6D]/5 hover:scale-[1.03]"
-              >
-                Orchestrate Now &nbsp; &rarr;
-              </MagneticButton>
-            </div>
-          </section>
-
         </div>
       </main>
+
 
       {/* Reused Website Footer */}
       <Footer />

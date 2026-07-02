@@ -1,5 +1,6 @@
-import { useRef, useState } from 'react'
-import { gsap } from '../lib/gsap-config'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { useTheme } from '../context/ThemeContext'
 
 const FAQS = [
   {
@@ -28,242 +29,322 @@ const FAQS = [
   },
 ]
 
-function FAQItem({ q, a }: { q: string; a: string }) {
-  const [open, setOpen] = useState(false)
-  const bodyRef = useRef<HTMLDivElement>(null)
-  const innerRef = useRef<HTMLDivElement>(null)
-  const chevronRef = useRef<SVGSVGElement>(null)
-
-  const toggle = () => {
-    const body = bodyRef.current
-    const inner = innerRef.current
-    const chevron = chevronRef.current
-    if (!body || !inner) return
-
-    if (!open) {
-      /* Open */
-      const h = inner.offsetHeight
-      gsap.fromTo(
-        body,
-        { height: 0, opacity: 0 },
-        {
-          height: h,
-          opacity: 1,
-          duration: 0.38,
-          ease: 'power3.out',
-          onComplete: () => gsap.set(body, { height: 'auto' }),
-        }
-      )
-      gsap.to(chevron, { rotation: 180, duration: 0.3, ease: 'power3.out' })
-    } else {
-      /* Close */
-      gsap.to(body, { height: 0, opacity: 0, duration: 0.28, ease: 'power3.in' })
-      gsap.to(chevron, { rotation: 0, duration: 0.28, ease: 'power3.in' })
-    }
-
-    setOpen((o) => !o)
-  }
+function FAQItem({ q, a, isDark }: { q: string; a: string; isDark: boolean }) {
+  const [isOpen, setIsOpen] = useState(false)
 
   return (
     <div
-      className="faq-glass-card"
       style={{
-        zIndex: 2,
-        position: 'relative',
-        borderColor: open ? 'rgba(194, 174, 109, 0.45)' : undefined,
-        boxShadow: open
-          ? '0 12px 30px rgba(0, 0, 0, 0.12), 0 0 12px rgba(194, 174, 109, 0.08)'
-          : undefined,
+        borderBottom: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
+        transition: 'border-color 0.3s ease',
       }}
+      className="group"
     >
       <button
-        onClick={toggle}
+        onClick={() => setIsOpen(!isOpen)}
         style={{
           width: '100%',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           gap: '24px',
-          padding: 'clamp(16px, 2vw, 24px) clamp(20px, 2.5vw, 32px)',
+          padding: '20px 8px',
           background: 'none',
           border: 'none',
           cursor: 'pointer',
           textAlign: 'left',
+          outline: 'none',
         }}
       >
         <span
           style={{
-            fontFamily: 'Poppins, sans-serif',
+            fontFamily: "'Sora', sans-serif",
             fontWeight: 500,
-            fontSize: 'clamp(14px, 1.25vw, 17px)',
-            color: open ? 'var(--hol-gold)' : 'var(--hol-text)',
-            lineHeight: 1.4,
+            fontSize: 'clamp(14px, 1.1vw, 16px)',
+            color: isOpen
+              ? 'var(--hol-gold, #C2AE6D)'
+              : isDark
+                ? '#FFFFFF'
+                : '#1A1A1A',
             transition: 'color 0.3s ease',
           }}
         >
           {q}
         </span>
 
-        <svg
-          ref={chevronRef}
-          width="18"
-          height="18"
+        <motion.svg
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: 0.3, ease: 'easeOut' }}
+          width="16"
+          height="16"
           viewBox="0 0 24 24"
           fill="none"
-          stroke={open ? 'var(--hol-gold)' : 'var(--hol-muted)'}
-          strokeWidth="2"
+          stroke={isOpen ? 'var(--hol-gold, #C2AE6D)' : isDark ? '#666666' : '#999999'}
+          strokeWidth="2.5"
           strokeLinecap="round"
           strokeLinejoin="round"
-          style={{
-            flexShrink: 0,
-            willChange: 'transform',
-            transition: 'stroke 0.3s ease',
-          }}
+          style={{ flexShrink: 0 }}
         >
           <polyline points="6 9 12 15 18 9" />
-        </svg>
+        </motion.svg>
       </button>
 
-      {/* Collapsible body */}
-      <div ref={bodyRef} style={{ height: 0, overflow: 'hidden', opacity: 0 }}>
-        <div ref={innerRef} style={{ padding: '0 clamp(20px, 2.5vw, 32px) clamp(18px, 2vw, 26px)' }}>
-          <p
-            style={{
-              fontFamily: 'Poppins, sans-serif',
-              fontWeight: 300,
-              fontSize: 'clamp(13px, 1vw, 14.5px)',
-              color: 'var(--hol-muted)',
-              lineHeight: 1.8,
-              margin: 0,
-              maxWidth: '760px',
-            }}
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            style={{ overflow: 'hidden' }}
           >
-            {a}
-          </p>
-        </div>
-      </div>
+            <div style={{ padding: '0 8px 24px 8px' }}>
+              <p
+                style={{
+                  fontFamily: "'Sora', sans-serif",
+                  fontWeight: 300,
+                  fontSize: 'clamp(13px, 0.95vw, 14.5px)',
+                  color: isDark ? '#8E8A84' : '#555555',
+                  lineHeight: 1.7,
+                  margin: 0,
+                  maxWidth: '760px',
+                }}
+              >
+                {a}
+              </p>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }
 
 export default function FAQ() {
-  const sectionRef = useRef<HTMLElement>(null)
+  const { theme } = useTheme()
+  const isDark = theme === 'dark'
 
   return (
     <section
-      ref={sectionRef}
       id="faq"
       style={{
-        backgroundColor: 'var(--hol-bg)',
-        padding: 'clamp(72px, 10vw, 120px) clamp(24px, 8vw, 120px)',
+        backgroundColor: isDark ? '#000000' : '#FFFFFF',
+        color: isDark ? '#FFFFFF' : '#1A1A1A',
+        padding: 'clamp(100px, 14vw, 160px) clamp(16px, 6vw, 80px)',
         position: 'relative',
         overflow: 'hidden',
+        width: '100%',
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        transition: 'background-color 0.4s ease, color 0.4s ease',
       }}
     >
-      {/* ── Glassmorphism Background Blobs ── */}
+      {/* Dynamic Background Glass Blobs */}
       <div
         style={{
           position: 'absolute',
-          top: '8%',
-          right: '8%',
-          width: 'clamp(200px, 25vw, 360px)',
+          top: '15%',
+          right: '10%',
+          width: 'clamp(250px, 30vw, 450px)',
           aspectRatio: '1 / 1',
           borderRadius: '50%',
-          background: 'var(--hol-gold)',
-          filter: 'blur(100px)',
-          opacity: 0.07,
-          zIndex: 1,
+          background: 'var(--hol-gold, #C2AE6D)',
+          filter: 'blur(120px)',
+          opacity: isDark ? 0.07 : 0.05,
+          zIndex: 0,
           pointerEvents: 'none',
-          animation: 'floatBlob1 24s infinite alternate ease-in-out',
         }}
       />
       <div
         style={{
           position: 'absolute',
-          bottom: '12%',
-          left: '6%',
-          width: 'clamp(240px, 30vw, 420px)',
+          bottom: '15%',
+          left: '8%',
+          width: 'clamp(280px, 35vw, 500px)',
           aspectRatio: '1 / 1',
           borderRadius: '50%',
-          background: 'var(--hol-red)',
-          filter: 'blur(110px)',
-          opacity: 0.04,
-          zIndex: 1,
+          background: 'var(--hol-red, #E50914)',
+          filter: 'blur(130px)',
+          opacity: isDark ? 0.04 : 0.02,
+          zIndex: 0,
           pointerEvents: 'none',
-          animation: 'floatBlob2 28s infinite alternate ease-in-out',
         }}
       />
 
-      {/* Heading */}
-      <h2
+      {/* Main Structural Container */}
+      <div
         style={{
-          fontFamily: 'Poppins, sans-serif',
-          fontWeight: 700,
-          fontSize: 'clamp(28px, 4vw, 52px)',
-          letterSpacing: '-0.03em',
-          lineHeight: 1.1,
-          color: 'var(--hol-text)',
-          textAlign: 'center',
-          margin: '0 0 clamp(48px, 6vw, 80px)',
           position: 'relative',
-          zIndex: 2,
+          width: '100%',
+          maxWidth: '860px',
+          zIndex: 1,
         }}
       >
-        Frequently asked questions
-      </h2>
+        {/* Precision "Half-In, Half-Out" Typography Watermark (Extruded 3D Style) */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 'clamp(-110px, -15vw, -165px)',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            userSelect: 'none',
+            pointerEvents: 'none',
+            zIndex: 0,
+            lineHeight: 0.8,
+            textAlign: 'center',
+            width: '100%',
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "'Sora', sans-serif",
+              fontWeight: 900,
+              fontSize: 'clamp(8rem, 16vw, 20rem)',
+              letterSpacing: '-0.06em',
+              textTransform: 'uppercase',
+              color: isDark ? '#FFFFFF' : '#000000',
+              textShadow: isDark
+                ? '1px 1px 0px #E6E6E6, 2px 2px 0px #D9D9D9, 3px 3px 0px #CCCCCC, 4px 4px 0px #B3B3B3, 5px 5px 15px rgba(0, 0, 0, 0.9)'
+                : '1px 1px 0px #1A1A1A, 2px 2px 0px #262626, 3px 3px 0px #333333, 4px 4px 0px #4D4D4D, 5px 5px 15px rgba(0, 0, 0, 0.15)',
+              transition: 'color 0.4s ease, text-shadow 0.4s ease',
+              display: 'block',
+              willChange: 'transform, opacity',
+            }}
+          >
+            FAQ
+          </span>
+        </div>
 
-      {/* Accordion List */}
-      <div style={{ maxWidth: '860px', margin: '0 auto', position: 'relative', zIndex: 2 }}>
-        {FAQS.map((faq, i) => (
-          <FAQItem key={i} q={faq.q} a={faq.a} />
-        ))}
+        {/* Folder Header Tab (Highly Specular Glass) */}
+        <div
+          style={{
+            width: 'clamp(140px, 20vw, 220px)',
+            height: '42px',
+            position: 'relative',
+            zIndex: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '0 20px',
+            borderTopLeftRadius: '16px',
+            borderTopRightRadius: '16px',
+            borderTop: isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.12)',
+            borderLeft: isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.12)',
+            borderRight: isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.12)',
+            background: isDark
+              ? 'linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%)'
+              : 'linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.3) 100%)',
+            backdropFilter: 'blur(12px) saturate(140%)',
+            WebkitBackdropFilter: 'blur(12px) saturate(140%)',
+            boxShadow: isDark
+              ? 'inset 0 1px 0 rgba(255,255,255,0.08)'
+              : 'inset 0 1px 0 rgba(255,255,255,0.85)',
+          }}
+        >
+          <span
+            style={{
+              fontFamily: "'Sora', sans-serif",
+              fontSize: '11px',
+              fontWeight: 600,
+              letterSpacing: '0.15em',
+              color: isDark ? '#C2AE6D' : '#88743A',
+              textTransform: 'uppercase',
+            }}
+          >
+            FAQ.SYS
+          </span>
+          <span style={{ fontSize: '12px', opacity: 0.6 }}>⚙️</span>
+        </div>
+
+        {/* Glassmorphism Folder Container Body */}
+        <div
+          style={{
+            position: 'relative',
+            zIndex: 1,
+            borderRadius: '24px',
+            borderTopLeftRadius: '0px', // Connect cleanly with folder tab
+            border: isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.1)',
+            background: isDark
+              ? 'linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.01) 60%, rgba(255, 255, 255, 0.03) 100%)'
+              : 'linear-gradient(135deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.15) 60%, rgba(255, 255, 255, 0.3) 100%)',
+            backdropFilter: 'blur(12px) saturate(140%)',
+            WebkitBackdropFilter: 'blur(12px) saturate(140%)',
+            padding: 'clamp(24px, 4vw, 48px)',
+            boxShadow: isDark
+              ? '0 40px 100px rgba(0, 0, 0, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -1px 0 rgba(0, 0, 0, 0.4)'
+              : '0 40px 100px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8), inset 0 -1px 0 rgba(0, 0, 0, 0.05)',
+            marginTop: '-1px', // Seamless connection
+            transition: 'background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease',
+            willChange: 'transform, opacity',
+          }}
+        >
+          {/* Top Decorative Graphic (Diagonal System Arrow) */}
+          <div
+            style={{
+              position: 'absolute',
+              top: '20px',
+              right: '24px',
+              color: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.15)',
+              fontSize: '22px',
+              fontWeight: 300,
+              userSelect: 'none',
+            }}
+          >
+            ↗
+          </div>
+
+          {/* FAQ Accordions List */}
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {FAQS.map((faq, i) => (
+              <FAQItem key={i} q={faq.q} a={faq.a} isDark={isDark} />
+            ))}
+          </div>
+
+          {/* Bottom Row Badge & System Text */}
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              marginTop: '40px',
+              paddingTop: '20px',
+              borderTop: isDark ? '1px solid rgba(255, 255, 255, 0.06)' : '1px solid rgba(0, 0, 0, 0.06)',
+              fontSize: '10px',
+              fontFamily: "'Sora', sans-serif",
+              color: isDark ? '#666666' : '#999999',
+              letterSpacing: '0.08em',
+              textTransform: 'uppercase',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <div
+                style={{
+                  width: '20px',
+                  height: '20px',
+                  borderRadius: '50%',
+                  border: isDark ? '1px solid rgba(255,255,255,0.15)' : '1px solid rgba(0,0,0,0.15)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '9px',
+                  fontWeight: 600,
+                  color: isDark ? '#FFFFFF' : '#1A1A1A',
+                }}
+              >
+                H
+              </div>
+              <span>HOL ARCHIVE // RECORDS</span>
+            </div>
+            <div style={{ textAlign: 'right' }}>
+              <span>SECURE_FILE_04.SYS</span>
+            </div>
+          </div>
+        </div>
       </div>
-
-      {/* Glassmorphic Card Styling rules */}
-      <style>{`
-        .faq-glass-card {
-          background: rgba(255, 255, 255, 0.02);
-          border: 1px solid rgba(255, 255, 255, 0.05);
-          backdrop-filter: blur(16px);
-          -webkit-backdrop-filter: blur(16px);
-          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
-          border-radius: 14px;
-          margin-bottom: 16px;
-          transition: all 0.45s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        
-        [data-theme="dark"] .faq-glass-card {
-          background: rgba(17, 17, 17, 0.25);
-          border: 1px solid rgba(244, 241, 236, 0.06);
-          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.15);
-        }
-
-        html:not([data-theme="dark"]) .faq-glass-card {
-          background: rgba(255, 255, 255, 0.45);
-          border: 1px solid rgba(17, 17, 17, 0.06);
-          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.02);
-        }
-
-        .faq-glass-card:hover {
-          transform: translateY(-3px);
-          border-color: var(--hol-gold);
-          box-shadow: 0 12px 30px rgba(194, 174, 109, 0.08);
-        }
-
-        [data-theme="dark"] .faq-glass-card:hover {
-          background: rgba(255, 255, 255, 0.03);
-          box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35), 0 0 15px rgba(194, 174, 109, 0.08);
-        }
-
-        @keyframes floatBlob1 {
-          0% { transform: translate(0, 0) scale(1); }
-          100% { transform: translate(40px, -30px) scale(1.08); }
-        }
-        @keyframes floatBlob2 {
-          0% { transform: translate(0, 0) scale(1); }
-          100% { transform: translate(-30px, 45px) scale(1.12); }
-        }
-      `}</style>
     </section>
   )
 }
+

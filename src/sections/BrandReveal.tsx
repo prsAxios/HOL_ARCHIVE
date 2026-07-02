@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { gsap, ScrollTrigger } from '../lib/gsap-config'
+import { gsap } from '../lib/gsap-config'
 
-const ACCENT = '#C2AE6D'
 const WORD_FS = 'clamp(36px, 6vw, 85px)'
 
 export default function BrandReveal() {
@@ -11,6 +10,7 @@ export default function BrandReveal() {
   const folderContainerRef = useRef<HTMLDivElement>(null)
   const folderImgRef = useRef<HTMLImageElement>(null)
   const logoRef = useRef<HTMLDivElement>(null)
+  const archivedTextRef = useRef<HTMLDivElement>(null)
 
   /* Word wrappers & letter refs for convergence */
   const hWrapRef = useRef<HTMLDivElement>(null)
@@ -65,55 +65,6 @@ export default function BrandReveal() {
     const oChars = oRest?.querySelectorAll('.char-span')
     const lChars = lRest?.querySelectorAll('.char-span')
 
-    // Initial resets
-    gsap.set([hFirst, oFirst, lFirst, hChars, oChars, lChars], { opacity: 0, y: 35 })
-    gsap.set(folderContainer, { xPercent: -50, yPercent: -50, opacity: 0, scale: 0.6 })
-    gsap.set(logo, { opacity: 0, scale: 0.8 })
-
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: 'top top',
-        end: '+=4500',
-        pin: true,
-        scrub: 1.4,
-        anticipatePin: 1,
-      },
-    })
-
-    // 1. Hospitality entry (letter by letter)
-    tl.to(hFirst, { opacity: 1, y: 0, duration: 0.3 }, 0)
-    if (hChars && hChars.length > 0) {
-      tl.to(hChars, { opacity: 1, y: 0, stagger: 0.05, duration: 0.5 }, 0.1)
-    }
-
-    // 2. Operations entry (letter by letter)
-    tl.to(oFirst, { opacity: 1, y: 0, duration: 0.3 }, 0.7)
-    if (oChars && oChars.length > 0) {
-      tl.to(oChars, { opacity: 1, y: 0, stagger: 0.05, duration: 0.5 }, 0.8)
-    }
-
-    // 3. Logistics entry (letter by letter)
-    tl.to(lFirst, { opacity: 1, y: 0, duration: 0.3 }, 1.4)
-    if (lChars && lChars.length > 0) {
-      tl.to(lChars, { opacity: 1, y: 0, stagger: 0.05, duration: 0.5 }, 1.5)
-    }
-
-    // Hold state
-    tl.to({}, { duration: 0.4 })
-
-    // 4. Folder canvas fades in and scales up
-    tl.to(folderContainer, { opacity: 1, scale: 1, duration: 0.7, ease: 'power2.out' }, '+=0.1')
-    tl.to(logo, { opacity: 0.85, scale: 1, duration: 0.7, ease: 'power2.out' }, '<')
-
-    // 5. Folder glows/pulses softly to receive papers
-    tl.to(folderImg, {
-      filter: 'drop-shadow(0 0 25px rgba(194, 174, 109, 0.5)) drop-shadow(0 15px 30px rgba(0,0,0,0.5))',
-      duration: 0.7,
-      ease: 'power2.inOut',
-    })
-
-    // 6. Fly the ENTIRE words into the folder mouth opening
     const getFlightTargets = () => {
       const w = window.innerWidth
       const h = window.innerHeight
@@ -134,34 +85,107 @@ export default function BrandReveal() {
       }
     }
 
-    const targets = getFlightTargets()
+    const ctx = gsap.context(() => {
+      // Initial resets
+      gsap.set([hFirst, oFirst, lFirst, hChars, oChars, lChars], { opacity: 0, y: 35 })
+      gsap.set(folderContainer, { xPercent: -50, yPercent: -50, opacity: 0, scale: 0.6 })
+      gsap.set(logo, { opacity: 0, scale: 0.8 })
+      gsap.set(archivedTextRef.current, { opacity: 0, y: 15 })
 
-    // Fly whole words into the folder opening, scaling down and fading to 0
-    tl.to(hWrap, { x: targets.hX, y: targets.hY, scale: 0.1, opacity: 0, duration: 1.1, ease: 'power2.inOut' }, '>-0.1')
-    tl.to(oWrap, { x: targets.oX, y: targets.oY, scale: 0.1, opacity: 0, duration: 1.1, ease: 'power2.inOut' }, '<')
-    tl.to(lWrap, { x: targets.lX, y: targets.lY, scale: 0.1, opacity: 0, duration: 1.1, ease: 'power2.inOut' }, '<')
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: () => `+=${window.innerWidth < 768 ? 2500 : 4500}`,
+          pin: true,
+          scrub: 1.4,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+        },
+      })
 
-    // 7. Folder glow returns to normal
-    tl.to(folderImg, {
-      filter: 'drop-shadow(0 15px 35px rgba(0,0,0,0.45))',
-      duration: 0.7,
-      ease: 'power2.inOut',
-    }, '>-0.1')
+      // 1. Hospitality entry (letter by letter)
+      tl.to(hFirst, { opacity: 1, y: 0, duration: 0.3 }, 0)
+      if (hChars && hChars.length > 0) {
+        tl.to(hChars, { opacity: 1, y: 0, stagger: 0.05, duration: 0.5 }, 0.1)
+      }
 
-    // 8. Center the Folder and scale it up showing the Logo flat on the front
-    const moveX = isMobile ? '0' : '-16vw'
-    const moveY = isMobile ? '-20vh' : '0'
+      // 2. Operations entry (letter by letter)
+      tl.to(oFirst, { opacity: 1, y: 0, duration: 0.3 }, 0.7)
+      if (oChars && oChars.length > 0) {
+        tl.to(oChars, { opacity: 1, y: 0, stagger: 0.05, duration: 0.5 }, 0.8)
+      }
 
-    // Shift to center
-    tl.to(folderContainer, { x: moveX, y: moveY, scale: 1.35, duration: 1.0, ease: 'power2.inOut' }, '>-0.1')
-    tl.to(logo, { opacity: 1.0, duration: 1.0, ease: 'power2.inOut' }, '<')
+      // 3. Logistics entry (letter by letter)
+      tl.to(lFirst, { opacity: 1, y: 0, duration: 0.3 }, 1.4)
+      if (lChars && lChars.length > 0) {
+        tl.to(lChars, { opacity: 1, y: 0, stagger: 0.05, duration: 0.5 }, 1.5)
+      }
 
-    // Cushion hold at the end of the section scroll
-    tl.to({}, { duration: 1.5 })
+      // Hold state
+      tl.to({}, { duration: 0.4 })
+
+      // 4. Folder canvas fades in and scales up
+      tl.to(folderContainer, { opacity: 1, scale: 1, duration: 0.7, ease: 'power2.out' }, '+=0.1')
+      tl.to(logo, { opacity: 0.85, scale: 1, duration: 0.7, ease: 'power2.out' }, '<')
+
+      // 5. Folder glows/pulses softly to receive papers
+      tl.to(folderImg, {
+        filter: 'drop-shadow(0 0 25px #a8b8c8) drop-shadow(0 15px 30px rgba(0,0,0,0.5))',
+        duration: 0.7,
+        ease: 'power2.inOut',
+      })
+
+      // 6. Fly the ENTIRE words into the folder mouth opening
+      tl.to(hWrap, { 
+        x: () => getFlightTargets().hX, 
+        y: () => getFlightTargets().hY, 
+        scale: 0.1, 
+        opacity: 0, 
+        duration: 1.1, 
+        ease: 'power2.inOut' 
+      }, '>-0.1')
+      tl.to(oWrap, { 
+        x: () => getFlightTargets().oX, 
+        y: () => getFlightTargets().oY, 
+        scale: 0.1, 
+        opacity: 0, 
+        duration: 1.1, 
+        ease: 'power2.inOut' 
+      }, '<')
+      tl.to(lWrap, { 
+        x: () => getFlightTargets().lX, 
+        y: () => getFlightTargets().lY, 
+        scale: 0.1, 
+        opacity: 0, 
+        duration: 1.1, 
+        ease: 'power2.inOut' 
+      }, '<')
+
+      // 7. Folder glow returns to normal
+      tl.to(folderImg, {
+        filter: 'drop-shadow(0 15px 35px rgba(0,0,0,0.45))',
+        duration: 0.7,
+        ease: 'power2.inOut',
+      }, '>-0.1')
+
+      // 8. Center the Folder and scale it up showing the Logo flat on the front
+      tl.to(folderContainer, { 
+        x: () => (window.innerWidth < 768 ? '0' : '-16vw'), 
+        y: () => (window.innerWidth < 768 ? '-20vh' : '0'), 
+        scale: 1.35, 
+        duration: 1.0, 
+        ease: 'power2.inOut' 
+      }, '>-0.1')
+      tl.to(logo, { opacity: 1.0, duration: 1.0, ease: 'power2.inOut' }, '<')
+      tl.to(archivedTextRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, '>-0.3')
+
+      // Cushion hold at the end of the section scroll
+      tl.to({}, { duration: 1.5 })
+    }, sectionRef)
 
     return () => {
-      tl.kill()
-      ScrollTrigger.getAll().forEach((t) => t.kill())
+      ctx.revert()
     }
   }, [isMobile])
 
@@ -177,7 +201,7 @@ export default function BrandReveal() {
     const rest = word.slice(1)
 
     const wordStyle: React.CSSProperties = {
-      fontFamily: 'Poppins, sans-serif',
+      fontFamily: 'Sora, sans-serif',
       fontWeight: 700,
       fontSize: WORD_FS,
       lineHeight: 1.05,
@@ -196,7 +220,7 @@ export default function BrandReveal() {
         <span
           ref={letterRef}
           className={`${charClass} first-letter`}
-          style={{ ...wordStyle, color: ACCENT, display: 'inline-block' }}
+          style={{ ...wordStyle, color: '#A8B8C8', display: 'inline-block' }}
         >
           {firstLetter}
         </span>
@@ -234,6 +258,10 @@ export default function BrandReveal() {
         justifyContent: 'center',
       }}
     >
+      {/* ── Google Fonts Sora Loader ── */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap');
+      `}</style>
       {/* ── Main Container: Split Column Layout on Desktop, Staggered on Mobile ── */}
       <div
         ref={containerRef}
@@ -270,7 +298,7 @@ export default function BrandReveal() {
           {renderWord('Logistics', lWrapRef, 'l-char', lLetterRef, lRestRef)}
         </div>
 
-        {/* Right Column: Flat Folder Icon & Logo Overlay */}
+        {/* Right Column: Flat Folder Icon, Logo Overlay & Text below */}
         <div
           ref={folderContainerRef}
           style={{
@@ -281,9 +309,13 @@ export default function BrandReveal() {
             pointerEvents: 'none',
             zIndex: 15,
             willChange: 'transform, opacity',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: 'clamp(20px, 3vh, 48px)', // Spacing between folder and the text below
           }}
         >
-          <div style={{ position: 'relative', width: '100%', height: '100%' }}>
+          <div style={{ position: 'relative', width: '100%' }}>
             {/* The Folder Image */}
             <img
               ref={folderImgRef}
@@ -316,6 +348,25 @@ export default function BrandReveal() {
                 willChange: 'opacity, transform',
               }}
             />
+          </div>
+
+          {/* Big Bold text below the folder */}
+          <div
+            ref={archivedTextRef}
+            style={{
+              fontFamily: "'Sora', sans-serif",
+              fontSize: 'clamp(28px, 4.5vw, 64px)',
+              fontWeight: 400, // Extra Bold
+              letterSpacing: '-0.02em',
+              color: 'var(--hol-text)',
+              textAlign: 'center',
+              textTransform: 'uppercase',
+              whiteSpace: 'nowrap',
+              width: '100%',
+              willChange: 'opacity, transform',
+            }}
+          >
+            HOL <span style={{ color: '#A8B8C8' }}>Archived</span>
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { gsap } from '../lib/gsap-config'
 
 interface HolSealProps {
@@ -16,7 +16,7 @@ export default function HolSeal({ size = 180, animate = true, style }: HolSealPr
   const sealRef  = useRef<SVGSVGElement>(null)
   const outerRef = useRef<SVGGElement>(null)
 
-  /* â”€â”€ Entry animation â”€â”€ */
+  /* ── Entry animation ── */
   useEffect(() => {
     if (!animate || !sealRef.current) return
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -34,7 +34,7 @@ export default function HolSeal({ size = 180, animate = true, style }: HolSealPr
     )
   }, [animate])
 
-  /* â”€â”€ Hover: outer ring spins faster, seal lifts â”€â”€ */
+  /* ── Hover: outer ring spins faster, seal lifts ── */
   useEffect(() => {
     const seal  = sealRef.current
     const outer = outerRef.current
@@ -61,16 +61,21 @@ export default function HolSeal({ size = 180, animate = true, style }: HolSealPr
     if (mq.matches) {
       seal.addEventListener('mouseenter', enter)
       seal.addEventListener('mouseleave', leave)
+    } else {
+      seal.addEventListener('touchstart', enter, { passive: true })
+      seal.addEventListener('touchend', leave, { passive: true })
     }
 
     return () => {
       cancelAnimationFrame(raf)
       seal.removeEventListener('mouseenter', enter)
       seal.removeEventListener('mouseleave', leave)
+      seal.removeEventListener('touchstart', enter)
+      seal.removeEventListener('touchend', leave)
     }
   }, [])
 
-  /* â”€â”€ Scale on hover via CSS (Emil: only transform) â”€â”€ */
+  /* ── Scale on hover via CSS (Emil: only transform) ── */
   const hoverStyle = `
     .hol-seal {
       cursor: default;
@@ -83,6 +88,10 @@ export default function HolSeal({ size = 180, animate = true, style }: HolSealPr
         transform: scale(1.06);
         filter: drop-shadow(0 0 18px rgba(194,174,109,0.45));
       }
+    }
+    .hol-seal:active {
+      transform: scale(1.06);
+      filter: drop-shadow(0 0 18px rgba(194,174,109,0.45));
     }
   `
 
@@ -99,7 +108,7 @@ export default function HolSeal({ size = 180, animate = true, style }: HolSealPr
         xmlns="http://www.w3.org/2000/svg"
         style={{ opacity: animate ? 0 : 1, ...style }}
       >
-        {/* â”€â”€ Circular text path â”€â”€ */}
+        {/* ── Circular text path ── */}
         <defs>
           <path
             id="arcPath"
@@ -110,7 +119,7 @@ export default function HolSeal({ size = 180, animate = true, style }: HolSealPr
         {/* Outer glow fill */}
         <circle cx="100" cy="100" r="96" fill={GOLD3} />
 
-        {/* Outer decorative ring â€” this group rotates */}
+        {/* Outer decorative ring — this group rotates */}
         <g ref={outerRef}>
           {/* Outer circle */}
           <circle cx="100" cy="100" r="96" stroke={GOLD2} strokeWidth="1" />
@@ -150,9 +159,9 @@ export default function HolSeal({ size = 180, animate = true, style }: HolSealPr
         <circle cx="100" cy="100" r="74" stroke={GOLD} strokeWidth="1.2" opacity="0.6" />
         <circle cx="100" cy="100" r="68" stroke={GOLD} strokeWidth="0.5" opacity="0.25" />
 
-        {/* Circular "ARCHIVE Â· HOL Â· ARCHIVE Â· HOL Â·" text */}
+        {/* Circular "ARCHIVE · HOL · ARCHIVE · HOL ·" text */}
         <text
-          fontFamily="Poppins, sans-serif"
+          fontFamily="Sora, sans-serif"
           fontWeight="300"
           fontSize="9"
           letterSpacing="3.5"
@@ -160,7 +169,7 @@ export default function HolSeal({ size = 180, animate = true, style }: HolSealPr
           opacity="0.75"
         >
           <textPath href="#arcPath" startOffset="0%">
-            ARCHIVE&nbsp;Â·&nbsp;HOL&nbsp;Â·&nbsp;ARCHIVE&nbsp;Â·&nbsp;HOL&nbsp;Â·&nbsp;ARCHIVE&nbsp;Â·&nbsp;HOL&nbsp;Â·
+            ARCHIVE&nbsp;·&nbsp;HOL&nbsp;·&nbsp;ARCHIVE&nbsp;·&nbsp;HOL&nbsp;·&nbsp;ARCHIVE&nbsp;·&nbsp;HOL&nbsp;·
           </textPath>
         </text>
 
@@ -183,7 +192,7 @@ export default function HolSeal({ size = 180, animate = true, style }: HolSealPr
         <text
           x="100" y="111"
           textAnchor="middle"
-          fontFamily="Poppins, sans-serif"
+          fontFamily="Sora, sans-serif"
           fontWeight="700"
           fontSize="44"
           letterSpacing="-1"
@@ -198,4 +207,5 @@ export default function HolSeal({ size = 180, animate = true, style }: HolSealPr
     </>
   )
 }
+
 

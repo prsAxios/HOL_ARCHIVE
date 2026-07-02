@@ -30,9 +30,25 @@ function stepPaths(i: number) {
   ]
 }
 
+/* ── Step data ──────────────────────────────────────────────────── */
+const STEPS = [
+  { num: '00', title: 'Every successful execution begins long before the event itself.', desc: 'At H.O.L. Archive, our process is built around understanding before execution, structure before movement, and clarity before decisions.' },
+  { num: '01', title: 'INQUIRE', desc: 'Every partnership begins with curiosity.' },
+  { num: '02', title: 'UNDERSTAND', desc: 'Great execution starts with understanding, not assumptions.' },
+  { num: '03', title: 'ANALYSE', desc: 'We observe the environment before shaping the solution.' },
+  { num: '04', title: 'DISCUSS', desc: 'Perspective creates clarity.' },
+  { num: '05', title: 'STRUCTURE', desc: 'Complexity becomes manageable when given a framework.' },
+  { num: '06', title: 'REFINE', desc: 'Every strong plan improves through thoughtful iteration.' },
+  { num: '07', title: 'ALIGN', desc: 'Shared understanding creates operational confidence.' },
+  { num: '08', title: 'FINALISE', desc: 'The direction is established and the path becomes clear.' },
+  { num: '09', title: 'CONFIRM', desc: 'Preparation ends. Execution begins.' },
+]
+
+const N = STEPS.length
+
 function computeViewBox() {
   let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < N; i++) {
     [
       iso(i * W, i * H, 0), iso(i * W, i * H, D),
       iso(i * W, (i + 1) * H, 0), iso(i * W, (i + 1) * H, D),
@@ -48,26 +64,44 @@ function computeViewBox() {
 }
 const VIEWBOX = computeViewBox()
 
-/* ── Step data ──────────────────────────────────────────────────── */
-const STEPS = [
-  { num: '01', title: 'Initial Inquiry', desc: 'Submit your event details through our contact form. We review every brief with care and respond within 24 hours.' },
-  { num: '02', title: 'Discovery Call', desc: 'A focused consultation where we understand your vision, guest profile, location preferences, and operational requirements.' },
-  { num: '03', title: 'Concept Design', desc: 'Our creative team develops a bespoke event concept — theme, spatial layout, aesthetic direction — tailored to your identity.' },
-  { num: '04', title: 'Venue Scouting', desc: 'We source and inspect venues that align with your concept — considering capacity, acoustics, access, and luxury quotient.' },
-  { num: '05', title: 'Vendor Curation', desc: 'We handpick caterers, florists, AV specialists, photographers, and entertainment from our verified luxury network.' },
-  { num: '06', title: 'Budget Planning', desc: 'Transparent cost architecture. Every line item is accounted for — no surprises, no hidden fees, pure operational clarity.' },
-  { num: '07', title: 'Operations Brief', desc: 'A master operations document is created: run-of-show, vendor contacts, contingency plans, and floor diagrams.' },
-  { num: '08', title: 'Pre-Event Logistics', desc: 'Ground team mobilises 48–72 hours prior. Venue setup, equipment checks, guest list coordination, and dry runs.' },
-  { num: '09', title: 'Event Execution', desc: 'Our on-ground team manages every moment — guest flow, vendor coordination, timeline adherence, and real-time problem solving.' },
-  { num: '10', title: 'Post-Event Archive', desc: 'Every event is documented, photographed, and archived. A detailed debrief ensures each future event exceeds the last.' },
-]
-
-const N = STEPS.length
-
 export default function Process() {
   const sectionRef = useRef<HTMLElement>(null)
   const groupRefs = useRef<(SVGGElement | null)[]>([])
   const contentRefs = useRef<(HTMLDivElement | null)[]>([])
+
+  // Listen for the preloader exit class 'hol-ready' on document.body to refresh ScrollTrigger
+  useEffect(() => {
+    const checkClassAndRefresh = () => {
+      if (document.body.classList.contains('hol-ready')) {
+        ScrollTrigger.refresh()
+        return true
+      }
+      return false
+    }
+
+    if (checkClassAndRefresh()) return
+
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          if (checkClassAndRefresh()) {
+            observer.disconnect()
+          }
+        }
+      })
+    })
+
+    observer.observe(document.body, { attributes: true })
+    
+    const t = setTimeout(() => {
+      ScrollTrigger.refresh()
+    }, 3000)
+
+    return () => {
+      observer.disconnect()
+      clearTimeout(t)
+    }
+  }, [])
 
   useEffect(() => {
     const section = sectionRef.current
@@ -76,110 +110,127 @@ export default function Process() {
     const groups = groupRefs.current.filter(Boolean) as SVGGElement[]
     const contents = contentRefs.current.filter(Boolean) as HTMLDivElement[]
 
-    /* ── Set initial state ── */
-    gsap.set(groups, { opacity: 0, scale: 0.88, transformOrigin: '50% 50%' })
+    const ctx = gsap.context(() => {
+      /* ── Set initial state ── */
+      gsap.set(groups, { opacity: 0, scale: 0.88, transformOrigin: '50% 50%' })
 
-    /* Step 0 visible immediately */
-    if (groups[0]) gsap.set(groups[0], { opacity: 1, scale: 1 })
-    if (contents[0]) gsap.set(contents[0], { opacity: 1, y: 0 })
+      /* Step 0 visible immediately */
+      if (groups[0]) gsap.set(groups[0], { opacity: 1, scale: 1 })
+      if (contents[0]) gsap.set(contents[0], { opacity: 1, y: 0 })
 
-    /* ── Single scrubbed timeline ── */
-    const tl = gsap.timeline({
-      scrollTrigger: {
-        trigger: section,
-        start: 'top top',
-        end: `+=${N * 650}`,
-        pin: true,
-        anticipatePin: 1,
-        scrub: 1.6,
-        onUpdate(self) {
-          /* Step track — driven directly from scroll progress */
-          const raw = self.progress * (N - 1)
-          STEPS.forEach((_, i) => {
-            const dot = document.getElementById(`step-dot-${i}`)
-            const line = document.getElementById(`step-line-${i}`)
-            if (dot) {
-              const active = Math.round(raw) === i
-              const past = raw > i + 0.5
-              dot.style.backgroundColor = past || active ? 'var(--hol-gold)' : 'var(--hol-border)'
-              dot.style.transform = active ? 'scale(1.6)' : 'scale(1)'
-            }
-            if (line) {
-              const fill = Math.min(1, Math.max(0, raw - i))
-              line.style.transform = `scaleX(${fill})`
-            }
-          })
+      /* ── Single scrubbed timeline ── */
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: 'top top',
+          end: () => `+=${N * (window.innerWidth < 768 ? 400 : 650)}`,
+          pin: true,
+          anticipatePin: 1,
+          scrub: 1.6,
+          pinType: 'fixed',
+          invalidateOnRefresh: true,
+          onUpdate(self) {
+            /* Step track — driven directly from scroll progress */
+            const raw = self.progress * (N - 1)
+            STEPS.forEach((_, i) => {
+              const dot = document.getElementById(`step-dot-${i}`)
+              const line = document.getElementById(`step-line-${i}`)
+              if (dot) {
+                const active = Math.round(raw) === i
+                const past = raw > i + 0.5
+                dot.style.backgroundColor = past || active ? 'var(--hol-gold)' : 'var(--hol-border)'
+                dot.style.transform = active ? 'scale(1.6)' : 'scale(1)'
+              }
+              if (line) {
+                const fill = Math.min(1, Math.max(0, raw - i))
+                line.style.transform = `scaleX(${fill})`
+              }
+            })
+          },
         },
-      },
-    })
+      })
 
-    const dt = 1 / (N - 1)   // timeline fraction per step
+      const dt = 1 / (N - 1)   // timeline fraction per step
 
-    STEPS.forEach((_, i) => {
-      const pos = i * dt
+      STEPS.forEach((_, i) => {
+        const pos = i * dt
 
-      if (i > 0) {
-        /* Stair block appears */
-        tl.to(groups[i],
-          { opacity: 1, scale: 1, duration: dt * 0.35, ease: 'power2.out' },
-          pos
-        )
-        /* Content fades in */
-        tl.to(contents[i],
-          { opacity: 1, y: 0, duration: dt * 0.3, ease: 'power2.out' },
-          pos
-        )
-      }
+        if (i > 0) {
+          /* Stair block appears */
+          tl.to(groups[i],
+            { opacity: 1, scale: 1, duration: dt * 0.35, ease: 'power2.out' },
+            pos
+          )
+          /* Content fades in */
+          tl.to(contents[i],
+            { opacity: 1, y: 0, duration: dt * 0.3, ease: 'power2.out' },
+            pos
+          )
+        }
 
-      /* Step 0 content fades out when step 1 comes in */
-      /* All content fades out before next step (except last) */
-      if (i < N - 1) {
-        tl.to(contents[i],
-          { opacity: 0, y: -18, duration: dt * 0.2, ease: 'power2.in' },
-          pos + dt * 0.68
-        )
-      }
-    })
+        /* Step 0 content fades out when step 1 comes in */
+        /* All content fades out before next step (except last) */
+        if (i < N - 1) {
+          tl.to(contents[i],
+            { opacity: 0, y: -18, duration: dt * 0.2, ease: 'power2.in' },
+            pos + dt * 0.68
+          )
+        }
+      })
+    }, sectionRef)
 
-  }, [])
+    return () => {
+      ctx.revert()
+    }
+  }, []) // Bindings are common to all states, keep dependency empty to avoid flicker
 
   return (
     <section
       ref={sectionRef}
       id="process"
       style={{
-        position: 'relative', width: '100%', height: '100vh',
+        position: 'relative',
+        width: '100%',
+        height: '100vh',
         overflow: 'hidden',
-        display: 'flex', flexDirection: 'column', justifyContent: 'center',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'flex-start',
         backgroundColor: 'var(--hol-bg)',
       }}
     >
       {/* Heading */}
-      <div style={{
-        position: 'absolute', top: 'clamp(60px, 10vh, 100px)',
-        left: 'clamp(40px, 6vw, 80px)', zIndex: 10,
-      }}>
+      <div className="absolute left-[clamp(20px,6vw,80px)] z-10 top-[clamp(32px,6vh,60px)] md:top-[clamp(60px,10vh,100px)]">
         <h2 style={{
-          fontFamily: 'Poppins, sans-serif', fontWeight: 700,
-          fontSize: 'clamp(22px, 3vw, 42px)',
-          letterSpacing: '-0.03em', color: 'var(--hol-text)', margin: 0,
-        }}>Our Process</h2>
+          fontFamily: 'Sora, sans-serif',
+          fontWeight: 800,
+          fontSize: 'clamp(32px, 5.5vw, 80px)',
+          letterSpacing: '-0.04em',
+          lineHeight: 0.85,
+          color: 'var(--hol-text)',
+          margin: 0,
+          textTransform: 'uppercase',
+        }}>Our</h2>
+        <h2 style={{
+          fontFamily: 'Sora, sans-serif',
+          fontWeight: 800,
+          fontSize: 'clamp(32px, 5.5vw, 80px)',
+          letterSpacing: '-0.04em',
+          lineHeight: 0.85,
+          color: 'var(--hol-text)',
+          margin: 0,
+          textTransform: 'uppercase',
+        }}>Process</h2>
       </div>
 
-      {/* Content grid */}
-      <div style={{
-        display: 'grid', gridTemplateColumns: '1fr 1fr',
-        alignItems: 'center', width: '100%',
-        padding: '0 clamp(40px, 6vw, 80px)',
-        gap: 'clamp(32px, 5vw, 80px)',
-        marginTop: '48px',
-      }}>
+      {/* Content grid - Stacks vertically on mobile and uses inline columns on desktop */}
+      <div className="grid grid-cols-1 md:grid-cols-2 items-center w-full px-[clamp(20px,6vw,80px)] gap-2 md:gap-[clamp(32px,5vw,80px)] pt-[clamp(110px,22vh,160px)] md:pt-0 md:mt-0 h-full md:h-auto md:my-auto md:absolute md:inset-x-0 md:top-1/2 md:-translate-y-1/2">
 
         {/* Left: 3D staircase */}
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div className="flex justify-center flex-col items-center relative md:static flex-shrink-0">
           <svg
             viewBox={VIEWBOX}
-            style={{ width: '100%', maxWidth: 460, height: 'auto' }}
+            className="w-full max-w-[220px] md:max-w-[460px] h-auto"
             fill="none"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -202,42 +253,83 @@ export default function Process() {
               )
             })}
           </svg>
+
+          {/* Step track */}
+          <div className="relative md:absolute left-auto md:left-[clamp(20px,6vw,80px)] right-auto md:right-[clamp(20px,6vw,80px)] bottom-auto md:bottom-[clamp(24px,4vh,44px)] flex items-center mt-3 mb-2 md:my-0 w-full">
+            {STEPS.map((_, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
+                <div
+                  id={`step-dot-${i}`}
+                  style={{
+                    width: 6, height: 6, borderRadius: '50%', flexShrink: 0,
+                    backgroundColor: 'var(--hol-border)',
+                    transition: 'background-color 0.25s, transform 0.25s',
+                  }}
+                />
+                {i < N - 1 && (
+                  <div style={{ flex: 1, height: 1, position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ position: 'absolute', inset: 0, backgroundColor: 'var(--hol-border)' }} />
+                    <div
+                      id={`step-line-${i}`}
+                      style={{
+                        position: 'absolute', inset: 0,
+                        backgroundColor: 'var(--hol-gold)',
+                        transformOrigin: 'left', transform: 'scaleX(0)',
+                      }}
+                    />
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Right: step content */}
-        <div style={{ position: 'relative', minHeight: 220 }}>
+        <div className="relative min-h-[160px] md:min-h-[220px]">
           {STEPS.map((step, i) => (
             <div
               key={i}
               ref={el => { contentRefs.current[i] = el }}
               style={{
-                position: 'absolute', top: 0, left: 0, width: '100%',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: '100%',
                 willChange: 'transform, opacity',
                 opacity: 0,
                 transform: 'translateY(28px)',
               }}
             >
               <p style={{
-                fontFamily: 'Poppins, sans-serif', fontWeight: 300,
+                fontFamily: 'Sora, sans-serif',
+                fontWeight: 500,
                 fontSize: 'clamp(9px, 0.8vw, 11px)',
-                letterSpacing: '0.32em', textTransform: 'uppercase',
-                color: 'var(--hol-gold)', margin: '0 0 14px',
+                letterSpacing: '0.32em',
+                textTransform: 'uppercase',
+                color: 'var(--hol-gold)',
+                margin: '0 0 10px',
               }}>
-                Step {step.num} / {N.toString().padStart(2, '0')}
+                Step {step.num} / {(N - 1).toString().padStart(2, '0')}
               </p>
               <h3 style={{
-                fontFamily: 'Poppins, sans-serif', fontWeight: 700,
-                fontSize: 'clamp(22px, 2.8vw, 44px)',
-                letterSpacing: '-0.03em', lineHeight: 1.1,
-                color: 'var(--hol-text)', margin: '0 0 20px',
+                fontFamily: 'Sora, sans-serif',
+                fontWeight: 700,
+                fontSize: 'clamp(18px, 2.5vw, 44px)',
+                letterSpacing: '-0.02em',
+                lineHeight: 1.1,
+                color: 'var(--hol-text)',
+                margin: '0 0 12px',
               }}>
                 {step.title}
               </h3>
               <p style={{
-                fontFamily: 'Poppins, sans-serif', fontWeight: 300,
-                fontSize: 'clamp(13px, 1vw, 15px)',
+                fontFamily: 'Sora, sans-serif',
+                fontWeight: 300,
+                fontSize: 'clamp(12px, 1.1vw, 15px)',
                 color: 'var(--hol-muted)',
-                lineHeight: 1.85, margin: 0, maxWidth: '400px',
+                lineHeight: 1.7,
+                margin: 0,
+                maxWidth: '400px',
               }}>
                 {step.desc}
               </p>
@@ -245,39 +337,7 @@ export default function Process() {
           ))}
         </div>
       </div>
-
-      {/* Step track */}
-      <div style={{
-        position: 'absolute', bottom: 'clamp(24px, 4vh, 44px)',
-        left: 'clamp(40px, 6vw, 80px)', right: 'clamp(40px, 6vw, 80px)',
-        display: 'flex', alignItems: 'center',
-      }}>
-        {STEPS.map((_, i) => (
-          <div key={i} style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
-            <div
-              id={`step-dot-${i}`}
-              style={{
-                width: 6, height: 6, borderRadius: '50%', flexShrink: 0,
-                backgroundColor: 'var(--hol-border)',
-                transition: 'background-color 0.25s, transform 0.25s',
-              }}
-            />
-            {i < N - 1 && (
-              <div style={{ flex: 1, height: 1, position: 'relative', overflow: 'hidden' }}>
-                <div style={{ position: 'absolute', inset: 0, backgroundColor: 'var(--hol-border)' }} />
-                <div
-                  id={`step-line-${i}`}
-                  style={{
-                    position: 'absolute', inset: 0,
-                    backgroundColor: 'var(--hol-gold)',
-                    transformOrigin: 'left', transform: 'scaleX(0)',
-                  }}
-                />
-              </div>
-            )}
-          </div>
-        ))}
-      </div>
     </section>
   )
 }
+

@@ -1,18 +1,23 @@
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { ScrollSmoother } from 'gsap/ScrollSmoother'
 import { SplitText } from 'gsap/SplitText'
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin'
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
+import Lenis from 'lenis'
 
-gsap.registerPlugin(ScrollTrigger, ScrollSmoother, SplitText, ScrollToPlugin, MotionPathPlugin)
+gsap.registerPlugin(ScrollTrigger, SplitText, ScrollToPlugin, MotionPathPlugin)
+ScrollTrigger.config({ ignoreMobileResize: true })
 
-export { gsap, ScrollTrigger, ScrollSmoother, SplitText }
+export { gsap, ScrollTrigger, SplitText }
 
-export function scrollTo(target: string | Element) {
-  const smoother = ScrollSmoother.get()
-  if (smoother) {
-    smoother.scrollTo(target, true)
+export let lenisInstance: Lenis | null = null
+export function setLenis(l: Lenis | null) {
+  lenisInstance = l
+}
+
+export function scrollTo(target: any) {
+  if (lenisInstance) {
+    lenisInstance.scrollTo(target)
   } else {
     const el = typeof target === 'string' ? document.querySelector(target) : target
     el?.scrollIntoView({ behavior: 'smooth' })

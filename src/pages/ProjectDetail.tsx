@@ -1,4 +1,4 @@
-﻿import { useParams, useNavigate } from 'react-router'
+import { useParams, useNavigate } from 'react-router'
 import { PROJECTS } from '../data/projects'
 
 const ACCENT = '#C2AE6D'
@@ -11,7 +11,7 @@ export default function ProjectDetail() {
   if (!project) {
     return (
       <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center',
-        backgroundColor: 'var(--hol-bg)', fontFamily: 'Poppins, sans-serif', color: 'var(--hol-muted)' }}>
+        backgroundColor: 'var(--hol-bg)', fontFamily: 'Sora, sans-serif', color: 'var(--hol-muted)' }}>
         Project not found.
       </div>
     )
@@ -26,12 +26,12 @@ export default function ProjectDetail() {
           onClick={() => navigate(-1)}
           style={{
             background: 'none', border: 'none', cursor: 'pointer',
-            fontFamily: 'Poppins, sans-serif', fontWeight: 300,
+            fontFamily: 'Sora, sans-serif', fontWeight: 300,
             fontSize: '13px', letterSpacing: '0.14em',
             color: 'var(--hol-muted)', textTransform: 'uppercase', padding: 0,
           }}
         >
-          â† Back
+          ← Back
         </button>
       </div>
 
@@ -68,12 +68,12 @@ export default function ProjectDetail() {
               borderRadius: '100px',
             }}>
               <span style={{
-                fontFamily: 'Poppins, sans-serif', fontSize: '11px',
+                fontFamily: 'Sora, sans-serif', fontSize: '11px',
                 letterSpacing: '0.18em', textTransform: 'uppercase',
                 color: 'var(--hol-muted)', marginRight: '8px',
               }}>{label}</span>
               <span style={{
-                fontFamily: 'Poppins, sans-serif', fontSize: '12px', fontWeight: 500,
+                fontFamily: 'Sora, sans-serif', fontSize: '12px', fontWeight: 500,
                 color: ACCENT,
               }}>{value}</span>
             </div>
@@ -82,7 +82,7 @@ export default function ProjectDetail() {
 
         {/* Title */}
         <h1 style={{
-          fontFamily: 'Poppins, sans-serif', fontWeight: 700,
+          fontFamily: 'Sora, sans-serif', fontWeight: 700,
           fontSize: 'clamp(28px,4vw,52px)',
           letterSpacing: '-0.03em', lineHeight: 1.1,
           margin: '0 0 10px',
@@ -91,7 +91,7 @@ export default function ProjectDetail() {
         </h1>
 
         <p style={{
-          fontFamily: 'Poppins, sans-serif', fontWeight: 300,
+          fontFamily: 'Sora, sans-serif', fontWeight: 300,
           fontSize: '15px', color: ACCENT,
           letterSpacing: '0.04em', margin: '0 0 32px',
         }}>
@@ -103,7 +103,7 @@ export default function ProjectDetail() {
 
         {/* Description */}
         <p style={{
-          fontFamily: 'Poppins, sans-serif', fontWeight: 300,
+          fontFamily: 'Sora, sans-serif', fontWeight: 300,
           fontSize: 'clamp(15px,1.2vw,18px)', lineHeight: 1.9,
           color: 'var(--hol-muted)', margin: 0,
         }}>
@@ -118,7 +118,7 @@ export default function ProjectDetail() {
               padding: '16px 36px',
               backgroundColor: 'var(--hol-text)', color: 'var(--hol-bg)',
               border: 'none', borderRadius: '100px',
-              fontFamily: 'Poppins, sans-serif', fontWeight: 500,
+              fontFamily: 'Sora, sans-serif', fontWeight: 500,
               fontSize: '14px', letterSpacing: '0.08em',
               cursor: 'pointer',
             }}
@@ -130,4 +130,5 @@ export default function ProjectDetail() {
     </div>
   )
 }
+
 

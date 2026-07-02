@@ -42,6 +42,10 @@ export default function Vision() {
   // Spring-like mouse parallax depth effect
   // Excluded from React rendering cycles to maintain a solid 60 FPS.
   useEffect(() => {
+    // Check if the device has a mouse/pointer capability for hover
+    const hasHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches
+    if (!hasHover) return
+
     const innerEl = innerRef.current
     let mouseX = 0
     let mouseY = 0
@@ -183,13 +187,14 @@ export default function Vision() {
       >
         <span
           style={{
-            fontFamily: 'Poppins, sans-serif',
-            fontSize: 'clamp(64px, 6vw, 96px)',
-            fontWeight: 700,
-            letterSpacing: '0.01em',
+            fontFamily: 'Sora, sans-serif',
+            fontWeight: 800,
+            fontSize: 'clamp(32px, 5.5vw, 80px)',
+            letterSpacing: '-0.04em',
+            lineHeight: 0.85,
+            color: 'var(--hol-text)',
+            margin: 0,
             textTransform: 'uppercase',
-            color: 'var(--hol-red)',
-            opacity: 0.95,
           }}
         >
           Vision
@@ -219,6 +224,7 @@ export default function Vision() {
             height: '100%',
             position: 'relative',
             willChange: 'transform',
+            overflow: 'hidden',
           }}
         >
           <img
@@ -226,8 +232,10 @@ export default function Vision() {
             alt="Vision"
             style={{
               width: '100%',
-              height: '100%',
+              height: '110%',
               display: 'block',
+              transform: 'scale(1.06)',
+              transformOrigin: '48.9800% 51.8678%',
             }}
           />
 
@@ -235,8 +243,8 @@ export default function Vision() {
           <div
             style={{
               position: 'absolute',
-              left: '48.9800%',
-              top: '51.8678%',
+              left: '48.9780%',
+              top: '56.8770%',
               width: '5.5379%',
               aspectRatio: '1 / 1',
               backgroundColor: '#d40303ff',
@@ -303,7 +311,7 @@ export default function Vision() {
 
         <p
           style={{
-            fontFamily: 'Poppins, sans-serif',
+            fontFamily: 'Sora, sans-serif',
             fontWeight: 300,
             fontSize: '10px',
             letterSpacing: '0.4em',
@@ -315,24 +323,11 @@ export default function Vision() {
           System Access
         </p>
 
-        <h2
-          style={{
-            fontFamily: 'Cormorant Garamond, serif',
-            fontStyle: 'italic',
-            fontWeight: 300,
-            fontSize: 'clamp(32px, 4.5vw, 56px)',
-            lineHeight: 1.1,
-            color: '#F4F1EC',
-            margin: '0 0 20px',
-            letterSpacing: '-0.01em',
-          }}
-        >
-          Know More
-        </h2>
+
 
         <p
           style={{
-            fontFamily: 'Poppins, sans-serif',
+            fontFamily: 'Sora, sans-serif',
             fontWeight: 300,
             fontSize: 'clamp(12px, 1.1vw, 14px)',
             lineHeight: 1.7,
@@ -350,7 +345,7 @@ export default function Vision() {
             background: 'none',
             border: '1px solid var(--hol-gold)',
             color: 'var(--hol-gold)',
-            fontFamily: 'Poppins, sans-serif',
+            fontFamily: 'Sora, sans-serif',
             fontSize: '11px',
             fontWeight: 400,
             letterSpacing: '0.3em',
@@ -377,3 +372,4 @@ export default function Vision() {
     </section>
   )
 }
+

@@ -1,4 +1,4 @@
-﻿import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { gsap } from '../lib/gsap-config'
 
 export default function Spatial() {
@@ -97,14 +97,15 @@ export default function Spatial() {
         position: 'relative',
         width: '100%',
         height: '100vh',
-        minHeight: '700px',
+        minHeight: '620px',
         backgroundColor: 'var(--hol-bg)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'hidden',
-        paddingTop: '96px',
+        paddingTop: '60px',
+        transition: 'background-color 0.4s ease',
       }}
     >
       {/* Letters row */}
@@ -113,9 +114,9 @@ export default function Spatial() {
           display: 'flex',
           alignItems: 'flex-end',
           justifyContent: 'center',
-          gap: 'clamp(12px, 3.5vw, 56px)',
+          gap: 'clamp(8px, 3.5vw, 56px)',
           width: '100%',
-          padding: '0 clamp(20px, 4vw, 64px)',
+          padding: '0 clamp(16px, 4vw, 64px)',
         }}
       >
         {/* A */}
@@ -124,13 +125,14 @@ export default function Spatial() {
             ref={aRef}
             style={{
               display: 'block',
-              fontSize: 'clamp(150px, 24vw, 340px)',
+              fontSize: 'clamp(70px, 20vw, 340px)',
               fontWeight: 900,
               lineHeight: 0.85,
               letterSpacing: '-0.04em',
               color: 'var(--hol-text)',
-              fontFamily: 'Poppins, sans-serif',
+              fontFamily: 'Sora, sans-serif',
               userSelect: 'none',
+              transition: 'color 0.4s ease',
             }}
           >
             A
@@ -146,13 +148,14 @@ export default function Spatial() {
             ref={rRef}
             style={{
               display: 'block',
-              fontSize: 'clamp(150px, 24vw, 340px)',
+              fontSize: 'clamp(70px, 20vw, 340px)',
               fontWeight: 900,
               lineHeight: 0.85,
               letterSpacing: '-0.04em',
               color: 'var(--hol-text)',
-              fontFamily: 'Poppins, sans-serif',
+              fontFamily: 'Sora, sans-serif',
               userSelect: 'none',
+              transition: 'color 0.4s ease',
             }}
           >
             R
@@ -168,13 +171,14 @@ export default function Spatial() {
             ref={cRef}
             style={{
               display: 'block',
-              fontSize: 'clamp(150px, 24vw, 340px)',
+              fontSize: 'clamp(70px, 20vw, 340px)',
               fontWeight: 900,
               lineHeight: 0.85,
               letterSpacing: '-0.04em',
               color: 'var(--hol-text)',
-              fontFamily: 'Poppins, sans-serif',
+              fontFamily: 'Sora, sans-serif',
               userSelect: 'none',
+              transition: 'color 0.4s ease',
             }}
           >
             C
@@ -189,16 +193,17 @@ export default function Spatial() {
       <p
         ref={taglineRef}
         style={{
-          marginTop: 'clamp(36px, 5vw, 68px)',
-          fontSize: 'clamp(19px, 1.6vw, 25px)',
+          marginTop: 'clamp(28px, 5vw, 68px)',
+          fontSize: 'clamp(14px, 1.6vw, 25px)',
           fontWeight: 300,
-          color: 'rgba(10,10,10,0.4)',
+          color: 'var(--hol-muted)',
           letterSpacing: '0.06em',
           textAlign: 'center',
           maxWidth: '480px',
           lineHeight: 1.85,
-          fontFamily: 'Poppins, sans-serif',
+          fontFamily: 'Sora, sans-serif',
           padding: '0 24px',
+          transition: 'color 0.4s ease',
         }}
       >
         Artistry in every detail. Refinement in every moment. Curation as a legacy.
@@ -217,12 +222,12 @@ export default function Spatial() {
           letterSpacing: '0.25em',
           color: hovered ? 'var(--hol-bg)' : 'var(--hol-text)',
           backgroundColor: hovered ? 'var(--hol-text)' : 'transparent',
-          border: '1px solid #0a0a0a',
+          border: '1px solid var(--hol-text)',
           padding: '18px 52px',
           cursor: 'pointer',
-          transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
+          transition: 'all 0.4s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.4s ease',
           textTransform: 'uppercase',
-          fontFamily: 'Poppins, sans-serif',
+          fontFamily: 'Sora, sans-serif',
         }}
       >
         Explore The Portfolio
@@ -233,12 +238,12 @@ export default function Spatial() {
 
 const wordStyle: React.CSSProperties = {
   display: 'block',
-  fontSize: 'clamp(15px, 1.1vw, 18px)',
+  fontSize: 'clamp(12px, 1.1vw, 18px)',
   fontWeight: 500,
-  letterSpacing: '0.3em',
+  letterSpacing: '0.25em',
   color: 'var(--hol-gold)',
   textTransform: 'uppercase',
-  fontFamily: 'Poppins, sans-serif',
+  fontFamily: 'Sora, sans-serif',
   whiteSpace: 'nowrap',
 }
 

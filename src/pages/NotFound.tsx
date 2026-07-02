@@ -1,4 +1,4 @@
-﻿import { Link } from "react-router";
+import { Link } from "react-router";
 
 export default function NotFound() {
   return (
@@ -13,7 +13,7 @@ export default function NotFound() {
         color: 'var(--hol-text)',
         padding: '24px',
         textAlign: 'center',
-        fontFamily: 'Poppins, sans-serif'
+        fontFamily: 'Sora, sans-serif'
       }}
     >
       <h1 
@@ -22,7 +22,7 @@ export default function NotFound() {
           fontWeight: 300, 
           margin: 0, 
           lineHeight: 1,
-          fontFamily: 'Poppins, sans-serif',
+          fontFamily: 'Sora, sans-serif',
           opacity: 0.1
         }}
       >
@@ -65,5 +65,6 @@ export default function NotFound() {
     </div>
   );
 }
+
 
 

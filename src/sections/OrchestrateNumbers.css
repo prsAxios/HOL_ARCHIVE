@@ -7,7 +7,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #0b0b0b;
+  background: var(--hol-bg);
+  transition: background-color 0.4s ease;
 }
 
 /* Perspective wrapper to give 3D depth to the stack */
@@ -61,7 +62,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Sora', sans-serif;
   font-size: clamp(10px, 0.8vw, 12px);
   font-weight: 600;
   letter-spacing: 0.18em;
@@ -86,7 +87,7 @@
   position: absolute;
   left: -0.04em;
   bottom: -0.18em;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Sora', sans-serif;
   font-weight: 800;
   font-size: clamp(280px, 38vw, 550px);
   line-height: 0.8;
@@ -106,7 +107,7 @@
 
 .folder-tag {
   display: inline-block;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Sora', sans-serif;
   font-size: clamp(10px, 0.8vw, 12px);
   font-weight: 600;
   letter-spacing: 0.25em;
@@ -117,7 +118,7 @@
 }
 
 .folder-title {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Sora', sans-serif;
   font-size: clamp(32px, 5vw, 76px);
   font-weight: 300;
   line-height: 1.05;
@@ -127,7 +128,7 @@
 }
 
 .folder-body {
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Sora', sans-serif;
   font-size: clamp(14px, 1.1vw, 18px);
   font-weight: 300;
   line-height: 1.7;
@@ -140,7 +141,7 @@
   position: absolute;
   bottom: clamp(24px, 4vh, 48px);
   right: clamp(32px, 5vw, 64px);
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Sora', sans-serif;
   font-size: 11px;
   letter-spacing: 0.2em;
   font-weight: 500;

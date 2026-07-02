@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router'
-import { gsap, ScrollTrigger } from '../lib/gsap-config'
+import { gsap } from '../lib/gsap-config'
 
 const PANELS = [
   {
@@ -22,11 +22,11 @@ const PANELS = [
     color: '#F4F1EC',
   },
   {
-    num: 'CTA',
-    label: 'Why HOL',
+    num: '',
+    label: '',
     title: 'Why \n HOL Archive ?',
-    body: 'As event companies expand, H.O.L. ARCHIVE provides structured backend support — from communication structures and workforce alignment to scheduling frameworks and on-ground supervision.',
-    features: ['Growing event companies', 'Production agencies'],
+    body: '',
+    features: [''],
     bg: '#F4F1EC',
     color: '#111111',
   },
@@ -39,36 +39,35 @@ export default function AboutSection() {
   useEffect(() => {
     const ctx = gsap.context(() => {
       const p = panelRefs.current.filter(Boolean) as HTMLDivElement[]
+      if (p.length === 0) return
 
-      gsap.set(p[1], { yPercent: 100 })
-      gsap.set(p[2], { yPercent: 100 })
-      gsap.set(p[3], { yPercent: 100 })
-      gsap.set(p[4], { yPercent: 100 })
+      // Set initial state for all panels except the first one
+      for (let i = 1; i < p.length; i++) {
+        gsap.set(p[i], { yPercent: 100 })
+      }
+
+      // Safe stable height calculation using the container bounding client rectangle
+      const stableHeight = containerRef.current?.getBoundingClientRect().height || window.innerHeight
 
       const tl = gsap.timeline({
         scrollTrigger: {
           trigger: containerRef.current,
           start: 'top top',
-          end: () => `+=${window.innerHeight * 4}`,
+          end: () => `+=${stableHeight * p.length}`,
           pin: true,
           scrub: 1.8,
           anticipatePin: 1,
+          pinType: 'transform',
+          invalidateOnRefresh: true,
         },
       })
 
-      tl.to(p[0], { scale: 0.96, ease: 'none', duration: 1 }, 0)
-      tl.to(p[1], { yPercent: 0, ease: 'none', duration: 1 }, 0)
+      // Build transitions based on actual panels length for all viewports (including mobile)
+      for (let i = 0; i < p.length - 1; i++) {
+        tl.to(p[i], { scale: 0.96, ease: 'none', duration: 1 }, i)
+        tl.to(p[i + 1], { yPercent: 0, ease: 'none', duration: 1 }, i)
+      }
 
-      tl.to(p[1], { scale: 0.96, ease: 'none', duration: 1 }, 1)
-      tl.to(p[2], { yPercent: 0, ease: 'none', duration: 1 }, 1)
-
-      tl.to(p[2], { scale: 0.96, ease: 'none', duration: 1 }, 2)
-      tl.to(p[3], { yPercent: 0, ease: 'none', duration: 1 }, 2)
-
-      tl.to(p[3], { scale: 0.96, ease: 'none', duration: 1 }, 3)
-      tl.to(p[4], { yPercent: 0, ease: 'none', duration: 1 }, 3)
-
-      ScrollTrigger.refresh()
     }, containerRef)
 
     return () => ctx.revert()
@@ -78,13 +77,28 @@ export default function AboutSection() {
     <section
       id="about"
       ref={containerRef}
-      style={{ position: 'relative', height: '100vh', overflow: 'hidden' }}
+      style={{
+        position: 'relative',
+        height: '100dvh', // Dynamic viewport units to prevent address-bar resizing issues
+        width: '100%',
+        overflow: 'hidden'
+      }}
     >
+      {/* ── Google Fonts Sora Loader ── */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap');
+      `}</style>
       {PANELS.map((panel, i) => (
         <div
           key={i}
           ref={el => { panelRefs.current[i] = el }}
-          style={{ position: 'absolute', inset: 0, zIndex: i + 1 }}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: i + 1,
+            width: '100%',
+            height: '100dvh', // Explicitly declare viewport height
+          }}
         >
           <PanelContent panel={panel} index={i} />
         </div>
@@ -102,12 +116,26 @@ function PanelContent({ panel, index }: { panel: Panel; index: number }) {
     return (
       <div
         onClick={() => navigate('/orchestrate')}
-        style={{ height: '100vh', position: 'relative', overflow: 'hidden', cursor: 'pointer' }}
+        style={{
+          height: '100dvh', // Dynamic viewport units to prevent address-bar resizing issues
+          position: 'relative',
+          overflow: 'hidden',
+          cursor: 'pointer',
+          width: '100%'
+        }}
       >
         <img
           src="/images/Why_we_orchestrate.jpeg"
           alt="Why We Orchestrate"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            display: 'block',
+            zIndex: 0
+          }}
         />
 
         {/* Left gradient */}
@@ -115,45 +143,32 @@ function PanelContent({ panel, index }: { panel: Panel; index: number }) {
           position: 'absolute', inset: 0,
           background: 'linear-gradient(to right, rgba(11,11,11,0.85) 0%, rgba(11,11,11,0.4) 48%, transparent 72%)',
           pointerEvents: 'none',
+          zIndex: 1
         }} />
 
         {/* Text overlay — left */}
         <div style={{
           position: 'absolute',
-          top: '50%', left: 'clamp(32px, 6vw, 80px)',
+          top: '50%',
+          left: 'clamp(20px, 6vw, 80px)',
           transform: 'translateY(-50%)',
-          maxWidth: 'clamp(260px, 38vw, 520px)',
+          maxWidth: 'clamp(280px, 38vw, 520px)',
+          zIndex: 2
         }}>
           <h2 style={{
-            fontFamily: 'Poppins, sans-serif',
-            fontSize: 'clamp(42px, 9vw, 128px)',
+            fontFamily: 'Sora, sans-serif',
+            fontSize: 'clamp(32px, 7vw, 128px)',
             fontWeight: 300, lineHeight: 1.0, letterSpacing: '-0.03em',
-            color: '#F4F1EC', margin: '0 0 clamp(16px, 2.5vh, 32px)',
+            color: '#F4F1EC', margin: '0 0 clamp(12px, 2.5vh, 32px)',
             whiteSpace: 'pre-line',
           }}>{'What we Orchestrate'}</h2>
-
 
           {/* Slide to know indicator */}
           <div style={{
             display: 'flex', alignItems: 'center', gap: '12px',
           }}>
-            <div style={{
-              display: 'flex', gap: '4px',
-            }}>
-              {[0, 1, 2].map(i => (
-                <span key={i} style={{
-                  display: 'block', width: '28px', height: '2px',
-                  background: i === 0 ? '#F4F1EC' : 'rgba(244,241,236,0.3)',
-                  borderRadius: '2px',
-                  animation: `slideBar 1.8s ease-in-out ${i * 0.2}s infinite alternate`,
-                }} />
-              ))}
-            </div>
-            <span style={{
-              fontFamily: 'Poppins, sans-serif', fontSize: '11px',
-              letterSpacing: '0.28em', textTransform: 'uppercase',
-              color: 'rgba(244,241,236,0.55)',
-            }}>Slide to know</span>
+
+
           </div>
         </div>
 
@@ -169,14 +184,28 @@ function PanelContent({ panel, index }: { panel: Panel; index: number }) {
 
   if (index === 0) {
     return (
-      <div 
+      <div
         onClick={() => navigate('/story')}
-        style={{ height: '100vh', position: 'relative', overflow: 'hidden', cursor: 'pointer' }}
+        style={{
+          height: '100dvh', // Dynamic viewport units to prevent address-bar resizing issues
+          position: 'relative',
+          overflow: 'hidden',
+          cursor: 'pointer',
+          width: '100%'
+        }}
       >
         <img
           src="/images/The_Story.jpeg"
           alt="The Story"
-          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            display: 'block',
+            zIndex: 0
+          }}
         />
 
         {/* Left gradient fade so text is legible */}
@@ -184,33 +213,34 @@ function PanelContent({ panel, index }: { panel: Panel; index: number }) {
           position: 'absolute', inset: 0,
           background: 'linear-gradient(to right, rgba(11,11,11,0.82) 0%, rgba(11,11,11,0.45) 45%, transparent 72%)',
           pointerEvents: 'none',
+          zIndex: 1
         }} />
 
         {/* Text overlay — left side */}
         <div style={{
           position: 'absolute',
-          top: '50%', left: 'clamp(32px, 6vw, 80px)',
+          top: '50%',
+          left: 'clamp(20px, 6vw, 80px)',
           transform: 'translateY(-50%)',
-          maxWidth: 'clamp(260px, 38vw, 520px)',
+          maxWidth: 'clamp(280px, 38vw, 520px)',
+          zIndex: 2
         }}>
-
-
           <h2 style={{
-            fontFamily: 'Poppins, sans-serif',
-            fontSize: 'clamp(56px, 11vw, 148px)',
+            fontFamily: 'Sora, sans-serif',
+            fontSize: 'clamp(38px, 9vw, 148px)',
             fontWeight: 300,
             lineHeight: 1.0,
             letterSpacing: '-0.03em',
             color: '#F4F1EC',
-            margin: '0 0 clamp(16px, 2.5vh, 32px)',
+            margin: '0 0 clamp(12px, 2.5vh, 32px)',
             whiteSpace: 'pre-line',
           }}>The{'\n'}Story</h2>
 
           <p style={{
-            fontFamily: 'Poppins, sans-serif',
-            fontSize: 'clamp(15px, 1.5vw, 22px)',
+            fontFamily: 'Sora, sans-serif',
+            fontSize: 'clamp(13px, 1.5vw, 22px)',
             fontWeight: 300,
-            lineHeight: 1.75,
+            lineHeight: 1.7,
             color: 'rgba(244,241,236,0.65)',
             margin: 0,
           }}>
@@ -224,14 +254,14 @@ function PanelContent({ panel, index }: { panel: Panel; index: number }) {
             navigate('/story')
           }}
           style={{
-            position: 'absolute', bottom: 'clamp(32px, 5vh, 60px)', left: '50%',
+            position: 'absolute', bottom: 'clamp(24px, 5vh, 60px)', left: '50%',
             transform: 'translateX(-50%)',
             background: 'rgba(244,241,236,0.08)',
             backdropFilter: 'blur(12px)',
             WebkitBackdropFilter: 'blur(12px)',
             border: '1px solid rgba(244,241,236,0.22)',
             color: '#F4F1EC',
-            fontFamily: 'Poppins, sans-serif',
+            fontFamily: 'Sora, sans-serif',
             fontSize: 'clamp(10px, 1vw, 13px)',
             fontWeight: 300,
             letterSpacing: '0.22em',
@@ -240,6 +270,7 @@ function PanelContent({ panel, index }: { panel: Panel; index: number }) {
             borderRadius: '100px',
             cursor: 'pointer',
             whiteSpace: 'nowrap',
+            zIndex: 3,
             transition: 'background 0.25s ease, border-color 0.25s ease',
           }}
           onMouseEnter={e => {
@@ -257,7 +288,6 @@ function PanelContent({ panel, index }: { panel: Panel; index: number }) {
     )
   }
 
-
   const isLight = panel.color === '#111111'
   const divider = isLight ? 'rgba(17,17,17,0.14)' : 'rgba(244,241,236,0.14)'
   const featureColor = isLight ? 'rgba(17,17,17,0.45)' : 'rgba(244,241,236,0.45)'
@@ -270,7 +300,7 @@ function PanelContent({ panel, index }: { panel: Panel; index: number }) {
     <div
       onClick={index === 2 ? () => navigate('/why-hol-archive') : undefined}
       style={{
-        height: '100vh',
+        height: '100dvh', // Dynamic viewport units to prevent address-bar resizing issues
         backgroundColor: panel.bg,
         color: panel.color,
         display: 'flex',
@@ -281,6 +311,7 @@ function PanelContent({ panel, index }: { panel: Panel; index: number }) {
         position: 'relative',
         overflow: 'hidden',
         cursor: index === 2 ? 'pointer' : 'default',
+        width: '100%'
       }}
     >
       {/* Watermark label */}
@@ -290,7 +321,7 @@ function PanelContent({ panel, index }: { panel: Panel; index: number }) {
           top: '50%', left: '50%',
           transform: 'translate(-50%, -50%)',
           fontSize: '11px', letterSpacing: '0.4em',
-          color: labelColor, fontFamily: 'Poppins, sans-serif',
+          color: labelColor, fontFamily: 'Sora, sans-serif',
           fontWeight: 300, userSelect: 'none', pointerEvents: 'none',
         }}
       >
@@ -298,104 +329,93 @@ function PanelContent({ panel, index }: { panel: Panel; index: number }) {
       </span>
 
       {/* Title + number */}
-      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 'clamp(16px, 3vw, 32px)' }}>
+      <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginBottom: 'clamp(12px, 3vw, 32px)' }}>
         <h2
           style={{
-            fontSize: 'clamp(36px, 8.5vw, 140px)',
-            fontFamily: 'Poppins, sans-serif', fontWeight: 300,
+            fontSize: 'clamp(26px, 8vw, 140px)',
+            fontFamily: 'Sora, sans-serif', fontWeight: 300,
             lineHeight: 1, letterSpacing: '-0.03em',
             color: panel.color, margin: 0, whiteSpace: 'pre-line',
           }}
         >
           {panel.title}
         </h2>
-        <span
-          style={{
-            fontSize: 'clamp(52px, 13vw, 210px)',
-            fontFamily: 'Poppins, sans-serif', fontWeight: 300,
-            lineHeight: 1, color: numColor, letterSpacing: '-0.04em',
-            userSelect: 'none', flexShrink: 0, marginLeft: '16px',
-          }}
-        >
-          {panel.num}
-        </span>
       </div>
 
-      {/* Divider */}
-      <div style={{ width: '100%', height: '1px', backgroundColor: divider, marginBottom: 'clamp(16px, 3vw, 36px)' }} />
-
-      {/* Body + features — responsive grid */}
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px, 100%), 1fr))',
-          gap: 'clamp(16px, 3vw, 40px)',
-          maxWidth: '900px',
-        }}
-      >
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          <p
+      {/* Body + features — responsive grid (or centered button for index 2) */}
+      {index === 2 ? (
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
+          <button
+            onClick={(e) => {
+              e.stopPropagation()
+              navigate('/why-hol-archive')
+            }}
             style={{
-              fontSize: 'clamp(13px, 1.15vw, 18px)',
-              fontFamily: 'Poppins, sans-serif', fontWeight: 300,
-              lineHeight: 1.75, color: bodyColor, margin: 0,
+              background: 'rgba(17, 17, 17, 0.05)',
+              border: '1px solid rgba(17, 17, 17, 0.15)',
+              color: '#111111',
+              fontFamily: 'Sora, sans-serif',
+              fontSize: '11px',
+              fontWeight: 400,
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              padding: '12px 32px',
+              borderRadius: '100px',
+              cursor: 'pointer',
+              transition: 'all 0.3s ease',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(17, 17, 17, 0.12)'
+              e.currentTarget.style.borderColor = 'rgba(17, 17, 17, 0.3)'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'rgba(17, 17, 17, 0.05)'
+              e.currentTarget.style.borderColor = 'rgba(17, 17, 17, 0.15)'
             }}
           >
-            {panel.body}
-          </p>
-          {index === 2 && (
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                navigate('/why-hol-archive')
-              }}
-              style={{
-                alignSelf: 'flex-start',
-                background: 'rgba(17, 17, 17, 0.05)',
-                border: '1px solid rgba(17, 17, 17, 0.15)',
-                color: '#111111',
-                fontFamily: 'Poppins, sans-serif',
-                fontSize: '11px',
-                fontWeight: 400,
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                padding: '10px 24px',
-                borderRadius: '100px',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.background = 'rgba(17, 17, 17, 0.12)'
-                e.currentTarget.style.borderColor = 'rgba(17, 17, 17, 0.3)'
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.background = 'rgba(17, 17, 17, 0.05)'
-                e.currentTarget.style.borderColor = 'rgba(17, 17, 17, 0.15)'
-              }}
-            >
-              Explore System &rarr;
-            </button>
-          )}
+            Explore System &rarr;
+          </button>
         </div>
-
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', justifyContent: 'center' }}>
-          {panel.features.map(f => (
+      ) : (
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))',
+            gap: 'clamp(12px, 3vw, 40px)',
+            maxWidth: '900px',
+          }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
             <p
-              key={f}
               style={{
-                fontSize: '11px', letterSpacing: '0.2em',
-                color: featureColor, fontFamily: 'Poppins, sans-serif',
-                fontWeight: 300, margin: 0,
-                display: 'flex', alignItems: 'center', gap: '14px',
-                textTransform: 'uppercase',
+                fontSize: 'clamp(12px, 1.15vw, 18px)',
+                fontFamily: 'Sora, sans-serif', fontWeight: 300,
+                lineHeight: 1.7, color: bodyColor, margin: 0,
               }}
             >
-              <span style={{ width: '20px', height: '1px', backgroundColor: featureLine, flexShrink: 0, display: 'inline-block' }} />
-              {f}
+              {panel.body}
             </p>
-          ))}
+          </div>
+
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', justifyContent: 'center' }}>
+            {panel.features.map(f => (
+              <p
+                key={f}
+                style={{
+                  fontSize: '11px', letterSpacing: '0.18em',
+                  color: featureColor, fontFamily: 'Sora, sans-serif',
+                  fontWeight: 300, margin: 0,
+                  display: 'flex', alignItems: 'center', gap: '14px',
+                  textTransform: 'uppercase',
+                }}
+              >
+                <span style={{ width: '20px', height: '1px', backgroundColor: featureLine, flexShrink: 0, display: 'inline-block' }} />
+                {f}
+              </p>
+            ))}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

@@ -174,9 +174,8 @@ export default function OrchestrateNumbers() {
               <span
                 className="folder-ghost-number"
                 style={{
-                  WebkitTextStroke: `2px ${
-                    isLight ? 'rgba(11,11,11,0.06)' : 'rgba(244,241,236,0.05)'
-                  }`,
+                  WebkitTextStroke: `2px ${isLight ? 'rgba(11,11,11,0.06)' : 'rgba(244,241,236,0.05)'
+                    }`,
                   color: 'transparent',
                 }}
               >
