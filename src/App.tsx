@@ -1,5 +1,5 @@
 import { useEffect, useRef } from 'react'
-import { Routes, Route, useLocation } from 'react-router'
+import { Routes, Route, useLocation, useNavigationType } from 'react-router'
 import { AnimatePresence, motion } from 'framer-motion'
 import Header from './sections/Header'
 import BrandReveal from './sections/BrandReveal'
@@ -19,6 +19,7 @@ import ArchiveSection from './sections/ArchiveSection'
 import Footer from './sections/Footer'
 import Preloader from './sections/Preloader'
 import ProjectDetail from './pages/ProjectDetail'
+import FaqDetailPage from './pages/FaqDetailPage'
 import { ThemeProvider } from './context/ThemeContext'
 import { gsap, setLenis, ScrollTrigger, lenisInstance } from './lib/gsap-config'
 import Lenis from 'lenis'
@@ -73,12 +74,72 @@ function App() {
   }, [])
 
   // Scroll Restoration on Route Change
+  const navigationType = useNavigationType()
+
   useEffect(() => {
-    window.scrollTo(0, 0)
-    if (lenisInstance) {
-      lenisInstance.scrollTo(0, { immediate: true })
+    const handleScroll = () => {
+      sessionStorage.setItem(`scroll_pos_${location.pathname}`, window.scrollY.toString())
     }
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => window.removeEventListener('scroll', handleScroll)
   }, [location.pathname])
+
+  useEffect(() => {
+    if (navigationType === 'POP') {
+      const savedScroll = sessionStorage.getItem(`scroll_pos_${location.pathname}`)
+      if (savedScroll !== null) {
+        const y = parseFloat(savedScroll)
+        const restore = () => {
+          window.scrollTo(0, y)
+          if (lenisInstance) {
+            lenisInstance.scrollTo(y, { immediate: true })
+          }
+        }
+        restore()
+        requestAnimationFrame(restore)
+        const timer = setTimeout(restore, 50)
+        return () => clearTimeout(timer)
+      } else {
+        window.scrollTo(0, 0)
+        if (lenisInstance) {
+          lenisInstance.scrollTo(0, { immediate: true })
+        }
+      }
+    } else {
+      if (location.hash) {
+        try {
+          const isCta = location.hash === '#vision-cta'
+          const selector = isCta ? '#vision' : location.hash
+          const target = document.querySelector(selector)
+          if (target) {
+            const restore = () => {
+              const rect = target.getBoundingClientRect()
+              let y = rect.top + window.scrollY
+              if (isCta) {
+                // Scroll to the end of the pinned zoom animation where the CTA is visible
+                y += 3450
+              }
+              window.scrollTo(0, y)
+              if (lenisInstance) {
+                lenisInstance.scrollTo(y, { immediate: true })
+              }
+            }
+            restore()
+            requestAnimationFrame(restore)
+            const timer = setTimeout(restore, 50)
+            return () => clearTimeout(timer)
+          }
+        } catch (e) {
+          console.error('Invalid selector for location.hash', e)
+        }
+      }
+
+      window.scrollTo(0, 0)
+      if (lenisInstance) {
+        lenisInstance.scrollTo(0, { immediate: true })
+      }
+    }
+  }, [location.pathname, navigationType, location.hash])
 
   return (
     <ThemeProvider>
@@ -161,6 +222,19 @@ function App() {
                 transition={{ duration: 0.6, ease: 'easeInOut' }}
               >
                 <OrchestratePage />
+              </motion.div>
+            }
+          />
+          <Route
+            path="/faq/:slug"
+            element={
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.6, ease: 'easeInOut' }}
+              >
+                <FaqDetailPage />
               </motion.div>
             }
           />

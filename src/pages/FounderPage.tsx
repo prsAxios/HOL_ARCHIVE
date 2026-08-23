@@ -2,6 +2,7 @@ import { useEffect } from 'react'
 import { useNavigate } from 'react-router'
 import { motion } from 'framer-motion'
 import EditorialTextBlock from '../components/EditorialTextBlock'
+import { scrollTo } from '../lib/gsap-config'
 
 const parentVariants = {
   hidden: {},
@@ -28,9 +29,17 @@ const letterVariants = {
 export default function FounderPage() {
   const navigate = useNavigate()
 
-  // Scroll to top on mount
   useEffect(() => {
-    window.scrollTo(0, 0)
+    // Clear temporary backgrounds when this page finishes entering
+    const timer = setTimeout(() => {
+      document.body.style.backgroundColor = ''
+      document.documentElement.style.backgroundColor = ''
+    }, 1000)
+    return () => {
+      clearTimeout(timer)
+      document.body.style.backgroundColor = ''
+      document.documentElement.style.backgroundColor = ''
+    }
   }, [])
 
   return (
@@ -71,6 +80,32 @@ export default function FounderPage() {
         animate="visible"
         className="relative w-full max-w-[1440px] mx-auto px-8 md:px-[6vw] py-28 md:py-40 flex flex-col items-center"
       >
+        {/* Back Button */}
+        <div className="w-full flex justify-start mb-8 md:mb-12">
+          <button
+            onClick={() => {
+              navigate('/#vision-cta')
+            }}
+            style={{
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              fontFamily: 'Sora, sans-serif',
+              fontWeight: 300,
+              fontSize: '13px',
+              letterSpacing: '0.14em',
+              color: 'var(--hol-muted)',
+              textTransform: 'uppercase',
+              padding: 0,
+              transition: 'color 0.3s ease',
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = 'var(--hol-text)'}
+            onMouseLeave={(e) => e.currentTarget.style.color = 'var(--hol-muted)'}
+          >
+            ← Back
+          </button>
+        </div>
+
         {/* ── SECTION R: FOUNDER NOTES (ROOTS) ── */}
         <div className="relative grid grid-cols-1 md:grid-cols-12 gap-12 items-start w-full mb-20 md:mb-32 z-10">
           <div className="md:col-span-6 md:col-start-1 flex justify-center md:justify-end md:pr-8">
@@ -215,6 +250,8 @@ export default function FounderPage() {
             />
           </div>
         </div>
+
+
       </motion.div>
 
       {/* ── Editorial Footer ── */}

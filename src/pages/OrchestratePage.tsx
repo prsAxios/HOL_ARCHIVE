@@ -1,14 +1,11 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { gsap, ScrollTrigger, SplitText } from '../lib/gsap-config'
+import { gsap, SplitText } from '../lib/gsap-config'
 import Footer from '../sections/Footer'
-import MagneticButton from '../components/MagneticButton'
 import { useTheme } from '../context/ThemeContext'
 import OrchestrateNumbers from '../sections/OrchestrateNumbers'
 
 export default function OrchestratePage() {
-  const navigate = useNavigate()
   const { theme } = useTheme()
   const isDark = theme === 'dark'
   const pageRef = useRef<HTMLDivElement>(null)
@@ -18,11 +15,6 @@ export default function OrchestratePage() {
   const descRef = useRef<HTMLParagraphElement>(null)
 
   const [scrollProgress, setScrollProgress] = useState(0)
-
-  // Scroll to top on mount
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
 
   // Reading progress tracker
   useEffect(() => {
@@ -184,26 +176,7 @@ export default function OrchestratePage() {
           >
             Orchestrate
           </h1>
-          <p
-            ref={descRef}
-            style={{
-              fontFamily: "'Sora', sans-serif",
-              fontSize: 'clamp(15px, 1.3vw, 20px)',
-              fontWeight: 400,
-              color: 'var(--hol-text)',
-              lineHeight: 1.6,
-              maxWidth: '680px',
-              margin: 0,
-              transition: 'color 0.4s ease',
-            }}
-          >
-            Every environment behaves differently under pressure.<br />
-            Different environments create different forms of complexity.<br />
-            Different forms of complexity require different ways of thinking.<br />
-            At H.O.L. Archive, we believe operational structure should adapt to the environment it serves.<br />
-            Because seamless execution is not created through a formula.<br />
-            It is created through understanding.
-          </p>
+
         </div>
       </div>
 

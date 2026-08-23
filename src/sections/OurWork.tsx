@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router'
 import { PROJECTS } from '../data/projects'
 import { useTheme } from '../context/ThemeContext'
+import { useIsMobile } from '../hooks/use-mobile'
 
 const ACCENT = '#C2AE6D'
 
@@ -11,6 +12,7 @@ export default function OurWork() {
   const navigate = useNavigate()
   const { theme } = useTheme()
   const isDark = theme === 'dark'
+  const isMobile = useIsMobile()
 
   // Scroll hijack prevention state
   const [isInteractive, setIsInteractive] = useState(false)
@@ -19,7 +21,6 @@ export default function OurWork() {
     if (!mountRef.current || globeRef.current) return
 
     let globeInstance: any = null
-    const isMobile = window.innerWidth < 768
     let resizeObserver: ResizeObserver | null = null
 
     const applySize = () => {
@@ -270,7 +271,7 @@ export default function OurWork() {
       globeRef.current = null
       if (mountRef.current) mountRef.current.innerHTML = ''
     }
-  }, [isDark]) // Re-init map when theme flips to load correct globe texture
+  }, [isDark, isMobile]) // Re-init map when theme flips to load correct globe texture
 
   return (
     <section

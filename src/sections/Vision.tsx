@@ -292,7 +292,7 @@ export default function Vision() {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          backgroundColor: '#000000',
+          backgroundColor: '#E50914', // Red background
           padding: '24px',
           textAlign: 'center',
           willChange: 'opacity, transform',
@@ -325,20 +325,6 @@ export default function Vision() {
 
 
 
-        <p
-          style={{
-            fontFamily: 'Sora, sans-serif',
-            fontWeight: 300,
-            fontSize: 'clamp(12px, 1.1vw, 14px)',
-            lineHeight: 1.7,
-            color: 'rgba(244, 241, 236, 0.5)',
-            maxWidth: '440px',
-            margin: '0 0 36px',
-          }}
-        >
-          We believe in the clean division of space and time. Our vision is to elevate operational planning into an architectural discipline. By mapping pathways, monitoring flows, and automating logistics, we create an invisible but unshakeable foundation. The ultimate luxury is an experience that unfolds as if by magic, backed by flawless logic.
-        </p>
-
         <button
           onClick={() => navigate('/founder')}
           style={{
@@ -357,7 +343,7 @@ export default function Vision() {
           }}
           onMouseEnter={(e) => {
             e.currentTarget.style.backgroundColor = 'var(--hol-gold)'
-            e.currentTarget.style.color = '#000000'
+            e.currentTarget.style.color = '#E50914'
             e.currentTarget.style.boxShadow = '0 0 25px rgba(194, 174, 109, 0.35)'
           }}
           onMouseLeave={(e) => {
@@ -366,9 +352,10 @@ export default function Vision() {
             e.currentTarget.style.boxShadow = 'none'
           }}
         >
-          Click here
+          CLICK TO KNOW MORE
         </button>
       </div>
+
     </section>
   )
 }

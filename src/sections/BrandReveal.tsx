@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import { gsap } from '../lib/gsap-config'
+import { useIsMobile } from '../hooks/use-mobile'
 
 const WORD_FS = 'clamp(36px, 6vw, 85px)'
 
@@ -25,17 +26,7 @@ export default function BrandReveal() {
   const oRestRef = useRef<HTMLSpanElement>(null)
   const lRestRef = useRef<HTMLSpanElement>(null)
 
-  const [isMobile, setIsMobile] = useState(false)
-
-  // Track responsive screen state
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
-    }
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
+  const isMobile = useIsMobile()
 
   // ── GSAP ANIMATION TIMELINE ──
   useEffect(() => {
@@ -68,7 +59,7 @@ export default function BrandReveal() {
     const getFlightTargets = () => {
       const w = window.innerWidth
       const h = window.innerHeight
-      if (w < 768) {
+      if (isMobile) {
         // Mobile: moves from top text column down to the folder opening
         return {
           hX: 0, hY: h * 0.33 + 10,
@@ -96,7 +87,7 @@ export default function BrandReveal() {
         scrollTrigger: {
           trigger: section,
           start: 'top top',
-          end: () => `+=${window.innerWidth < 768 ? 2500 : 4500}`,
+          end: isMobile ? '+=2500' : '+=4500',
           pin: true,
           scrub: 1.4,
           anticipatePin: 1,
@@ -170,12 +161,12 @@ export default function BrandReveal() {
       }, '>-0.1')
 
       // 8. Center the Folder and scale it up showing the Logo flat on the front
-      tl.to(folderContainer, { 
-        x: () => (window.innerWidth < 768 ? '0' : '-16vw'), 
-        y: () => (window.innerWidth < 768 ? '-20vh' : '0'), 
-        scale: 1.35, 
-        duration: 1.0, 
-        ease: 'power2.inOut' 
+      tl.to(folderContainer, {
+        x: isMobile ? '0' : '-16vw',
+        y: isMobile ? '-20vh' : '0',
+        scale: 1.35,
+        duration: 1.0,
+        ease: 'power2.inOut'
       }, '>-0.1')
       tl.to(logo, { opacity: 1.0, duration: 1.0, ease: 'power2.inOut' }, '<')
       tl.to(archivedTextRef.current, { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' }, '>-0.3')

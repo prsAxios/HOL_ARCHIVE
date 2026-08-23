@@ -1,4 +1,3 @@
-import { useEffect } from 'react'
 import { motion } from 'framer-motion'
 import ArchiveExplorer from '../components/ArchiveExplorer'
 import { useTheme } from '../context/ThemeContext'
@@ -6,11 +5,6 @@ import { useTheme } from '../context/ThemeContext'
 export default function ArchivePage() {
   const { theme } = useTheme()
   const isDark = theme === 'dark'
-
-  // Scroll to top on mount
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
 
   return (
     <motion.div

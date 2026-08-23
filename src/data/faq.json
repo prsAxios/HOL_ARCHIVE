@@ -1,0 +1,122 @@
+[
+  {
+    "id": 1,
+    "title": "What does HOL Archive do?",
+    "slug": "what-does-hol-archive-do",
+    "questions": [
+      {
+        "question": "What is HOL Archive?",
+        "answer": "HOL Archive is a premium hospitality, operations, and logistics company specialising in luxury event execution. We handle every detail — from guest experience design and vendor coordination to on-ground logistics — ensuring your event is flawlessly delivered and permanently archived as a timeless memory."
+      },
+      {
+        "question": "Why is it called Archive?",
+        "answer": "Archive reflects our philosophy that every event we create should be worthy of permanent preservation. We don't just execute events — we curate experiences so meticulously crafted that they become timeless records. Each project is added to our archive as a testament to precision and luxury."
+      },
+      {
+        "question": "Do you manage luxury events?",
+        "answer": "Yes, we manage luxury weddings, destination celebrations, corporate galas, brand activations, private milestones, and large-scale productions. Our operational frameworks scale to match from 50 to 1,000+ guests."
+      },
+      {
+        "question": "Do you handle custom installations?",
+        "answer": "Absolutely. We coordinate directly with art directors, production designers, and structural engineers to ensure custom builds and scenography are constructed safely and to exact aesthetic standards."
+      },
+      {
+        "question": "How do you coordinate with international partners?",
+        "answer": "We establish unified communication systems, joint timelines, and check-in protocols to integrate international partners seamlessly into the local delivery timeline."
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "title": "What types of events do you manage?",
+    "slug": "event-types",
+    "questions": [
+      {
+        "question": "Do you manage destination weddings?",
+        "answer": "Yes. We coordinate destination weddings globally, managing travel logistics, local vendor vetting, hospitality suites, guest routing, and on-site event execution."
+      },
+      {
+        "question": "Do you manage corporate summits?",
+        "answer": "Yes. We design and coordinate corporate galas, high-profile summits, product launches, and brand activations with detailed logistics frameworks."
+      },
+      {
+        "question": "Do you manage private celebrations?",
+        "answer": "Yes. Private celebrations including milestones, intimate anniversaries, and VIP dining experiences are curated with the same attention to detail."
+      },
+      {
+        "question": "What is the scale limit for events you manage?",
+        "answer": "We manage events ranging from intimate 30-guest dinners to large-scale productions with 1,000+ delegates. Our systems are fully scale-invariant."
+      },
+      {
+        "question": "Do support virtual or hybrid events?",
+        "answer": "Yes. We establish dedicated broadcast lines, stage monitoring, and virtual audience integration to ensure high-fidelity hybrid delivery."
+      },
+      {
+        "question": "Can you manage events in remote locations?",
+        "answer": "Yes, we specialize in high-complexity logistics for remote locations, setting up temporary power, water, communication arrays, and supply chains."
+      },
+      {
+        "question": "How do you handle security for VIP attendees?",
+        "answer": "We coordinate directly with local authorities and private security details to design secure transit lanes, entrance checks, and private holding zones."
+      },
+      {
+        "question": "Do you handle hospitality for guest travel?",
+        "answer": "Yes. We manage flight bookings, local transfers, hotel check-ins, custom welcome hampers, and hospitality helpdesks throughout the stay."
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "title": "Which cities and countries do you operate in?",
+    "slug": "cities-and-countries-of-operation",
+    "questions": [
+      {
+        "question": "What is your primary operating region?",
+        "answer": "Our primary base is Mumbai, India, with active operations across Delhi, Jaipur, Dubai, Singapore, and London."
+      },
+      {
+        "question": "Are you able to mobilize internationally?",
+        "answer": "Yes. We are equipped to mobilize teams globally for destination weddings, international summits, and cross-border brand activations."
+      },
+      {
+        "question": "Do you charge extra for travel outside Mumbai?",
+        "answer": "Our management fees remain stable. Travel, logistics, and accommodation for the core team are billed as project actuals in the budget."
+      },
+      {
+        "question": "How do you manage local vendor relations in new cities?",
+        "answer": "We leverage our global partner database and conduct rigorous on-ground vetting audits to ensure all local vendors meet our quality benchmarks."
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "title": "How far in advance should I reach out?",
+    "slug": "lead-time-and-contact",
+    "questions": [
+      {
+        "question": "What is the recommended lead time for weddings?",
+        "answer": "For destination weddings and luxury celebrations, we recommend initiating contact at least 6–12 months in advance."
+      },
+      {
+        "question": "What is the lead time for corporate events?",
+        "answer": "For corporate summits, product launches, or brand activations, 2–3 months is typically sufficient."
+      },
+      {
+        "question": "Do you accept last-minute bookings?",
+        "answer": "Yes, we assess last-minute bookings based on current scheduling and team availability. Reach out via our contact form to confirm feasibility."
+      },
+      {
+        "question": "What is the first step in the onboarding process?",
+        "answer": "The first step is a consultation call where we discuss your event vision, scope, spatial requirements, and general timelines."
+      },
+      {
+        "question": "How long does it take to receive a proposal?",
+        "answer": "After our initial consultation, we typically deliver a customized operational scope and fee proposal within 3-5 business days."
+      },
+      {
+        "question": "Can I hold dates before signing a contract?",
+        "answer": "Dates are formally reserved only upon contract execution and receipt of the initial onboarding deposit."
+      }
+    ]
+  }
+]

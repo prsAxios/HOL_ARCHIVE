@@ -45,6 +45,7 @@ const REQUIREMENTS = [
 export default function Contact() {
   const [submitted, setSubmitted] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [checked, setChecked] = useState<string[]>([])
   const [formData, setFormData] = useState({
     fullName: '', company: '', phone: '', email: '',
@@ -53,7 +54,12 @@ export default function Contact() {
 
   const createConsultation = trpc.consultation.create.useMutation({
     onSuccess: () => { setSubmitted(true); setSubmitError(null) },
-    onError: (err) => { setSubmitError(err.message || 'Something went wrong.') },
+    onError: (err) => { 
+      // If we already successfully submitted via Google Script, don't show error
+      if (!submitted) {
+        setSubmitError(err.message || 'Something went wrong.') 
+      }
+    },
   })
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -64,20 +70,58 @@ export default function Contact() {
     setChecked(prev => prev.includes(label) ? prev.filter(l => l !== label) : [...prev, label])
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSubmitError(null)
     if (!formData.fullName || !formData.email) {
       setSubmitError('Please fill in Full Name and Email.')
       return
     }
-    createConsultation.mutate({
-      fullName: formData.fullName,
-      email: formData.email,
-      projectType: formData.eventType || 'General',
-      budgetRange: formData.guestCount || 'Not specified',
-      message: [formData.message, checked.length ? `Requirements: ${checked.join(', ')}` : ''].filter(Boolean).join('\n') || undefined,
-    })
+
+    setIsSubmitting(true)
+    let googleSheetSuccess = false
+
+    // 1. Post to Google Apps Script Web App URL if configured
+    const scriptUrl = import.meta.env.VITE_GOOGLE_SCRIPT_URL
+    if (scriptUrl) {
+      try {
+        const payload = {
+          ...formData,
+          requirements: checked.join(', ')
+        }
+        await fetch(scriptUrl, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        })
+        googleSheetSuccess = true
+        setSubmitted(true)
+        setSubmitError(null)
+      } catch (err) {
+        console.error('Error submitting to Google Sheets:', err)
+      }
+    }
+
+    // 2. Log in local database / tRPC backend
+    try {
+      await createConsultation.mutateAsync({
+        fullName: formData.fullName,
+        email: formData.email,
+        projectType: formData.eventType || 'General',
+        budgetRange: formData.guestCount || 'Not specified',
+        message: [formData.message, checked.length ? `Requirements: ${checked.join(', ')}` : ''].filter(Boolean).join('\n') || undefined,
+      })
+    } catch (err) {
+      console.error('Database submission failed:', err)
+      if (!googleSheetSuccess) {
+        setSubmitError('Failed to submit inquiry. Please try again.')
+      }
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -182,21 +226,21 @@ export default function Contact() {
               style={{ ...inputStyle, resize: 'vertical', marginBottom: '16px' }}
             />
 
-            <button
+             <button
               type="submit"
-              disabled={createConsultation.isPending}
+              disabled={createConsultation.isPending || isSubmitting}
               style={{
                 width: '100%', padding: '14px',
                 backgroundColor: 'var(--hol-text)', color: 'var(--hol-bg)',
                 border: 'none', borderRadius: '4px',
                 fontFamily: 'Sora, sans-serif', fontWeight: 500,
                 fontSize: '14px', letterSpacing: '0.08em',
-                cursor: createConsultation.isPending ? 'wait' : 'pointer',
-                opacity: createConsultation.isPending ? 0.6 : 1,
+                cursor: (createConsultation.isPending || isSubmitting) ? 'wait' : 'pointer',
+                opacity: (createConsultation.isPending || isSubmitting) ? 0.6 : 1,
                 transition: 'opacity 0.2s, background-color 0.4s ease, color 0.4s ease',
               }}
             >
-              {createConsultation.isPending ? 'Sending...' : 'Submit Inquiry'}
+              {(createConsultation.isPending || isSubmitting) ? 'Sending...' : 'Submit Inquiry'}
             </button>
           </form>
 

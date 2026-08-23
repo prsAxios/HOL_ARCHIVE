@@ -141,7 +141,7 @@ export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
             fontFamily: 'Sora, sans-serif',
             fontSize: isMobile ? '12px' : '14px',
             letterSpacing: '0.1em',
-            color: 'var(--hol-text)',
+            color: theme === 'light' ? '#000000' : '#ffffff',
             textTransform: 'uppercase',
             whiteSpace: 'nowrap',
             cursor: 'pointer',
@@ -150,7 +150,7 @@ export default function Header({ scrollRef: _scrollRef }: HeaderProps) {
               <span className="logo-slot-inner" style={{ fontWeight: 700, display: 'inline-block' }}>HOL</span>
             </span>
             <span className="logo-slot-wrap" style={{ marginLeft: '6px' }}>
-              <span className="logo-slot-inner logo-slot-archive" style={{ fontWeight: 300, color: 'var(--hol-faint)', display: 'inline-block' }}>Archive</span>
+              <span className="logo-slot-inner logo-slot-archive" style={{ fontWeight: 700, color: 'inherit', display: 'inline-block' }}>Archive</span>
             </span>
           </span>
         </button>

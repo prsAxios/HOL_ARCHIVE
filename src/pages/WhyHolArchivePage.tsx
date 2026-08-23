@@ -1,13 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { useNavigate } from 'react-router'
+import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { gsap, ScrollTrigger, SplitText } from '../lib/gsap-config'
+import { gsap, SplitText } from '../lib/gsap-config'
 import Footer from '../sections/Footer'
-import MagneticButton from '../components/MagneticButton'
 import { useTheme } from '../context/ThemeContext'
 
 export default function WhyHolArchivePage() {
-  const navigate = useNavigate()
   const { theme } = useTheme()
   const isDark = theme === 'dark'
   const pageRef = useRef<HTMLDivElement>(null)
@@ -17,11 +14,6 @@ export default function WhyHolArchivePage() {
   const descRef = useRef<HTMLParagraphElement>(null)
 
   const [scrollProgress, setScrollProgress] = useState(0)
-
-  // Scroll to top on mount
-  useEffect(() => {
-    window.scrollTo(0, 0)
-  }, [])
 
   // Reading progress tracker
   useEffect(() => {

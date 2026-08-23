@@ -1,124 +1,6 @@
-import { useState } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { Link } from 'react-router'
 import { useTheme } from '../context/ThemeContext'
-
-const FAQS = [
-  {
-    q: 'What does HOL Archive do?',
-    a: 'HOL Archive is a premium hospitality, operations, and logistics company specialising in luxury event execution. We handle every detail — from guest experience design and vendor coordination to on-ground logistics — ensuring your event is flawlessly delivered and permanently archived as a timeless memory.',
-  },
-  {
-    q: 'What types of events do you manage?',
-    a: 'We manage luxury weddings, destination celebrations, corporate galas, brand activations, private milestones, and large-scale productions. Whether it\'s an intimate 50-guest affair or a 1,000-delegate summit, our operational frameworks scale to match.',
-  },
-  {
-    q: 'Which cities and countries do you operate in?',
-    a: 'Our primary base is Mumbai, India, with active operations across Delhi, Jaipur, Dubai, Singapore, and London. We are equipped to mobilise globally for destination weddings and international events.',
-  },
-  {
-    q: 'How far in advance should I reach out?',
-    a: 'For luxury weddings and large-scale events, we recommend reaching out at least 6–12 months in advance. For corporate events and smaller productions, 2–3 months is typically sufficient. That said, we do accommodate urgent inquiries — contact us and we will assess feasibility.',
-  },
-  {
-    q: 'What does "Archive" mean in HOL Archive?',
-    a: 'Archive reflects our philosophy that every event we create should be worthy of permanent preservation. We don\'t just execute events — we curate experiences so meticulously crafted that they become timeless records. Each project is added to our archive as a testament to precision and luxury.',
-  },
-  {
-    q: 'How do I start working with HOL Archive?',
-    a: 'Submit an inquiry through our contact form with your event details — type, location, dates, and guest count. Our team reviews every inquiry carefully and responds within 24–48 hours to schedule an initial consultation.',
-  },
-]
-
-function FAQItem({ q, a, isDark }: { q: string; a: string; isDark: boolean }) {
-  const [isOpen, setIsOpen] = useState(false)
-
-  return (
-    <div
-      style={{
-        borderBottom: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
-        transition: 'border-color 0.3s ease',
-      }}
-      className="group"
-    >
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        style={{
-          width: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '24px',
-          padding: '20px 8px',
-          background: 'none',
-          border: 'none',
-          cursor: 'pointer',
-          textAlign: 'left',
-          outline: 'none',
-        }}
-      >
-        <span
-          style={{
-            fontFamily: "'Sora', sans-serif",
-            fontWeight: 500,
-            fontSize: 'clamp(14px, 1.1vw, 16px)',
-            color: isOpen
-              ? 'var(--hol-gold, #C2AE6D)'
-              : isDark
-                ? '#FFFFFF'
-                : '#1A1A1A',
-            transition: 'color 0.3s ease',
-          }}
-        >
-          {q}
-        </span>
-
-        <motion.svg
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.3, ease: 'easeOut' }}
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke={isOpen ? 'var(--hol-gold, #C2AE6D)' : isDark ? '#666666' : '#999999'}
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          style={{ flexShrink: 0 }}
-        >
-          <polyline points="6 9 12 15 18 9" />
-        </motion.svg>
-      </button>
-
-      <AnimatePresence initial={false}>
-        {isOpen && (
-          <motion.div
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: 'auto', opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            style={{ overflow: 'hidden' }}
-          >
-            <div style={{ padding: '0 8px 24px 8px' }}>
-              <p
-                style={{
-                  fontFamily: "'Sora', sans-serif",
-                  fontWeight: 300,
-                  fontSize: 'clamp(13px, 0.95vw, 14.5px)',
-                  color: isDark ? '#8E8A84' : '#555555',
-                  lineHeight: 1.7,
-                  margin: 0,
-                  maxWidth: '760px',
-                }}
-              >
-                {a}
-              </p>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  )
-}
+import faqData from '../data/faq.json'
 
 export default function FAQ() {
   const { theme } = useTheme()
@@ -183,7 +65,7 @@ export default function FAQ() {
           zIndex: 1,
         }}
       >
-        {/* Precision "Half-In, Half-Out" Typography Watermark (Extruded 3D Style) */}
+        {/* Typography Watermark */}
         <div
           style={{
             position: 'absolute',
@@ -218,7 +100,7 @@ export default function FAQ() {
           </span>
         </div>
 
-        {/* Folder Header Tab (Highly Specular Glass) */}
+        {/* Folder Header Tab */}
         <div
           style={{
             width: 'clamp(140px, 20vw, 220px)',
@@ -265,7 +147,7 @@ export default function FAQ() {
             position: 'relative',
             zIndex: 1,
             borderRadius: '24px',
-            borderTopLeftRadius: '0px', // Connect cleanly with folder tab
+            borderTopLeftRadius: '0px',
             border: isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.1)',
             background: isDark
               ? 'linear-gradient(135deg, rgba(255, 255, 255, 0.06) 0%, rgba(255, 255, 255, 0.01) 60%, rgba(255, 255, 255, 0.03) 100%)'
@@ -276,12 +158,12 @@ export default function FAQ() {
             boxShadow: isDark
               ? '0 40px 100px rgba(0, 0, 0, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -1px 0 rgba(0, 0, 0, 0.4)'
               : '0 40px 100px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.8), inset 0 -1px 0 rgba(0, 0, 0, 0.05)',
-            marginTop: '-1px', // Seamless connection
+            marginTop: '-1px',
             transition: 'background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease',
             willChange: 'transform, opacity',
           }}
         >
-          {/* Top Decorative Graphic (Diagonal System Arrow) */}
+          {/* Top Decorative Arrow */}
           <div
             style={{
               position: 'absolute',
@@ -296,10 +178,84 @@ export default function FAQ() {
             ↗
           </div>
 
-          {/* FAQ Accordions List */}
+          {/* FAQ Categories List */}
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            {FAQS.map((faq, i) => (
-              <FAQItem key={i} q={faq.q} a={faq.a} isDark={isDark} />
+            {faqData.map((category) => (
+              <Link
+                key={category.id}
+                to={`/faq/${category.slug}`}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  padding: '24px 8px',
+                  borderBottom: isDark ? '1px solid rgba(255, 255, 255, 0.08)' : '1px solid rgba(0, 0, 0, 0.08)',
+                  textDecoration: 'none',
+                  transition: 'border-color 0.3s ease',
+                  outline: 'none',
+                }}
+                onMouseEnter={e => {
+                  const title = e.currentTarget.querySelector('.faq-title') as HTMLElement
+                  const arrow = e.currentTarget.querySelector('.faq-arrow') as SVGElement
+                  if (title) title.style.color = 'var(--hol-gold, #C2AE6D)'
+                  if (arrow) {
+                    arrow.style.transform = 'translateX(4px)'
+                    arrow.style.stroke = 'var(--hol-gold, #C2AE6D)'
+                  }
+                }}
+                onMouseLeave={e => {
+                  const title = e.currentTarget.querySelector('.faq-title') as HTMLElement
+                  const arrow = e.currentTarget.querySelector('.faq-arrow') as SVGElement
+                  if (title) title.style.color = isDark ? '#FFFFFF' : '#1A1A1A'
+                  if (arrow) {
+                    arrow.style.transform = 'translateX(0)'
+                    arrow.style.stroke = isDark ? '#666666' : '#999999'
+                  }
+                }}
+              >
+                <span
+                  className="faq-title"
+                  style={{
+                    fontFamily: "'Sora', sans-serif",
+                    fontWeight: 500,
+                    fontSize: 'clamp(14px, 1.1vw, 16px)',
+                    color: isDark ? '#FFFFFF' : '#1A1A1A',
+                    transition: 'color 0.3s ease',
+                  }}
+                >
+                  {category.title}
+                </span>
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+                  <span
+                    style={{
+                      fontFamily: "'Sora', sans-serif",
+                      fontWeight: 600,
+                      fontSize: '13px',
+                      color: 'var(--hol-gold, #C2AE6D)',
+                      letterSpacing: '0.05em',
+                    }}
+                  >
+                    [{category.questions.length}]
+                  </span>
+
+                  <svg
+                    className="faq-arrow"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke={isDark ? '#666666' : '#999999'}
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    style={{ transition: 'transform 0.3s ease, stroke 0.3s ease' }}
+                  >
+                    <line x1="5" y1="12" x2="19" y2="12" />
+                    <polyline points="12 5 19 12 12 19" />
+                  </svg>
+                </div>
+              </Link>
             ))}
           </div>
 
