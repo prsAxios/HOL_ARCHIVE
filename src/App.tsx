@@ -128,49 +128,54 @@ function App() {
       }
     }
 
-    if (navigationType === 'POP') {
-      // Back navigation: restore scroll position
-      restoreScroll()
-    } else if (location.hash) {
-      // Hash navigation: scroll to hash
-      try {
-        const isCta = location.hash === '#vision-cta'
-        const selector = isCta ? '#vision' : location.hash
-        const target = document.querySelector(selector)
-        if (target) {
-          if (lenisInstance) {
-            lenisInstance.stop()
-          }
-          const rect = target.getBoundingClientRect()
-          let y = rect.top + window.scrollY
-          if (isCta) {
-            y += 3450
-          }
-          window.scrollTo(0, y)
-          setTimeout(() => {
-            if (lenisInstance) {
-              lenisInstance.start()
-              lenisInstance.scrollTo(y, { immediate: true })
-            }
-          }, 100)
-        }
-      } catch (e) {
-        console.error('Invalid selector for location.hash', e)
+    // Delay scroll actions to allow the AnimatePresence page exit transition (600ms) to complete
+    const timer = setTimeout(() => {
+      if (navigationType === 'POP') {
+        // Back navigation: restore scroll position
         restoreScroll()
-      }
-    } else {
-      // Forward navigation: scroll to top
-      if (lenisInstance) {
-        lenisInstance.stop()
-      }
-      window.scrollTo(0, 0)
-      setTimeout(() => {
-        if (lenisInstance) {
-          lenisInstance.start()
-          lenisInstance.scrollTo(0, { immediate: true })
+      } else if (location.hash) {
+        // Hash navigation: scroll to hash
+        try {
+          const isCta = location.hash === '#vision-cta'
+          const selector = isCta ? '#vision' : location.hash
+          const target = document.querySelector(selector)
+          if (target) {
+            if (lenisInstance) {
+              lenisInstance.stop()
+            }
+            const rect = target.getBoundingClientRect()
+            let y = rect.top + window.scrollY
+            if (isCta) {
+              y += 3450
+            }
+            window.scrollTo(0, y)
+            setTimeout(() => {
+              if (lenisInstance) {
+                lenisInstance.start()
+                lenisInstance.scrollTo(y, { immediate: true })
+              }
+            }, 100)
+          }
+        } catch (e) {
+          console.error('Invalid selector for location.hash', e)
+          restoreScroll()
         }
-      }, 100)
-    }
+      } else {
+        // Forward navigation: scroll to top
+        if (lenisInstance) {
+          lenisInstance.stop()
+        }
+        window.scrollTo(0, 0)
+        setTimeout(() => {
+          if (lenisInstance) {
+            lenisInstance.start()
+            lenisInstance.scrollTo(0, { immediate: true })
+          }
+        }, 100)
+      }
+    }, 610)
+
+    return () => clearTimeout(timer)
   }, [location.pathname, navigationType, location.hash])
 
   return (
