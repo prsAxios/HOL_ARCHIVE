@@ -228,7 +228,7 @@ export default function Vision() {
           }}
         >
           <img
-            src="/images/Vision_Section.PNG"
+            src="/images/Vision_Section.png"
             alt="Vision"
             style={{
               width: '100%',
