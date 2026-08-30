@@ -37,12 +37,12 @@ export default function Preloader() {
     }
   }, [])
 
-  // Smooth loading progression over exactly 8 seconds
+  // Smooth loading progression over exactly 10 seconds
   useEffect(() => {
     if (done) return
 
     startTimeRef.current = Date.now()
-    const targetDuration = 8000 // 8 seconds minimum wait time
+    const targetDuration = 10000 // 10 seconds minimum wait time
 
     const interval = setInterval(() => {
       const elapsed = Date.now() - startTimeRef.current
@@ -57,7 +57,7 @@ export default function Preloader() {
     return () => clearInterval(interval)
   }, [done])
 
-  // Hide the preloader ONLY after 8 seconds have passed AND all assets/DOM contents are rendered
+  // Hide the preloader ONLY after 10 seconds have passed AND all assets/DOM contents are rendered
   useEffect(() => {
     if (progress >= 100 && assetsLoaded) {
       const t = setTimeout(() => {
@@ -72,7 +72,7 @@ export default function Preloader() {
     if (done) return
     const fallbackTimer = setTimeout(() => {
       setIsVisible(false)
-    }, 2000)
+    }, 12000)
     return () => clearTimeout(fallbackTimer)
   }, [done])
 

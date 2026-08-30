@@ -19,7 +19,7 @@ export default function Hero() {
     const lines = headRef.current?.querySelectorAll<HTMLElement>('.hero-line') ?? []
     gsap.fromTo(lines,
       { y: 52, autoAlpha: 0 },
-      { y: 0, autoAlpha: 1, duration: 1.1, stagger: 0.14, ease: 'expo.out', delay: 0.25 }
+      { y: 0, autoAlpha: 1, duration: 1.8, stagger: 0.25, ease: 'expo.out', delay: 0.5 }
     )
   }, [])
 
@@ -30,7 +30,7 @@ export default function Hero() {
 
     // Initial fade-in
     gsap.fromTo(logoEl, { autoAlpha: 0, scale: 0.7 }, {
-      autoAlpha: 1, scale: 1, duration: 1.4, ease: 'power3.out', delay: 0.8,
+      autoAlpha: 1, scale: 1, duration: 2.2, ease: 'power3.out', delay: 1.0,
     })
 
     // Apply first phase immediately

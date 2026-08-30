@@ -166,7 +166,7 @@ export default function Process() {
         #process { box-sizing: border-box; will-change: transform; }
 
         .proc-header {
-          padding: clamp(24px,5.5vh,60px) clamp(20px,5vw,72px) 0;
+          padding: clamp(90px, 8vh, 120px) clamp(20px, 5vw, 72px) 0;
           flex-shrink: 0;
         }
         .proc-title {

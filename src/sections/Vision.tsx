@@ -192,7 +192,7 @@ export default function Vision() {
             fontSize: 'clamp(32px, 5.5vw, 80px)',
             letterSpacing: '-0.04em',
             lineHeight: 0.85,
-            color: 'var(--hol-text)',
+            color: 'white',
             margin: 0,
             textTransform: 'uppercase',
           }}

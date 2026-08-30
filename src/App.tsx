@@ -75,6 +75,7 @@ function App() {
 
   // Scroll Restoration on Route Change
   const navigationType = useNavigationType()
+  const previousPathnameRef = useRef(location.pathname)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -84,60 +85,91 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll)
   }, [location.pathname])
 
+  // Save scroll position when route changes (SPA navigation)
   useEffect(() => {
-    if (navigationType === 'POP') {
+    const previousPath = previousPathnameRef.current
+    previousPathnameRef.current = location.pathname
+
+    // Save scroll position of previous route before changing
+    if (previousPath !== location.pathname) {
+      sessionStorage.setItem(`scroll_pos_${previousPath}`, window.scrollY.toString())
+    }
+  }, [location.pathname])
+
+  useEffect(() => {
+    const restoreScroll = () => {
       const savedScroll = sessionStorage.getItem(`scroll_pos_${location.pathname}`)
       if (savedScroll !== null) {
         const y = parseFloat(savedScroll)
-        const restore = () => {
-          window.scrollTo(0, y)
+        // Disable Lenis temporarily for immediate scroll restoration
+        if (lenisInstance) {
+          lenisInstance.stop()
+        }
+        window.scrollTo(0, y)
+        // Re-enable Lenis after scroll is restored
+        setTimeout(() => {
           if (lenisInstance) {
+            lenisInstance.start()
             lenisInstance.scrollTo(y, { immediate: true })
           }
-        }
-        restore()
-        requestAnimationFrame(restore)
-        const timer = setTimeout(restore, 50)
-        return () => clearTimeout(timer)
+        }, 100)
       } else {
-        window.scrollTo(0, 0)
+        // No saved position, scroll to top
         if (lenisInstance) {
-          lenisInstance.scrollTo(0, { immediate: true })
+          lenisInstance.stop()
         }
+        window.scrollTo(0, 0)
+        setTimeout(() => {
+          if (lenisInstance) {
+            lenisInstance.start()
+            lenisInstance.scrollTo(0, { immediate: true })
+          }
+        }, 100)
+      }
+    }
+
+    if (navigationType === 'POP') {
+      // Back navigation: restore scroll position
+      restoreScroll()
+    } else if (location.hash) {
+      // Hash navigation: scroll to hash
+      try {
+        const isCta = location.hash === '#vision-cta'
+        const selector = isCta ? '#vision' : location.hash
+        const target = document.querySelector(selector)
+        if (target) {
+          if (lenisInstance) {
+            lenisInstance.stop()
+          }
+          const rect = target.getBoundingClientRect()
+          let y = rect.top + window.scrollY
+          if (isCta) {
+            y += 3450
+          }
+          window.scrollTo(0, y)
+          setTimeout(() => {
+            if (lenisInstance) {
+              lenisInstance.start()
+              lenisInstance.scrollTo(y, { immediate: true })
+            }
+          }, 100)
+        }
+      } catch (e) {
+        console.error('Invalid selector for location.hash', e)
+        restoreScroll()
       }
     } else {
-      if (location.hash) {
-        try {
-          const isCta = location.hash === '#vision-cta'
-          const selector = isCta ? '#vision' : location.hash
-          const target = document.querySelector(selector)
-          if (target) {
-            const restore = () => {
-              const rect = target.getBoundingClientRect()
-              let y = rect.top + window.scrollY
-              if (isCta) {
-                // Scroll to the end of the pinned zoom animation where the CTA is visible
-                y += 3450
-              }
-              window.scrollTo(0, y)
-              if (lenisInstance) {
-                lenisInstance.scrollTo(y, { immediate: true })
-              }
-            }
-            restore()
-            requestAnimationFrame(restore)
-            const timer = setTimeout(restore, 50)
-            return () => clearTimeout(timer)
-          }
-        } catch (e) {
-          console.error('Invalid selector for location.hash', e)
-        }
-      }
-
-      window.scrollTo(0, 0)
+      // Forward navigation: scroll to top
       if (lenisInstance) {
-        lenisInstance.scrollTo(0, { immediate: true })
+        lenisInstance.stop()
       }
+      window.scrollTo(0, 0)
+      setTimeout(() => {
+        if (lenisInstance) {
+          lenisInstance.start()
+          lenisInstance.scrollTo(0, { immediate: true })
+        }
+      }, 100)
     }
   }, [location.pathname, navigationType, location.hash])
 
