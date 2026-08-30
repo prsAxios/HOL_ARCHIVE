@@ -232,10 +232,8 @@ export default function Vision() {
             alt="Vision"
             style={{
               width: '100%',
-              height: '110%',
+              height: '100%',
               display: 'block',
-              transform: 'scale(1.06)',
-              transformOrigin: '48.9800% 51.8678%',
             }}
           />
 
