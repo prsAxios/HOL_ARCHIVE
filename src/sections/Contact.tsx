@@ -54,10 +54,10 @@ export default function Contact() {
 
   const createConsultation = trpc.consultation.create.useMutation({
     onSuccess: () => { setSubmitted(true); setSubmitError(null) },
-    onError: (err) => { 
+    onError: (err) => {
       // If we already successfully submitted via Google Script, don't show error
       if (!submitted) {
-        setSubmitError(err.message || 'Something went wrong.') 
+        setSubmitError(err.message || 'Something went wrong.')
       }
     },
   })
@@ -226,7 +226,7 @@ export default function Contact() {
               style={{ ...inputStyle, resize: 'vertical', marginBottom: '16px' }}
             />
 
-             <button
+            <button
               type="submit"
               disabled={createConsultation.isPending || isSubmitting}
               style={{
@@ -259,7 +259,7 @@ export default function Contact() {
 
             {[
               { icon: 'call', label: 'Phone', value: '+91 88955 29383' },
-              { icon: 'mail', label: 'Email', value: 'rony@gholarchive.com' },
+              { icon: 'mail', label: 'Email', value: 'rony@holarchive.com' },
               { icon: 'location_on', label: 'Location', value: 'Mumbai, India\n(Operating across India)' },
             ].map(({ icon, label, value }) => (
               <div key={label} style={{ marginBottom: '16px' }}>
