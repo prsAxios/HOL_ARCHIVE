@@ -241,8 +241,8 @@ export default function Vision() {
           <div
             style={{
               position: 'absolute',
-              left: '48.9780%',
-              top: '56.8770%',
+              left: '48.9800%',
+              top: '51.8678%',
               width: '5.5379%',
               aspectRatio: '1 / 1',
               backgroundColor: '#d40303ff',
